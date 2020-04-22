@@ -1,6 +1,6 @@
 # Bachelor's Degree in Statistics at UB-UPC
 
-This repository contains all the projects and laboratory works carried out during the courses studied at the MSC in Statistics and Machine Learning at Linköping University.
+This repository contains all the projects and laboratory works carried out during the courses studied at the Bachelor's Degree in Statistics at both University of Barcelona and Polytechnic University of Catalonia.
 
 The contents are separated by year and course, each one of them contained in a different folder.
 
