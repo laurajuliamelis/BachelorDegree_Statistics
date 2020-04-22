@@ -1,0 +1,237 @@
+%--------------------------------------------------------------------------------
+%	PAQUETES
+%--------------------------------------------------------------------------------
+\documentclass[twoside]{report}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Código}
+\renewcommand\lstlistlistingname{Índice de códigos}
+\usepackage[usenames,dvipsnames]{color}
+
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage[spanish, es-tabla]{babel}
+\usepackage[hidelinks]{hyperref}
+\usepackage{pdfpages}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{setspace}
+\usepackage{relsize}
+\usepackage[justification=centering]{caption}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage[table,xcdraw]{xcolor}
+
+\lstset{texcl=true}
+\counterwithout{footnote}{chapter} %Números pie de página
+
+\usepackage{fancyvrb}
+
+%--------------------------------------------------------------------------------
+%	ESTILO DEL DOCUMENTO
+%--------------------------------------------------------------------------------
+% SANGRÍA
+\parindent 0pt
+
+% MÁRGENES
+\usepackage[margin=1.5in, top=1in]{geometry}
+
+% CABECERA Y PIE
+\usepackage{fancyhdr}
+
+\fancyhead{}
+\fancyfoot{}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[LO]{\slshape \rightmark}
+\fancyhead[RE]{\slshape \leftmark}
+\pagestyle{fancy}
+
+% FORMATO CÓDIGO R
+\definecolor{mygray}{gray}{0.95}
+\lstset{
+	language=R,
+	basicstyle=\small\ttfamily,
+	%numbers=left,
+	%numberstyle=\scriptsize\color{Blue},
+	%stepnumber=1,
+	%numbersep=5pt,
+	backgroundcolor=\color{mygray},
+	showspaces=false,
+	showstringspaces=false,
+	showtabs=false,
+	%frame=single,
+	rulecolor=\color{black},
+	tabsize=2,
+	captionpos=b,
+	breaklines=true,
+	breakatwhitespace=false,
+	keywordstyle=\color{RoyalBlue},
+	commentstyle=\color{YellowGreen},
+	stringstyle=\color{ForestGreen}
+}
+
+% BIBLIOGRAFIA
+\usepackage[backend = biber, style = apa, autocite = inline,%
+            defernumbers = true]{biblatex}
+\addbibresource{references.bib}
+
+
+\begin{document}
+	
+%--------------------------------------------------------------------------------
+%	PORTADA
+%--------------------------------------------------------------------------------
+\includepdf{portada.pdf} % Portada 1(obligatoria)
+
+\shipout\null % página en blanco
+
+\begin{titlepage}
+	\begin{center}
+		\textsc{Grado en Estadística \\
+			Universitat de Barcelona - Universitat politècnica de Catalunya}\\
+		[3cm]
+		
+		\huge{El modelo de regresión log-binomial: una alternativa al modelo de regresión logística en estudios de cohortes y transversales.} \\
+		[12.3cm]
+	\end{center}
+	
+	\begin{flushleft}
+		\hspace*{9.8cm}
+		\textmd{Autora: Laura Julià Melis}\\
+		\vspace*{0.08cm}
+		\hspace*{9.8cm}
+		\textmd{Director: Klaus Langohr}\\
+		[1cm]
+	\end{flushleft}
+	
+	\begin{center}
+		\textmd{Junio, 2019} \\
+		[0.1cm]
+		\textmd{Barcelona}
+	\end{center}
+\end{titlepage}
+
+\shipout\null % página en blanco
+
+%--------------------------------------------------------------------------------
+%   RERUMEN/ABSTRACT
+%--------------------------------------------------------------------------------
+\spacing{1.3}
+
+\setcounter{page}{3}
+\chapter*{Resumen}
+El modelo de regresión logística es probablemente el modelo de regresión más utilizado en epidemiología. Está implementado en todos los grandes paquetes estadísticos (R, SAS, Stata, SPSS) y provee una estimación del \textit{odds ratio} asociado a una variable de interés y, de esta manera, una aproximación del riesgo relativo. No obstante, la estimación del riesgo relativo mediante el \textit{odds ratio} puede ser errónea y es deseable estimar el riesgo relativo directamente. Tal estimación es posible si se utiliza el modelo de regresión log-binomial, que es una alternativa al modelo de regresión logística en caso de estudios de cohorte y transversales.\\
+
+En este trabajo se presenta con detalle el modelo log-binomial incluyendo, entre otros aspectos, la estimación de parámetros, la implementación en el software R y su interpretación. Además, al producirse en muchas ocasiones problemas de convergencia y la consecuente imposibilidad de obtener la estimación de los parámetros del modelo, se presentan diversos métodos para solucionar estas situaciones. \\
+
+Por último, se ilustrará el uso del modelo de regresión log-binomial a partir de los datos de un estudio sobre la depresión posparto mediante varias funciones de R, comparando y definiendo los beneficios y limitaciones de cada una.\\
+
+\textbf{Palabras clave:} regresión logística,  \textit{odds ratio}, riesgo relativo, regresión log-binomial.\\
+
+\textbf{Clasificación AMS:} 62J12 (Modelos Lineales Generalizados), 62-07 (Análisis de datos), 62P15 (Aplicaciones a la psicología). 
+
+\chapter*{Abstract}
+%\addcontentsline{toc}{chapter}{\numberline{}Abstract}
+The logistic regression model is probably the most used regression model in epidemiology. It is implemented in most of the commonly used statistical softwares (R, SAS, Stata, SPSS) and provides an estimation of the odds ratio associated to a variable of interest and, consequently, an approximation of the relative risk. However, the estimation of the relative risk through the odds ratio can be erroneous and it is desirable to estimate the relative risk directly. Such an estimate is possible, if the log-binomial regression model is used, which is an alternative to the logistic regression model in the case of cohort and cross-sectional studies.\\
+
+In this paper, we present in detail the log-binomial model including, among other aspects, the parameter estimation, the implementation in the R software, and its interpretation. In addition, as convergence problems and the consequent impossibility of obtaining the estimation of the parameters of the model frequently occur, several methods to solve these situations are presented. \\
+
+Finally, we will illustrate the use of the log-binomial regression model with the data of a postpartum depression survey by means of several R functions, comparing and defining the advantages and limitations of each one.\\
+
+\textbf{Key words:} logistic regression, odds ratio, relative risk, log-binomial regression.\\
+
+\textbf{AMS classification:} 62J12 (Generalized linear models), 62-07 (Data analysis), 62P15 (Applications to psychology).
+
+%--------------------------------------------------------------------------------
+%	ÍNDICE
+%--------------------------------------------------------------------------------
+\tableofcontents
+\thispagestyle{empty}
+\newpage
+%--------------------------------------------------------------------------------
+%	ÍNDICE DE TABLAS Y CÓDIGOS
+%--------------------------------------------------------------------------------
+\addcontentsline{toc}{chapter}{Índice de tablas}
+\listoftables
+\begingroup
+\let\clearpage\relax
+
+\lstlistoflistings
+\addcontentsline{toc}{chapter}{Índice de códigos}
+
+\endgroup
+
+%--------------------------------------------------------------------------------
+%	CAPÍTULO 1: INTRODUCCIÓN
+%--------------------------------------------------------------------------------
+\input{cap1}
+
+%--------------------------------------------------------------------------------
+%	CAPÍTULO 2: MÉTODOS ESTADÍSTICOS
+%--------------------------------------------------------------------------------
+% "2.1 Diseño de estudios epidemiológicos"
+% "2.2 Medidas epidemiológicas"
+\input{cap2_1-2}
+
+% "2.3 Regresión logística"
+\input{cap2_3}
+
+% "2.4 Regresión log-binomial"
+% "2.5 Software"
+\input{cap2_4-5}
+
+%--------------------------------------------------------------------------------
+%	CAPÍTULO 3: ESTUDIO PRINCIPAL
+%--------------------------------------------------------------------------------
+\input{cap3}
+
+%--------------------------------------------------------------------------------
+%	CAPÍTULO 4: APLICACIÓN DE LA REGRESIÓN LOGÍSTICA/BINOMIAL/PROBIT AL ESTUDIO
+%--------------------------------------------------------------------------------
+\input{cap4}
+
+%--------------------------------------------------------------------------------
+%	CAPÍTULO 5:DISCUSIÓN Y CONCLUSIONES
+%--------------------------------------------------------------------------------
+\input{cap5}
+
+\newpage
+\clearpage
+\thispagestyle{empty}
+\hfill
+\clearpage
+%--------------------------------------------------------------------------------
+%	BIBLIOGRAFÍA
+%--------------------------------------------------------------------------------
+\printbibliography[heading=bibintoc, title = {Referencias}]
+
+
+%--------------------------------------------------------------------------------
+%	APÉNDICE
+%--------------------------------------------------------------------------------
+\appendix
+\chapter{Cuestionario EDPS}\label{cap:apendiceA}
+\vspace*{-1.4cm}
+\begin{center}
+	\hspace*{-1.6cm}
+	\includegraphics[width=13.8cm,height=16cm]{Figure1.png}
+\end{center}
+
+\begin{center}
+	\hspace*{-2.1cm}
+ 	\includegraphics[width=18cm,height=21.2cm]{Figure2.png}
+\end{center}
+
+\chapter{Código R}
+\input{codiR}
+
+%--------------------------------------------------------------------------------
+% PÁGINA EN BLANCO, FINAL DEL DOCUMENTO
+%--------------------------------------------------------------------------------
+\newpage
+\thispagestyle{empty}
+\mbox{}
+
+\end{document}
+
+
+

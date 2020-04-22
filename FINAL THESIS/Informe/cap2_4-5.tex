@@ -1,0 +1,124 @@
+\section{Regresión log-binomial}\label{cap:logbinom}
+En esta sección se pretende dar a conocer el modelo de regresión log-binomial: su expresión matemática, la estimación de los parámetros y la bondad del ajuste. En general, la explicación se realizará siguiendo el planteamiento de \textcite{logbinom1} en su estudio \textit{``Parameter Estimation and Goodness-of-Fit in Log Binomial Regression''}.\\
+
+El modelo log-binomial se utiliza para obtener una estimación del riesgo, ajustada por variables confusoras, cuando la enfermedad de interés es común en la población ya que en esas situaciones, si se utiliza el modelo de regresión logística, el OR puede ser mucho más grande que el RR y exagerar la asociación entre la enfermedad y la exposición en cuestión.\\
+
+Tal como en el caso del modelo logístico, el log-binomial es un Modelo Lineal Generalizado (GLM) en el que el componente aleatorio $Y$ es una variable aleatoria binaria. La diferencia reside en que la función de enlace que utiliza para relacionar el predictor lineal $\eta$ con el valor esperado de la respuesta es el \textbf{logaritmo}. \\
+
+Siendo $\boldsymbol{X}= (X_1,...,X_k)'$ el conjunto de variables explicativas, $\alpha$ el término independiente, $\boldsymbol{\beta}=(\beta_0,...,\beta_k)'$ los parámetros del modelo y $\pi_{\mathsmaller{\boldsymbol{X}}}=P(Y=1|\boldsymbol{X})$, la probabilidad de éxito (p. ej. probabilidad de que el sujeto tenga la enfermedad), se puede definir el modelo log-binomial con la siguiente expresión:
+\begin{equation}
+\label{eq:bin}
+\eta=g(\pi_{\mathsmaller{\boldsymbol{X}}})=\log(\pi_{\mathsmaller{\boldsymbol{X}}})=\alpha + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k
+\end{equation}
+
+Por lo tanto, la probabilidad de respuesta positiva se puede modelar a partir de la ecuación anterior \eqref{eq:bin} como:
+\begin{equation}
+\label{eq:pi_bin}
+\pi_{\mathsmaller{\boldsymbol{X}}}=g^{-1}(\eta)=\exp(\eta)=\exp(\alpha +\boldsymbol{\beta'X})=\exp(\alpha + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k)
+\end{equation}
+
+Nótese que el rango de valores de la probabilidad de éxito y del exponencial del predictor son diferentes: $\pi_{\mathsmaller{\boldsymbol{X}}} \in [0,1] $ y $\exp(\boldsymbol{\beta'X}) \in {\rm I\!R}^{+}$ de modo que, en ocasiones, puede haber problemas de estimación de parámetros. \\
+
+También en este modelo de regresión, la estimación de los parámetros se realiza maximizando la función de verosimilitud de los datos observados \autocite{Silvia}.
+\begin{align*}
+L(\alpha, \boldsymbol{\beta} | Y, \boldsymbol{X})
+&=\prod_{i=1}^{n}P(Y=y_i|\boldsymbol{x_i})f(\boldsymbol{x_i})\propto \prod_{i=1}^{n}P(Y=y_i|\boldsymbol{x_i})\\[1ex]
+& =\prod_{i=1}^{n}P(Y=1|\boldsymbol{x_i})^{\delta_i}P(Y=0|\boldsymbol{x_i})^{1-\delta_i} \\[1ex]
+& =\prod_{i=1}^{n}\exp(\alpha + \boldsymbol{\beta'x_i})^{\delta_i} \cdot (1-\exp(\alpha + \boldsymbol{\beta'x_i}))^{1-\delta_i},
+\end{align*}
+donde $\boldsymbol{\beta}=(\beta_1, ..., \beta_k)'$ y $\delta_i=1$ si $Y_i=1$ y 0 en caso contrario. Cabe mencionar que, como en el modelo de regresión logística, el método supone 	que la función $f(\boldsymbol{x_i})$ no depende de $\alpha$ y $\boldsymbol{\beta}$, es decir, que no existe sesgo de selección. \\
+
+Una vez conocido el criterio de estimación de los parámetros, es importante definir cuál es la medida de asociación enfermedad-exposición con la que estos se interpretan. En estudios de cohortes prospectivos (véase Sección \ref{sec:estudios}) y transversales se utilizan el riesgo relativo (RR) y el \textit{prevalence ratio} (PR), respectivamente, que son dos medidas que ofrecen dos interpretaciones diferentes pero se calculan de la misma manera. \\
+
+Sea $X_i$ una variable dicotómica, el RR (o PR) asociado a $X_i=1$ y ajustado para el resto de covariables se expresa como:
+\begin{align*}
+RR_{X_i} (\text{o } PR_{X_i} )
+&= \frac{P(Y=1|X_1,...  ,X_i=1,... , X_k)}{P(Y=1|X_1, ... ,X_i=0, ..., X_k)} \\[1.2ex]
+&= \frac{\exp(\beta_0 + \beta_1X_1 + \cdots + \beta_iX_i + \cdots + \beta_kX_k)}{\exp(\beta_0 +\beta_1X_1+ \cdots + \beta_kX_k)}  = \exp(\beta_i)
+\end{align*}
+
+Esto supone una ventaja del modelo log-binomial frente al modelo de regresión logística ya que tanto el RR como el PR son más fáciles de interpretar que el OR, el cual necesita explicarse a través de las \textit{odds}.\\
+
+Por otra parte, es conveniente señalar que en los estudios caso-control no se admite la utilización del modelo de regresión log-binomial debido a que no es posible estimar la probabilidad de enfermar, $P(Y=1|\boldsymbol{X})$, y consecuentemente, tampoco el riesgo relativo.\\
+
+Para terminar, como ya se ha mencionado en la Sección \ref{cap:logistica}, es conveniente comprobar la bondad del ajuste. A pesar de que desde la presentación del modelo de regresión log-binomial por parte de Wacholder en 1986 este fue cada vez más utilizado en el campo de la epidemiología, apenas se tenían conocimientos sobre el rendimiento del modelo o la bondad de ajuste hasta que en 2006, los ya nombrados Blizzard y Hosmer realizaron su estudio, en el que presentaron varias extensiones de la bondad de ajuste del modelo de regresión logística para el modelo log-binomial. \\
+
+En su publicación, proponen el test de Hosmer y Lemeshow (HL), ya descrito en el apartado anterior (\ref{cap:logistica}), y comentan un problema al aproximar el estadístico $\chi^2_{HL}$ a una chi-cuadrado con $g-2$ grados de libertad puesto que en el modelo log-binomial la suma de los valores esperados no es la misma que la de los valores observados.
+\begin{equation*}
+\sum_{k=1}^{g} O_k \neq \sum_{k=1}^{g} E_k
+\end{equation*}
+A pesar de ello, los autores demostraron mediante varias simulaciones que esos valores estaban prácticamente siempre extramadamente cerca y que, si el modelo ajustado era bueno, el test HL se aproximaba correctamente a una distribución $\chi^2$ con $g-2$ grados de libertad aunque sugerian llevar a cabo nuevas simulaciones ya que la regla de $g-2$ podía rechazar la hipótesis nula menos a menudo de lo que debería.\\
+
+ \textbf{Posibles problemas de estimación de parámetros.}\\
+[0.3cm]
+En el modelo de regresión log-binomial, como ya se ha comentado anteriormente, se utiliza la transformación de logaritmo de una proporción (enlace \textit{log}), la cual tiene un rango de valores $\pi_{\mathsmaller{\boldsymbol{X}}} \in [0,1] $. Sin embargo, en ciertas ocasiones $\exp(\boldsymbol{\beta'X})$ puede estar fuera de esos límites puesto que $\exp(\boldsymbol{\beta'X}) > 0$.\\
+
+Al no conseguir un modelo en el que todas las probabilidades predichas se mantengan dentro del intervalo de cero a uno, se dan problemas de convergencia al maximizar la función de verosimilitud y, en consecuencia, no es posible obtener la estimación de los parámetros del modelo. \\
+
+Una posible solución a este asunto, propuesta por \textcite{COPY} en su trabajo \textit{``Estimation of prevalence ratios when PROC GENMOD does not converge"}, se explicará con detalle en el siguiente apartado (Sección \ref{cap:software}).
+
+\section{Software}\label{cap:software}
+Este apartado pretende resumir brevemente qué paquetes y funciones del \textit{software} estadístico R hay disponibles para los modelos de regresión logística, tomando como referencia los apuntes de \textcite{Mlgz}, y para el modelo de regresión log-binomial, siguiendo el estudio de \textcite{logbinom2}: \textit{``logbin: An \textbf{R} Package for Relative Risk Regression Using the Log-Binomial Model"}.\\
+
+Primeramente, para ajustar un modelo lineal generalizado cualquiera con R existe la función \textit{``glm"} del paquete \textit{stats}, el cual forma parte de R \autocite{R}. Entre los argumentos a especificar al utilizar esta función cabe destacar la \textbf{fórmula}, en la cual se indica la variable respuesta y las variables explicativas que se quieren introducir en el modelo, la \textbf{familia}, con la que se especifica la distribución de los datos y la \textbf{base de datos}. \\
+
+A continuación se muestra el código para ajustar un modelo lineal generalizado con \textit{``glm"}:
+
+\begin{lstlisting}[language=R, caption=Uso de la función glm \{stats\} en R.]
+ glm(formula=response~terms, family=gaussian, data, weights, subset, na.action, start=NULL, etastart, mustart, offset, control=list(...), model=TRUE, method="glm.fit", x=FALSE, y = TRUE, singular.ok=TRUE, contrasts=NULL,...)
+\end{lstlisting}
+
+Del código anterior se observa que se pueden ajustar modelos de regresión logística y de regresión log-binomial con la misma función. Para ello, solo hay que especificar que el tipo de familia es binomial y la función de enlace que utiliza: \lstinline{family = binomial (link = "logit")} en el caso de la regresión logística y \lstinline{family = binomial (link = "log")} en el del modelo log-binomial.\\
+
+Una función alternativa para el caso del modelo de regresión logística es \textit{``lrm"} del paquete \textit{rms} \autocite{rms}. El código para su utilización es el siguiente:
+\begin{lstlisting}[language=R, caption=Uso de la función lrm \{rms\} en R.]
+ lrm(formula, data, subset, na.action=na.delete, method="lrm.fit", model=FALSE, x=FALSE, y=FALSE, linear.predictors=TRUE, se.fit=FALSE, penalty=0, penalty.matrix, tol=1e-7, strata.penalty=0, var.penalty=c('simple','sandwich'), weights, normwt, scale=FALSE, ...)
+\end{lstlisting}
+
+Ambas funciones devuelven un \textit{output} muy completo en el que se puede ver el valor estimado de los coeficientes ($\boldsymbol{\beta}$), su desviación estándar, el estadístico del test ($Z$) y el p-valor ($Pr(>|Z|)$). Además, con \textit{``glm"} se obtiene la devianza nula (devianza del modelo nulo, sin variables explicativas) y la residual (la del modelo ajustado) y los grados de libertad de ambos, por lo que se puede comprobar la bondad del ajuste a través del test de la devianza. \\
+
+Por otra parte, \textit{``lrm"} ofrece también los resultados del test del cociente de verosimilitud (para evaluar la bondad de ajuste), entre otros estadísticos, así como también el número de observaciones totales y el número de respuestas positivas ($Y=1$) y negativas ($Y=0$). \\
+
+Para el modelo de regresión log-binomial, además de \textit{``glm"}, también existe la posibilidad de utilizar la función \textit{``logbin"}, del paquete \textit{logbin} \autocite{logbinR}. Tiene la siguiente estructura:
+\begin{lstlisting}[language=R, caption=Uso de la función logbin \{logbin\} en R.]
+ logbin(formula, mono = NULL, data, subset, na.action, start = NULL, offset, control = list(...), model = TRUE, method = c("cem", "em", "glm", "glm2", "ab"), accelerate = c("em", "squarem", "pem", "qn"), control.method = list(), warn = TRUE, ...)
+\end{lstlisting}
+
+Véase cómo los argumentos son en su mayoría idénticos a los utilizados por la función  \textit{``glm"}, excepto que la familia y la función de enlace no necesitan ser especificadas por el usuario. El algoritmo utilizado por defecto para estimar los parámetros del modelo es el CEM (\textit{Combinatorial Expectation-Maximization}), el cual tiene propiedades de convergencia más estables. Para conocer más detalles, ver \textcite{logbinom2}.
+
+\subsection*{Función COPY}
+Con el fin de solucionar los problemas de convergencia, \textcite{COPY} en su trabajo \textit{``Estimation of prevalence ratios when PROC GENMOD does not converge"} desarrolló el nombrado método COPY en el \textit{software} estadístico SAS. Posteriormente, \textcite{COPY2} lo modificaron proponiendo un nuevo planteamiento y, más adelante, \textcite{Silvia} programó esta última idea en R de la siguiente manera: 
+
+\begin{lstlisting}[language=R, caption=Función COPY implementada en R.]
+  copy <- function(data, Y, vars,n, W) {
+ 	  if (!is.numeric(data[, Y])) {
+  	   	data[, Y] <- as.numeric(data[, Y])-1
+    }
+ 	  data$W <- (n-1)/n
+  	data.copy <- data
+  	data.copy[, Y] <- 1-data.copy[, Y]
+  	data.copy$W <- 1/n
+  	data.all <- merge(data, data.copy, all = T)
+  	formul <- paste(Y, paste(vars, collapse = " + "), sep = "~")
+  	mod.mat <- model.matrix(as.formula(formul), data)
+  	glm.copy <- glm(as.formula(formul), family = binomial(log), 
+  						  data.all, weights = W, control = list(maxit = 100),
+  						  start = c(-4, rep(0, ncol(mod.mat)-1))
+  	return(glm.copy)
+  }
+\end{lstlisting}
+
+Por una parte, siendo $n$ el número de copias o simulaciones a realizar, se debe de asignar un peso $W=\frac{(n-1)}{n}$ a la base de datos inicial (\lstinline{data$W<-(n-1)/n}). Luego, se tiene que crear un nuevo conjunto de datos (\lstinline{data.copy}) a partir del original en el cual la variable respuesta \lstinline{Y} tenga los valores intercambiados de manera que los ceros (0) se cambian por unos (1) y los unos por ceros, así como también se debe crear una variable de peso $W=\frac{1}{n}$ (\lstinline{data.copy$W <- 1/n}). \\
+
+De este modo, maximizando la función de verosimilitud de la regresión log-binomial ponderada (ver expresión (\ref{eq:ponderada})) se obtendrá una aproximación de la estimación máximo verosímil que se obtendría utilizando la base de datos original.
+
+\begin{equation}
+\label{eq:ponderada}
+L(\alpha, \boldsymbol{\beta} | Y, \boldsymbol{X})=\prod_{i=1}^{n}\exp(\alpha + \boldsymbol{\beta'x_i})^{W\delta_i+(1-W)(1-\delta_i)} \cdot (1-\exp(\alpha + \boldsymbol{\beta'x_i}))^{W(1- \delta_i)+(1-W)\delta_i},
+\end{equation}
+
+Además, \textcite{COPY} indicó que es necesario introducir los valores iniciales -4 para la variable independiente y 0 para las explicativas (\lstinline{start=c(-4, rep(0, ncol(mod.mat)-1))}) puesto que en la práctica, fijar estos valores, siempre ha tenido como resultado una estimación de máxima verosimilitud dentro del espacio de parámteros. \\
+
+El último aspecto importante a mencionar es la elección del número de simulaciones a realizar. El autor llegó a la conclusión de que $n=1000$ copias era el número adecuado en la mayoría de los casos que analizó aunque, en este estudio, se realizarán pruebas con diversos tamaños de $n$ (ver Capítulo \ref{cap:aplicacion}).\\
+
+Para terminar, mencionar que existen también otros \textit{softwares} para implementar ambos modelos como por ejemplo STATA y SAS, aunque no son tan utilizados y tienen diversas limitaciones. \\

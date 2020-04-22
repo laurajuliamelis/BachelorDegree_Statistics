@@ -1,0 +1,56 @@
+---
+title: '`r paste("Análisis de secuencias:", params$nombre.fichero)`'
+author: "Esteban Vegas"
+output: html_document
+date: '`r format(Sys.Date(),"%e de %B, %Y")`'
+params:
+  ruta.in: "E:/BIOCIÈNCIES/Entregues/5/Fasta file"
+  ruta.out: "E:/BIOCIÈNCIES/Entregues/5/Fasta file_out"
+  nombre.fichero: ENSG00000114374.fa
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r libraries,include=FALSE}
+# poso el paquet com a comentari, ja que sinó no puc executar el render
+
+## try http:// if https:// URLs are not supported
+#source("https://bioconductor.org/biocLite.R")
+#biocLite("Biostrings")
+if(!require('knitr',quietly = T)){install.packages('knitr')} 
+require('knitr', quietly = T)
+
+if(!require('Biostrings',quietly = T)){
+  source('https://bioconductor.org/biocLite.R')
+  biocLite('Biostrings', ask=FALSE)}
+require('Biostrings', quietly = T)
+
+```
+
+
+```{r, include=FALSE}
+#input_file <- "gi32141095_N_0.fa"
+mydata.Fasta <- readDNAStringSet(filepath=file.path(params$ruta.in,params$nombre.fichero))
+
+letras<-letterFrequency(mydata.Fasta, c("A", "T", "C", "G"))
+
+n <-length(mydata.Fasta)
+
+dataGen<-data.frame("Accession number" = substr(names(mydata.Fasta), 1, 30), letras, "Total" =width(mydata.Fasta))
+# Aquest es el dataframe amb tota la informacio
+
+```
+
+En este informe analizamos el fichero fasta (.fa)  **`r params$nombre.fichero`**, que contiene exactamente ``r n`` registros y se encuentra en la carpeta "*`r params$ruta.in`*". A continuación resumo la tabla siguiente el número de cuentas de Adenina, Guanina, Citosina y Timina de cada registro. También añado el número total de bases nitrogenadas.
+
+```{r kable}
+library(knitr)
+kable(dataGen, caption = "Contaje de las bases nitrogenadas de cada registro")
+```
+
+
+
+

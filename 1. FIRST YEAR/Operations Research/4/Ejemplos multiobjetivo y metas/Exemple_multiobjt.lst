@@ -1,0 +1,711 @@
+                                          Sistema SAS           10:51 Friday, March 16, 2012  37
+
+                                        Procedimiento LP
+
+                                     Resumen del problema
+
+                      Función objetiva              MínCoste de producció
+                      Variable Rhs                                  _rhs_
+                      Variable de tipo                             _type_
+                      Densidad del problema (%)                     60.00
+
+                      Variables                                    Number
+
+                      No-negativo                                       2
+                      Excedentes                                        3
+
+                      Total                                             5
+
+                      Restricciones                                Number
+
+                      GE                                                3
+                      Objetivo                                          3
+
+                      Total                                             6
+                                          Sistema SAS           10:51 Friday, March 16, 2012  38
+
+                                        Procedimiento LP
+
+                                     Resumen de la solución
+
+                                      Terminación correcta
+
+                         Valor objetivo                             244
+
+                         Iteraciones 1 fase                           1
+                         Iteraciones 2 fase                           2
+                         Iteraciones 3 fase                           0
+                         Iteraciones de enteros                       0
+                         Soluciones de enteros                        0
+                         Variable viable básica inicial               7
+                         Tiempo empleado (segundos)                   0
+                         Número de inversiones                        3
+
+                         Epsilon                                   1E-8
+                         Infinito                          1.797693E308
+                         Iteraciones 1 fase máxima                  100
+                         Iteraciones 2 fase máxima                  100
+                         Iteraciones 3 fase máxima             99999999
+                         Iteraciones enteras máximas                100
+                         Límite temporal (segundos)                 120
+                                          Sistema SAS           10:51 Friday, March 16, 2012  39
+
+                                        Procedimiento LP
+
+                                     Resumen de la variable
+
+                   Nombre de la                                               Coste
+               Col variable            Estado Tipo       Precio Actividad  reducida
+
+                 1 White               BASIC  NON-NEG        40       2.5         0
+                 2 Giles               BASIC  NON-NEG        32       4.5         0
+                 3 Alta graduació             SURPLUS         0         0         1
+                 4 Mitjana graduació          SURPLUS         0         0         7
+                 5 Baixa graduació     BASIC  SURPLUS         0        15         0
+                                          Sistema SAS           10:51 Friday, March 16, 2012  40
+
+                                        Procedimiento LP
+
+                                    Resumen de restricciones
+
+                   Nombre de la                   Col                     Actividad
+              Fila restricción         Tipo       S/S       Rhs Actividad      dual
+
+                 1 Coste de producció  OBJECTVE     .         0       244         .
+                 2 Aigües tòxiques     FREE_OBJ     .         0      7625         .
+                 3 Accidents mortals   FREE_OBJ     .         0     2.525         .
+                 4 Alta graduació      GE           3        48        48         1
+                 5 Mitjana graduació   GE           4        28        28         7
+                 6 Baixa graduació     GE           5       100       115         0
+                                          Sistema SAS           10:51 Friday, March 16, 2012  41
+
+                                        Procedimiento LP
+
+                                     Resumen del problema
+
+                       Función objetiva               MínAigües tòxiques
+                       Variable Rhs                                _rhs_
+                       Variable de tipo                           _type_
+                       Densidad del problema (%)                   60.00
+
+                       Variables                                  Number
+
+                       No-negativo                                     2
+                       Excedentes                                      3
+
+                       Total                                           5
+
+                       Restricciones                              Number
+
+                       GE                                              3
+                       Objetivo                                        3
+
+                       Total                                           6
+                                          Sistema SAS           10:51 Friday, March 16, 2012  42
+
+                                        Procedimiento LP
+
+                                     Resumen de la solución
+
+                                      Terminación correcta
+
+                         Valor objetivo                            7625
+
+                         Iteraciones 1 fase                           0
+                         Iteraciones 2 fase                           1
+                         Iteraciones 3 fase                           0
+                         Iteraciones de enteros                       0
+                         Soluciones de enteros                        0
+                         Variable viable básica inicial               7
+                         Tiempo empleado (segundos)                   0
+                         Número de inversiones                        6
+
+                         Epsilon                                   1E-8
+                         Infinito                          1.797693E308
+                         Iteraciones 1 fase máxima                  100
+                         Iteraciones 2 fase máxima                  100
+                         Iteraciones 3 fase máxima             99999999
+                         Iteraciones enteras máximas                100
+                         Límite temporal (segundos)                 120
+                                          Sistema SAS           10:51 Friday, March 16, 2012  43
+
+                                        Procedimiento LP
+
+                                     Resumen de la variable
+
+                   Nombre de la                                               Coste
+               Col variable            Estado Tipo       Precio Actividad  reducida
+
+                 1 White               BASIC  NON-NEG       800       2.5         0
+                 2 Giles               BASIC  NON-NEG      1250       4.5         0
+                 3 Alta graduació      DEGEN  SURPLUS         0         0         0
+                 4 Mitjana graduació          SURPLUS         0         0     762.5
+                 5 Baixa graduació     BASIC  SURPLUS         0        15         0
+                                          Sistema SAS           10:51 Friday, March 16, 2012  44
+
+                                        Procedimiento LP
+
+                                    Resumen de restricciones
+
+                   Nombre de la                   Col                     Actividad
+              Fila restricción         Tipo       S/S       Rhs Actividad      dual
+
+                 1 Coste de producció  FIXEDOBJ     .         0       244         .
+                 2 Aigües tòxiques     OBJECTVE     .         0      7625         .
+                 3 Accidents mortals   FREE_OBJ     .         0     2.525         .
+                 4 Alta graduació      GE           3        48        48         0
+                 5 Mitjana graduació   GE           4        28        28     762.5
+                 6 Baixa graduació     GE           5       100       115         0
+                                          Sistema SAS           10:51 Friday, March 16, 2012  45
+
+                                        Procedimiento LP
+
+                                      Resumen del problema
+
+                       Función objetiva              MínAccidents mortals
+                       Variable Rhs                                 _rhs_
+                       Variable de tipo                            _type_
+                       Densidad del problema (%)                    60.00
+
+                       Variables                                   Number
+
+                       No-negativo                                      2
+                       Excedentes                                       3
+
+                       Total                                            5
+
+                       Restricciones                               Number
+
+                       GE                                               3
+                       Objetivo                                         3
+
+                       Total                                            6
+                                          Sistema SAS           10:51 Friday, March 16, 2012  46
+
+                                        Procedimiento LP
+
+                                     Resumen de la solución
+
+                                      Terminación correcta
+
+                         Valor objetivo                           2.525
+
+                         Iteraciones 1 fase                           0
+                         Iteraciones 2 fase                           1
+                         Iteraciones 3 fase                           0
+                         Iteraciones de enteros                       0
+                         Soluciones de enteros                        0
+                         Variable viable básica inicial               7
+                         Tiempo empleado (segundos)                   0
+                         Número de inversiones                        8
+
+                         Epsilon                                   1E-8
+                         Infinito                          1.797693E308
+                         Iteraciones 1 fase máxima                  100
+                         Iteraciones 2 fase máxima                  100
+                         Iteraciones 3 fase máxima             99999999
+                         Iteraciones enteras máximas                100
+                         Límite temporal (segundos)                 120
+                                          Sistema SAS           10:51 Friday, March 16, 2012  47
+
+                                        Procedimiento LP
+
+                                     Resumen de la variable
+
+                   Nombre de la                                               Coste
+               Col variable            Estado Tipo       Precio Actividad  reducida
+
+                 1 White               BASIC  NON-NEG       0.2       2.5         0
+                 2 Giles               BASIC  NON-NEG      0.45       4.5         0
+                 3 Alta graduació      DEGEN  SURPLUS         0         0         0
+                 4 Mitjana graduació          SURPLUS         0         0    0.3625
+                 5 Baixa graduació     BASIC  SURPLUS         0        15         0
+                                          Sistema SAS           10:51 Friday, March 16, 2012  48
+
+                                        Procedimiento LP
+
+                                    Resumen de restricciones
+
+                   Nombre de la                   Col                     Actividad
+              Fila restricción         Tipo       S/S       Rhs Actividad      dual
+
+                 1 Coste de producció  FIXEDOBJ     .         0       244         .
+                 2 Aigües tòxiques     FIXEDOBJ     .         0      7625         .
+                 3 Accidents mortals   OBJECTVE     .         0     2.525         .
+                 4 Alta graduació      GE           3        48        48         0
+                 5 Mitjana graduació   GE           4        28        28    0.3625
+                 6 Baixa graduació     GE           5       100       115         0
+                                          Sistema SAS           10:51 Friday, March 16, 2012  49
+
+                                        Procedimiento LP
+
+                                     Resumen del problema
+
+                       Función objetiva               MínAigües tòxiques
+                       Variable Rhs                                _rhs_
+                       Variable de tipo                           _type_
+                       Densidad del problema (%)                   60.00
+
+                       Variables                                  Number
+
+                       No-negativo                                     2
+                       Excedentes                                      3
+
+                       Total                                           5
+
+                       Restricciones                              Number
+
+                       GE                                              3
+                       Objetivo                                        3
+
+                       Total                                           6
+                                          Sistema SAS           10:51 Friday, March 16, 2012  50
+
+                                        Procedimiento LP
+
+                                     Resumen de la solución
+
+                                      Terminación correcta
+
+                         Valor objetivo                            6950
+
+                         Iteraciones 1 fase                           1
+                         Iteraciones 2 fase                           1
+                         Iteraciones 3 fase                           0
+                         Iteraciones de enteros                       0
+                         Soluciones de enteros                        0
+                         Variable viable básica inicial               7
+                         Tiempo empleado (segundos)                   0
+                         Número de inversiones                        3
+
+                         Epsilon                                   1E-8
+                         Infinito                          1.797693E308
+                         Iteraciones 1 fase máxima                  100
+                         Iteraciones 2 fase máxima                  100
+                         Iteraciones 3 fase máxima             99999999
+                         Iteraciones enteras máximas                100
+                         Límite temporal (segundos)                 120
+                                          Sistema SAS           10:51 Friday, March 16, 2012  51
+
+                                        Procedimiento LP
+
+                                     Resumen de la variable
+
+                   Nombre de la                                               Coste
+               Col variable            Estado Tipo       Precio Actividad  reducida
+
+                 1 White               BASIC  NON-NEG       800         4         0
+                 2 Giles               BASIC  NON-NEG      1250         3         0
+                 3 Alta graduació      BASIC  SURPLUS         0        12         0
+                 4 Mitjana graduació          SURPLUS         0         0      87.5
+                 5 Baixa graduació            SURPLUS         0         0        45
+                                          Sistema SAS           10:51 Friday, March 16, 2012  52
+
+                                        Procedimiento LP
+
+                                    Resumen de restricciones
+
+                   Nombre de la                   Col                     Actividad
+              Fila restricción         Tipo       S/S       Rhs Actividad      dual
+
+                 1 Coste de producció  FREE_OBJ     .         0       256         .
+                 2 Aigües tòxiques     OBJECTVE     .         0      6950         .
+                 3 Accidents mortals   FREE_OBJ     .         0      2.15         .
+                 4 Alta graduació      GE           3        48        60         0
+                 5 Mitjana graduació   GE           4        28        28      87.5
+                 6 Baixa graduació     GE           5       100       100        45
+                                          Sistema SAS           10:51 Friday, March 16, 2012  53
+
+                                        Procedimiento LP
+
+                                     Resumen del problema
+
+                      Función objetiva              MínCoste de producció
+                      Variable Rhs                                  _rhs_
+                      Variable de tipo                             _type_
+                      Densidad del problema (%)                     60.00
+
+                      Variables                                    Number
+
+                      No-negativo                                       2
+                      Excedentes                                        3
+
+                      Total                                             5
+
+                      Restricciones                                Number
+
+                      GE                                                3
+                      Objetivo                                          3
+
+                      Total                                             6
+                                          Sistema SAS           10:51 Friday, March 16, 2012  54
+
+                                        Procedimiento LP
+
+                                     Resumen de la solución
+
+                                      Terminación correcta
+
+                         Valor objetivo                             256
+
+                         Iteraciones 1 fase                           0
+                         Iteraciones 2 fase                           1
+                         Iteraciones 3 fase                           0
+                         Iteraciones de enteros                       0
+                         Soluciones de enteros                        0
+                         Variable viable básica inicial               7
+                         Tiempo empleado (segundos)                   0
+                         Número de inversiones                        6
+
+                         Epsilon                                   1E-8
+                         Infinito                          1.797693E308
+                         Iteraciones 1 fase máxima                  100
+                         Iteraciones 2 fase máxima                  100
+                         Iteraciones 3 fase máxima             99999999
+                         Iteraciones enteras máximas                100
+                         Límite temporal (segundos)                 120
+                                          Sistema SAS           10:51 Friday, March 16, 2012  55
+
+                                        Procedimiento LP
+
+                                     Resumen de la variable
+
+                   Nombre de la                                               Coste
+               Col variable            Estado Tipo       Precio Actividad  reducida
+
+                 1 White               BASIC  NON-NEG        40         4         0
+                 2 Giles               BASIC  NON-NEG        32         3         0
+                 3 Alta graduació      BASIC  SURPLUS         0        12         0
+                 4 Mitjana graduació          SURPLUS         0         0 13.555556
+                 5 Baixa graduació     DEGEN  SURPLUS         0         0         0
+                                          Sistema SAS           10:51 Friday, March 16, 2012  56
+
+                                        Procedimiento LP
+
+                                    Resumen de restricciones
+
+                   Nombre de la                   Col                     Actividad
+              Fila restricción         Tipo       S/S       Rhs Actividad      dual
+
+                 1 Coste de producció  OBJECTVE     .         0       256         .
+                 2 Aigües tòxiques     FIXEDOBJ     .         0      6950         .
+                 3 Accidents mortals   FREE_OBJ     .         0      2.15         .
+                 4 Alta graduació      GE           3        48        60         0
+                 5 Mitjana graduació   GE           4        28        28 13.555556
+                 6 Baixa graduació     GE           5       100       100         0
+                                          Sistema SAS           10:51 Friday, March 16, 2012  57
+
+                                        Procedimiento LP
+
+                                      Resumen del problema
+
+                       Función objetiva              MínAccidents mortals
+                       Variable Rhs                                 _rhs_
+                       Variable de tipo                            _type_
+                       Densidad del problema (%)                    60.00
+
+                       Variables                                   Number
+
+                       No-negativo                                      2
+                       Excedentes                                       3
+
+                       Total                                            5
+
+                       Restricciones                               Number
+
+                       GE                                               3
+                       Objetivo                                         3
+
+                       Total                                            6
+                                          Sistema SAS           10:51 Friday, March 16, 2012  58
+
+                                        Procedimiento LP
+
+                                     Resumen de la solución
+
+                                      Terminación correcta
+
+                         Valor objetivo                            2.15
+
+                         Iteraciones 1 fase                           0
+                         Iteraciones 2 fase                           1
+                         Iteraciones 3 fase                           0
+                         Iteraciones de enteros                       0
+                         Soluciones de enteros                        0
+                         Variable viable básica inicial               7
+                         Tiempo empleado (segundos)                   0
+                         Número de inversiones                        9
+
+                         Epsilon                                   1E-8
+                         Infinito                          1.797693E308
+                         Iteraciones 1 fase máxima                  100
+                         Iteraciones 2 fase máxima                  100
+                         Iteraciones 3 fase máxima             99999999
+                         Iteraciones enteras máximas                100
+                         Límite temporal (segundos)                 120
+                                          Sistema SAS           10:51 Friday, March 16, 2012  59
+
+                                        Procedimiento LP
+
+                                     Resumen de la variable
+
+                   Nombre de la                                               Coste
+               Col variable            Estado Tipo       Precio Actividad  reducida
+
+                 1 White               BASIC  NON-NEG       0.2         4         0
+                 2 Giles               BASIC  NON-NEG      0.45         3         0
+                 3 Alta graduació      BASIC  SURPLUS         0        12         0
+                 4 Mitjana graduació   DEGEN  SURPLUS         0         0         0
+                 5 Baixa graduació     DEGEN  SURPLUS         0         0         0
+                                          Sistema SAS           10:51 Friday, March 16, 2012  60
+
+                                        Procedimiento LP
+
+                                    Resumen de restricciones
+
+                   Nombre de la                   Col                     Actividad
+              Fila restricción         Tipo       S/S       Rhs Actividad      dual
+
+                 1 Coste de producció  FIXEDOBJ     .         0       256         .
+                 2 Aigües tòxiques     FIXEDOBJ     .         0      6950         .
+                 3 Accidents mortals   OBJECTVE     .         0      2.15         .
+                 4 Alta graduació      GE           3        48        60         0
+                 5 Mitjana graduació   GE           4        28        28         0
+                 6 Baixa graduació     GE           5       100       100         0
+                                          Sistema SAS           10:51 Friday, March 16, 2012  61
+
+                                        Procedimiento LP
+
+                                      Resumen del problema
+
+                       Función objetiva              MínAccidents mortals
+                       Variable Rhs                                 _rhs_
+                       Variable de tipo                            _type_
+                       Densidad del problema (%)                    60.00
+
+                       Variables                                   Number
+
+                       No-negativo                                      2
+                       Excedentes                                       3
+
+                       Total                                            5
+
+                       Restricciones                               Number
+
+                       GE                                               3
+                       Objetivo                                         3
+
+                       Total                                            6
+                                          Sistema SAS           10:51 Friday, March 16, 2012  62
+
+                                        Procedimiento LP
+
+                                     Resumen de la solución
+
+                                      Terminación correcta
+
+                         Valor objetivo                               2
+
+                         Iteraciones 1 fase                           1
+                         Iteraciones 2 fase                           0
+                         Iteraciones 3 fase                           0
+                         Iteraciones de enteros                       0
+                         Soluciones de enteros                        0
+                         Variable viable básica inicial               7
+                         Tiempo empleado (segundos)                   0
+                         Número de inversiones                        2
+
+                         Epsilon                                   1E-8
+                         Infinito                          1.797693E308
+                         Iteraciones 1 fase máxima                  100
+                         Iteraciones 2 fase máxima                  100
+                         Iteraciones 3 fase máxima             99999999
+                         Iteraciones enteras máximas                100
+                         Límite temporal (segundos)                 120
+                                          Sistema SAS           10:51 Friday, March 16, 2012  63
+
+                                        Procedimiento LP
+
+                                     Resumen de la variable
+
+                   Nombre de la                                               Coste
+               Col variable            Estado Tipo       Precio Actividad  reducida
+
+                 1 White               BASIC  NON-NEG       0.2        10         0
+                 2 Giles                      NON-NEG      0.45         0      0.05
+                 3 Alta graduació      BASIC  SURPLUS         0        72         0
+                 4 Mitjana graduació   BASIC  SURPLUS         0        12         0
+                 5 Baixa graduació            SURPLUS         0         0      0.02
+                                          Sistema SAS           10:51 Friday, March 16, 2012  64
+
+                                        Procedimiento LP
+
+                                    Resumen de restricciones
+
+                   Nombre de la                   Col                     Actividad
+              Fila restricción         Tipo       S/S       Rhs Actividad      dual
+
+                 1 Coste de producció  FREE_OBJ     .         0       400         .
+                 2 Aigües tòxiques     FREE_OBJ     .         0      8000         .
+                 3 Accidents mortals   OBJECTVE     .         0         2         .
+                 4 Alta graduació      GE           3        48       120         0
+                 5 Mitjana graduació   GE           4        28        40         0
+                 6 Baixa graduació     GE           5       100       100      0.02
+                                          Sistema SAS           10:51 Friday, March 16, 2012  65
+
+                                        Procedimiento LP
+
+                                     Resumen del problema
+
+                       Función objetiva               MínAigües tòxiques
+                       Variable Rhs                                _rhs_
+                       Variable de tipo                           _type_
+                       Densidad del problema (%)                   60.00
+
+                       Variables                                  Number
+
+                       No-negativo                                     2
+                       Excedentes                                      3
+
+                       Total                                           5
+
+                       Restricciones                              Number
+
+                       GE                                              3
+                       Objetivo                                        3
+
+                       Total                                           6
+                                          Sistema SAS           10:51 Friday, March 16, 2012  66
+
+                                        Procedimiento LP
+
+                                     Resumen de la solución
+
+                                      Terminación correcta
+
+                         Valor objetivo                            8000
+
+                         Iteraciones 1 fase                           0
+                         Iteraciones 2 fase                           1
+                         Iteraciones 3 fase                           0
+                         Iteraciones de enteros                       0
+                         Soluciones de enteros                        0
+                         Variable viable básica inicial               7
+                         Tiempo empleado (segundos)                   0
+                         Número de inversiones                        5
+
+                         Epsilon                                   1E-8
+                         Infinito                          1.797693E308
+                         Iteraciones 1 fase máxima                  100
+                         Iteraciones 2 fase máxima                  100
+                         Iteraciones 3 fase máxima             99999999
+                         Iteraciones enteras máximas                100
+                         Límite temporal (segundos)                 120
+                                          Sistema SAS           10:51 Friday, March 16, 2012  67
+
+                                        Procedimiento LP
+
+                                     Resumen de la variable
+
+                   Nombre de la                                               Coste
+               Col variable            Estado Tipo       Precio Actividad  reducida
+
+                 1 White               BASIC  NON-NEG       800        10         0
+                 2 Giles               DEGEN  NON-NEG      1250         0         0
+                 3 Alta graduació      BASIC  SURPLUS         0        72         0
+                 4 Mitjana graduació   BASIC  SURPLUS         0        12         0
+                 5 Baixa graduació            SURPLUS         0         0       220
+                                          Sistema SAS           10:51 Friday, March 16, 2012  68
+
+                                        Procedimiento LP
+
+                                    Resumen de restricciones
+
+                   Nombre de la                   Col                     Actividad
+              Fila restricción         Tipo       S/S       Rhs Actividad      dual
+
+                 1 Coste de producció  FREE_OBJ     .         0       400         .
+                 2 Aigües tòxiques     OBJECTVE     .         0      8000         .
+                 3 Accidents mortals   FIXEDOBJ     .         0         2         .
+                 4 Alta graduació      GE           3        48       120         0
+                 5 Mitjana graduació   GE           4        28        40         0
+                 6 Baixa graduació     GE           5       100       100       220
+                                          Sistema SAS           10:51 Friday, March 16, 2012  69
+
+                                        Procedimiento LP
+
+                                     Resumen del problema
+
+                      Función objetiva              MínCoste de producció
+                      Variable Rhs                                  _rhs_
+                      Variable de tipo                             _type_
+                      Densidad del problema (%)                     60.00
+
+                      Variables                                    Number
+
+                      No-negativo                                       2
+                      Excedentes                                        3
+
+                      Total                                             5
+
+                      Restricciones                                Number
+
+                      GE                                                3
+                      Objetivo                                          3
+
+                      Total                                             6
+                                          Sistema SAS           10:51 Friday, March 16, 2012  70
+
+                                        Procedimiento LP
+
+                                     Resumen de la solución
+
+                                      Terminación correcta
+
+                         Valor objetivo                             400
+
+                         Iteraciones 1 fase                           0
+                         Iteraciones 2 fase                           1
+                         Iteraciones 3 fase                           0
+                         Iteraciones de enteros                       0
+                         Soluciones de enteros                        0
+                         Variable viable básica inicial               7
+                         Tiempo empleado (segundos)                   0
+                         Número de inversiones                        7
+
+                         Epsilon                                   1E-8
+                         Infinito                          1.797693E308
+                         Iteraciones 1 fase máxima                  100
+                         Iteraciones 2 fase máxima                  100
+                         Iteraciones 3 fase máxima             99999999
+                         Iteraciones enteras máximas                100
+                         Límite temporal (segundos)                 120
+                                          Sistema SAS           10:51 Friday, March 16, 2012  71
+
+                                        Procedimiento LP
+
+                                     Resumen de la variable
+
+                   Nombre de la                                               Coste
+               Col variable            Estado Tipo       Precio Actividad  reducida
+
+                 1 White               BASIC  NON-NEG        40        10         0
+                 2 Giles               DEGEN  NON-NEG        32         0         0
+                 3 Alta graduació      BASIC  SURPLUS         0        72         0
+                 4 Mitjana graduació   BASIC  SURPLUS         0        12         0
+                 5 Baixa graduació            SURPLUS         0         0      23.2
+                                          Sistema SAS           10:51 Friday, March 16, 2012  72
+
+                                        Procedimiento LP
+
+                                    Resumen de restricciones
+
+                   Nombre de la                   Col                     Actividad
+              Fila restricción         Tipo       S/S       Rhs Actividad      dual
+
+                 1 Coste de producció  OBJECTVE     .         0       400         .
+                 2 Aigües tòxiques     FIXEDOBJ     .         0      8000         .
+                 3 Accidents mortals   FIXEDOBJ     .         0         2         .
+                 4 Alta graduació      GE           3        48       120         0
+                 5 Mitjana graduació   GE           4        28        40         0
+                 6 Baixa graduació     GE           5       100       100      23.2

@@ -1,0 +1,160 @@
+---
+title: "PRÀCTICA 1"
+author: "Laura Julià Melis y Víctor Navarro Garcés"
+date: "March 23, 2018"
+output: html_document
+---
+
+1. Cargar los datos en BreenOakWood.xlsx en el entorno R.
+```{r include=FALSE}
+library(vegan)
+library(xlsx)
+library(knitr)
+
+
+```
+
+```{r}
+data <- read.xlsx("BreenOakwood.xlsx",sheetIndex=1, header=T)
+```
+
+2. (1p) Cuantas especies se han encontrado? Cúal és el número total de plantas? En promedio,
+cuantas plantas se han encontrado de cada especie?
+```{r}
+N_especies <- nrow(data)
+N_especies
+
+N_plantas <- sum(data[,2])
+N_plantas
+
+Promedio <- N_plantas/N_especies
+round(Promedio,2)
+```
+
+Se han encontrado `r nrow(data)` especies. El número total de plantas ha sido `r sum(data[,2])`. El promedio de plantas por especies es de `r round(N_plantas/N_especies,2)`.
+
+3. Calcula una nueva variable con la abundancia relativa de cada especie.
+
+La abundancia relativa de cada especie es:
+
+```{r}
+Abun_relativa <- round(data$Abundance/N_plantas,4)
+kable(data.frame(data$Species, Abun_relativa))
+
+```
+
+
+
+
+
+4. (1p) Grafica el diagrama rango-abundancia (rank-abundance plot) (abundancia relativa versus
+número de rango de las especies). Realiza también el mismo gráfico en escala logarítmica. Que se
+observa?
+
+```{r}
+N <- N_plantas
+N
+
+S <- N_especies
+S
+
+index <- sort(data$Abundance, decreasing=TRUE)
+rel.abundance.sorted <- index/N
+speciesrank <- 1:S
+plot(speciesrank,rel.abundance.sorted,type="b") # in a relative scale
+plot(speciesrank,log(rel.abundance.sorted),type="b") # in the log scale
+```
+
+5. (1p) Ajustamos la distribución log-serie de Fisher a los datos, usando la función fisherfit del
+paquete R vegan, estimando el parámetro de diversidad ??.
+
+```{r}
+
+fisher.alpha(data[,2])
+fisherfit(data[,2])
+```
+
+
+6. (1p) ¿Que interpretación tiene esta estimación? La distribución log-serie de Fisher tiene un solo
+parámetro p. A la vista de los resultados, cúal seria el valor estimado del parámetro p?
+
+El estimador Fisher alpha se interpreta como el número de especies que están presentes con un individuo. La fiablididad de Fisher alpha depende de la cercanía del parámetro p a 1.
+
+Calculamos p para comprobarlo:
+
+```{r}
+p <- 1-exp(-S/fisher.alpha(data[,2]))
+p
+```
+
+Como p es `r round(1-exp(-S/fisher.alpha(data[,2])),3)`, podemos afirmar que hay 5 especies representadas con un solo individuo.
+
+7. (1p) Ajustamos la serie geométrica a los datos. Realiza una regresión lineal de la abundancia
+relativa log-transformada de los S especies sobre su rango. El modelo es significativo? Proporciona
+la recta estimada y el coeficiente de determinación del modelo.
+```{r}
+x<- 1:N_especies
+lny<- log(sort(data[,2], decreasing =T ))
+regresion <- lm(lny~x)
+summary(regresion)
+
+par(mfrow=c(2,2))
+pie(sort(data[,2], decreasing=T), labels = NA, main = 'Niche space')
+plot(x,lny, main= 'Regresion graphic')
+abline(regresion)
+```
+
+En el model de regresión lineal de la abundancia relativa, se ha obtenido un p-valor inferior al 5%, por lo que podemos afirmar que el model es significativo (es lineal). 
+
+En la gráfica de regresión lineal se confirman los resultados obtenidos con el summary.
+
+
+8. (1p) Repite el diagrama rango-abudundancia en escala logarítmica, añadiendo la recta de regresión
+con la función abline. Cuál es vuestra estimación del parámetro k de la serie geométrica?
+```{r}
+regresion_rel <- lm(log(rel.abundance.sorted)~speciesrank)
+summary(regresion_rel)
+plot(speciesrank,log(rel.abundance.sorted),type="b") # in the log scale
+abline(regresion_rel)
+
+k <- 1-exp(-0.1444583)
+k
+```
+
+La estimación del parámetro k de la serie geométrica es `r 1-exp(-0.1444583 )`.
+
+9. (1p) Investiga los residuos de esta regresión lineal, y hagais los comentarios que os parecen indicados.
+
+```{r}
+summary(regresion_rel$residuals)
+
+plot(regresion_rel, which=1)
+```
+
+Se observa una línia curvada, poco horizontal, por lo que parece haber algún problema de aleatoriedad. Cabe destacar que las tres especies con mayor número de individuos son outliers. 
+
+
+10. (1p) Calcula un intervalo de confianza 95% para el pendiente del modelo, y usa los resultados para
+hacer un intervalo de confianza 95% para el parámetro k de la serie geométrica.
+```{r}
+confint(regresion_rel)
+
+
+```
+
+11. (1p) Ajustamos el modelo del bastón roto (broken stick model) a los datos, usando la función
+rad.null del paquete vegan, dando el vector con las cuentas de los S especies como argumento.
+Con plot(rad.null(x)) se pueden graficar los resultados. ¿El modelo del bastón roto se ajusta
+bien a los datos?
+```{r}
+out <- rad.null(data$Abundance)
+yhat <- fitted(out)
+plot(out)
+```
+
+12. (1p) Calcula el valor del índice de Shannon para estos datos. Calcula también, consultando las
+transparencies de teoria, su varianza. Asumiendo normalidad, calcula un intervalo de confianza de
+95% para el verdadero valor de este ´indice
+
+
+

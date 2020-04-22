@@ -1,0 +1,38 @@
+\BOOKMARK [0][-]{chapter*.3}{\315ndice de tablas}{}% 1
+\BOOKMARK [0][-]{chapter*.5}{\315ndice de c\363digos}{}% 2
+\BOOKMARK [0][-]{chapter.1}{Introducci\363n}{}% 3
+\BOOKMARK [1][-]{section.1.1}{Presentaci\363n del estudio}{chapter.1}% 4
+\BOOKMARK [1][-]{section.1.2}{Estructura del documento}{chapter.1}% 5
+\BOOKMARK [0][-]{chapter.2}{M\351todos estad\355sticos}{}% 6
+\BOOKMARK [1][-]{section.2.1}{Dise\361o de estudios epidemiol\363gicos}{chapter.2}% 7
+\BOOKMARK [2][-]{subsection.2.1.1}{Estudios de cohorte}{section.2.1}% 8
+\BOOKMARK [2][-]{subsection.2.1.2}{Estudios transversales}{section.2.1}% 9
+\BOOKMARK [2][-]{subsection.2.1.3}{Estudios de caso-control}{section.2.1}% 10
+\BOOKMARK [1][-]{section.2.2}{Medidas epidemiol\363gicas}{chapter.2}% 11
+\BOOKMARK [2][-]{subsection.2.2.1}{Incidencia acumulada}{section.2.2}% 12
+\BOOKMARK [2][-]{subsection.2.2.2}{Prevalencia}{section.2.2}% 13
+\BOOKMARK [2][-]{subsection.2.2.3}{Riesgo relativo}{section.2.2}% 14
+\BOOKMARK [2][-]{subsection.2.2.4}{Odds ratio}{section.2.2}% 15
+\BOOKMARK [1][-]{section.2.3}{Regresi\363n log\355stica}{chapter.2}% 16
+\BOOKMARK [1][-]{section.2.4}{Regresi\363n log-binomial}{chapter.2}% 17
+\BOOKMARK [1][-]{section.2.5}{Software}{chapter.2}% 18
+\BOOKMARK [0][-]{chapter.3}{Estudio sobre la depresi\363n postparto}{}% 19
+\BOOKMARK [1][-]{section.3.1}{Metodolog\355a}{chapter.3}% 20
+\BOOKMARK [1][-]{section.3.2}{Resultados}{chapter.3}% 21
+\BOOKMARK [0][-]{chapter.4}{Aplicaci\363n de los modelos de regresi\363n}{}% 22
+\BOOKMARK [1][-]{section.4.1}{Descripci\363n de la base de datos}{chapter.4}% 23
+\BOOKMARK [1][-]{section.4.2}{Modelo de Regresi\363n Log\355stica}{chapter.4}% 24
+\BOOKMARK [2][-]{subsection.4.2.1}{S\355ntomas de depresi\363n a las 8 semanas \(EPDS>9\)}{section.4.2}% 25
+\BOOKMARK [2][-]{subsection.4.2.2}{S\355ntomas de depresi\363n a las 32 semanas \(EPDS>9\)}{section.4.2}% 26
+\BOOKMARK [2][-]{subsection.4.2.3}{Diagn\363stico cl\355nico de la depresi\363n postparto \(DIGS\)}{section.4.2}% 27
+\BOOKMARK [1][-]{section.4.3}{Modelo de Regresi\363n Log-binomial}{chapter.4}% 28
+\BOOKMARK [2][-]{subsection.4.3.1}{S\355ntomas de depresi\363n a las 8 semanas \(EPDS>9\)}{section.4.3}% 29
+\BOOKMARK [2][-]{subsection.4.3.2}{S\355ntomas de depresi\363n a las 32 semanas \(EPDS>9\)}{section.4.3}% 30
+\BOOKMARK [2][-]{subsection.4.3.3}{Diagn\363stico cl\355nico de la depresi\363n postparto \(DIGS\)}{section.4.3}% 31
+\BOOKMARK [1][-]{section.4.4}{Pruebas de bondad de ajuste}{chapter.4}% 32
+\BOOKMARK [0][-]{chapter.5}{Discusi\363n y conclusiones}{}% 33
+\BOOKMARK [1][-]{section.5.1}{Comparaci\363n de resultados}{chapter.5}% 34
+\BOOKMARK [1][-]{section.5.2}{Consideraciones metodol\363gicas}{chapter.5}% 35
+\BOOKMARK [0][-]{chapter*.26}{Referencias}{}% 36
+\BOOKMARK [0][-]{appendix.Alph1}{Cuestionario EDPS}{}% 37
+\BOOKMARK [0][-]{appendix.Alph2}{C\363digo R}{}% 38

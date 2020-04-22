@@ -1,0 +1,567 @@
+\chapter[Aplicación de los modelos de regresión]{Aplicación de los modelos de regresión logística y de regresión log-binomial}\label{cap:aplicacion}
+
+El propósito principal de este capítulo es aplicar toda la teoria expuesta sobre los modelos de regresión logística y log-binomial a los datos recogidos en el estudio explicado en el Capítulo \ref{cap:estudioppal}: \textit{``Is Neuroticism a Risk Factor for Postpartum Depression?"}.\\
+
+Para empezar, se reproducirá el análisis que se llevó a cabo en el estudio, ajustando el modelo de regresión logística (en este caso utilizando la función ``glm" de R) y se compararán los resultados obtenidos. Luego, con la intención de añadir valor al estudio, se ajustará el modelo log-binomial y se contrastarán los resultados conseguidos con ambos modelos.\\
+
+Además, como la regresión log-binomial se ajustará utilizando las diferentes funciones presentadas en la Sección \ref{cap:software}: ``glm'', ``logbin'' y ``COPY'', se comentarán también las ventajes y limitaciones de cada una.
+
+\section{Descripción de la base de datos}\label{cap:descriptiva}
+
+Antes de empezar con el análisis, es conveniente conocer cierta información sobre el conjunto de datos. Es importante mencionar que la base de datos utilizada en este análisis es ligeramente diferente a la que se tuvo en el estudio puesto que se han omitido varias variables que no se utilizaron. La base de datos modificada será la que se explicará a continuación. \\
+
+Se trata de una base de datos con 1804 filas (número de participantes en el estudio) y 30 columnas (variables). Hay una variable identificadora, ocho variables contínuas (las referentes a las puntuaciones de los diferentes cuestionarios - EPDS, DUKE, etc) y 21 categóricas. Un total de 22 variables tienen valores faltantes o \textit{missings} debido al abandono del seguimiento por parte de las participantes.\\
+
+Diversas variables contínuas fueron categorizadas para poder ajustar el modelo. En el caso de las tres variables que recogen la puntuación del cuestionario EPDS (basal, a las 8 y a las 32 semanas), las cuales fueron categorizadas definiendo dos niveles: ``EPDS$<=9$'' y ``EPDS$>9$'', que representan la ausencia y presencia de síntomas depresivos, respectivamente. Por otro lado, las tres variables contínuas con las puntuaciones del cuestionario de personalidad EPQR-A (extraversión, neuroticismo y psicotisicmo) fueron clasificadas según tres niveles: ``\textit{Low}", ``\textit{Medium}'' y ``\textit{High}''.\\
+
+A continuación se dará una breve explicación de las variables más relevantes del  posterior análisis, con el fin de facilitar la comprensión e interpretación de los resultados:
+
+\begin{itemize}
+	\item \underline{Variables respuesta}.
+		\begin{itemize}
+			\item \lstinline{epds8wc:} Presencia de síntomas depresivos a las 8 semanas postparto según la puntuación EPDS (categorizada). 
+			\item \lstinline{epds32winc:} Casos incidentes de síntomas depresivos (EPDS$>9$) entre las 8 y las 32 semanas postparto. Categórica con niveles \textit{``Yes"} y \textit{``No"}.
+			\item \lstinline{digs0a32:} Depresión mayor durante las 32 semanas postparto.  Categórica con niveles \textit{``Yes"} y \textit{``No DIGS/ No depr"}, si presencia o ausencia de depresión mayor en la Entrevista de Diagnóstico para Estudios Genéticos, respectivamente. 
+		\end{itemize}
+	\item \underline{Variables explicativas}.
+		\begin{itemize}
+			\item \lstinline{epqnT:} Puntuación de neuroticismo en el cuestionario EPQR-A (Variable discreta).
+			\item \lstinline{epds0:} Puntuación basal, a los 2-3 días postparto, del cuestionario EPDS (Variable discreta).
+			\item \lstinline{duke:} Puntuación en el cuestionario DUKE-UNC en relación al apoyo social (Variable discreta).
+			\item \lstinline{ecoprob:} Presencia de problemas económicos. Dicotómica: \textit{``Yes"} y \textit{``No"}.
+			\item \lstinline{antpers:} Historial clínico psiquiátrico personal. Dicotómica: \textit{``Yes"} y \textit{``No"}.
+			\item \lstinline{antpsifa:} Historial clínico psiquiátrico familiar. Dicotómica: \textit{``Yes"} y \textit{``No"}.
+			\item \lstinline{expvit:} Vivencia de eventos estresantes durante el embarazo en base al cuestionario SPR de acontecimientos vitales. Dicotómica: \textit{``Yes"} y \textit{``No"}.
+		\end{itemize}
+\end{itemize}
+
+Para finalizar con la presentación de la base de datos, se adjunta un resumen numérico descriptivo de las variables numéricas (Tabla \ref{tab:5}) y una tabla de frecuencias para las categóricas (Tabla \ref{tab:6}):
+\begin{table} [h]
+	\centering
+	\begin{tabular}{l c c c c c c c}
+		\toprule
+		\textbf{Variable} & \textbf{Min.} & \textbf{1st Qu.} & \textbf{Median} & \textbf{Mean} & \textbf{3rd Qu.} & \textbf{Max.} & \textbf{\textit{Missings}}\\
+		\midrule
+		\textbf{epqnT} &  32.0 &  37.0 & 43.0  & 43.6 & 47.0 & 73.0 & 7\\
+		\textbf{epds0} & 0.0 &  3.0 &  6.0 & 6.2 &  9.0 & 27.0 & 0 \\
+		\textbf{duke} & 5.0 & 49.0 & 54.0 & 52.2 & 58.0 & 62 & 18\\
+		\bottomrule
+	\end{tabular}
+	\caption{Resumen numérico descriptivo de las variables explicativas numéricas más relevantes.}
+	\label{tab:5}
+\end{table}
+
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c }
+		\toprule
+		\textbf{Variable} & \textbf{Yes} & \textbf{No} & \textbf{\textit{Missings}} \\
+		\midrule
+		\textbf{epds8wc} &   218 & 1189 & 397\\
+		\textbf{epds32winc} & 78 & 922 & 804\\
+		\textbf{digs0a32} & 142 & 1032 & 630 \\
+		\textbf{ecoprob} &  668 & 1130 & 6\\
+		\textbf{antpers} &299 & 1505 & 0 \\
+		\textbf{antpsifa} & 575 & 1229&0 \\
+		\textbf{expvit} &  1137 & 666 & 1\\
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla de frecuencias de las variables explicativas categóricas más relevantes.}
+	\label{tab:6}
+\end{table}
+
+Obsérvese como el rango de valores de la variable numérica \textbf{epds0} es bastante inferior al de las otras dos, como es lógico, ya que utilizan escalas de valores diferentes y, mientras la puntuación máxima del cuestionario EPDS es 30, la de las dos restantes es superior a 60. Además, llama la atención la gran cantidad de \textit{missings} en los datos de seguimiento a las 8 y 32 semanas.
+
+\section{Modelo de Regresión Logística}\label{cap:aplicacionlogistica}
+
+En este apartado se ajustan tres modelos de regresión logística, uno para cada una de las tres variables respuesta del estudio, mediante la función ``glm" de R. Se incluyen tablas con las salidas de R resultantes, las expresiones de los modelos y una breve interpretación de los resultados. \\
+
+Cabe señalar que los tres modelos de regresión logística se han ajustado con las variables explicativas incluidas en los modelos del estudio, sin utilizar ningún criterio de selección de variables puesto que, como ya se mencionó en el Capítulo \ref{cap:estudioppal}, los investigadores ya ajustaron los modelos siguiendo el método propuesto por \textcite{hosmer}.
+
+\subsection{Síntomas de depresión a las 8 semanas (EPDS$>9$)}
+
+Se desea estudiar la presencia de síntomas de depresión a las 8 semanas postparto en función de diferentes posibles factores de riesgo. Por ello, se ajusta un modelo con la variable \lstinline{epds8wc} (síntomas depresivos a las 8 semanas postparto según EPDS) como variable respuesta y se definirán como variables explicativas las siguientes: puntuación de neuroticismo en el cuestionario EPQR-A, puntuación basal de EPDS, puntuación de apoyo social del cuestionario DUKE y historia clínica psiquiatrica personal. El modelo correspondiente se muestra en la Tabla (\ref{tab:7}), adjuntada a continuación.
+\begin{table} [h!]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & adj. OR(IC 95\%)\\
+		\midrule
+		Constante & -4.305 &  0.731& -5.888  & $<$ 0.0001 &  \\
+		Neuroticismo &  0.047   & 0.011   & 4.119 & $<$ 0.0001  & 1.05 (1.02,1.07) \\
+		Puntuación EPDS & 0.177  &  0.022  & 7.903 &$<$ 0.0001  &1.19 (1.14,1.25) \\
+		Apoyo social &  -0.020  &    0.009  &-2.291  & 0.022 &0.98 (0.96,1) \\
+		Historia psiquiátrica personal & 0.668  & 0.190 &  3.515 & 0.0004  &1.95 (1.34,2.83) \\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión logística para los síntomas de depresión a las 8 semanas postparto con función ``glm".}
+	\label{tab:7}
+\end{table}
+
+La expresión matemática estimada para el modelo es
+\begin{equation*}
+\text{logit}(\hat{\pi}_{\mathsmaller{\boldsymbol{X}}})=\log\Big(\frac{\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}}{1-\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}}\Big)=-4.305+0.047X_1+0.177X_2-0.02X_3+0.668X_4,
+\end{equation*}
+
+donde $X_1=$ Neuroticismo, $X_2=$ Puntuación EPDS basal , $X_3=$ Apoyo social (Duke) y $X_4=$ Historia psiquiátrica personal.\\
+
+Alternativamente, la fórmula anterior se puede escribir en función de la probabilidad estimada de respuesta positiva, $\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}$, como se muestra a continuación:
+\begin{equation*}
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\frac{\exp(-4.305+0.047X_1+0.177X_2-0.02X_3+0.668X_4)}{1+\exp(-4.305+0.047X_1+0.177X_2-0.02X_3+0.668X_4)}
+\end{equation*}
+
+Todos los parámetros resultan ser estadísticamente significativos al 5\% (todos tienen un p-valor inferior a 0.05) por lo que todas las variables del modelo se suponen relevantes para explicar la presencia o ausencia de síntomas depresivos a las 8 semanas postparto. \\
+
+A partir de la estimación de los parámetros del modelo se puede concluir que el apoyo social es un posible factor protector de padecer depresión postparto mientras que el neuroticismo, la puntuación inicial en el cuestionario EPDS y tener un historial psiquiatrico personal son tres posibles factores de riesgo.\\
+
+Finalmente, mencionar que los OR asociados a cada una de las variables son ajustados por todas las demás variables. A modo de ejemplo veamos que  el OR ajustado asociado a la variable ``Historia psiquiátrica personal'' es $1.95$, lo cual significa que el \textit{odds} de que una mujer seleccionada al azar presente síntomas depresivos a las 8 semanas postparto es más alto (puesto que \textit{adj. OR} $>1$) entre aquellas mujeres con un historial psiquiatico respecto a las que no tienen, teniendo en las demás variables los mismos valores.
+
+\subsection{Síntomas de depresión a las 32 semanas (EPDS$>9$)}
+
+En este caso se pretende estudiar la asociación entre la incidencia de síntomas depresivos entre las 8 y las 32 semanas y las variables de interés que se seleccionaron en el estudio: puntuación de neuroticismo en el cuestionario EPQR-A, puntuación basal de EPDS y situación económica. El modelo correspondiente se muestra en la Tabla (\ref{tab:8}).
+
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & adj. OR(IC 95\%)\\
+		\midrule
+		Constante &   -4.998  &  0.701 & -7.130  &  $<$ 0.0001   &  \\
+		Neuroticismo &   0.040  &  0.017  & 2.305 & 0.021 &1.04 (1.01,1.08)  \\
+		Puntuación EPDS &   0.084 &  0.034 &  2.493 & 0.013 & 1.09 (1.02,1.16)\\
+		Problemas económicos & 0.680  &  0.244   & 2.784  &0.005 & 1.97 (1.22,3.18)\\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión logística para los síntomas de depresión a las 32 semanas postparto con función ``glm".}
+	\label{tab:8}
+\end{table}
+
+Entonces, la estimación de la probabilidad de casos incidentes de síntomas depresivos durante dicho periodo se puede calcular como se muestra a continuación.
+
+\begin{equation*}
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\frac{\exp(-4.998+0.04X_1+0.084X_2+0.68X_3)}{1+\exp(-4.998+0.04X_1+0.084X_2+0.68X_3))},
+\end{equation*}
+con $X_1=$ Neuroticismo, $X_2=$ Puntuación EPDS basal y $X_3=$ Problemas económicos.\\
+
+Nuevamente, todos los parámetros son estadísticamente significativos al 5\% y, viendo que los signos de los parámetros estimados son positivos y que los OR ajustados a las variables del modelo son superiores a 1, se concluye que las tres variables son posibles factores de riesgo para tener síntomas de depresión entre las 8 y las 32 semanas postparto. 
+
+\subsection{Diagnóstico clínico de la depresión postparto (DIGS)}
+
+Con este último modelo se analizará la asociación entre la presencia de episodios depresivos mayores (DIGS) durante las 32 primeras semanas postparto y diversos factores que se consideraron de interés y se incluyeron en el modelo ajustado en el estudio: puntuación de neuroticismo en el cuestionario EPQR-A, puntuación basal de EPDS, vivencia de eventos estresantes durante el periodo de embarazo e historial psiquiatrico personal y familiar. En la Tabla (\ref{tab:9}) se muestra el modelo correspondiente.
+
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & adj. OR(IC 95\%)\\
+		\midrule
+		Constante &  -5.739  & 0.568 &-10.098 & $<$ 0.0001 &  \\
+		Neuroticismo &  0.048 &   0.013  & 3.660 &0.0003   & 1.05 (1.02,1.08) \\
+		Puntuación EPDS &  0.085   & 0.026  &3.265 &0.001  & 1.09 (1.03,1.14) \\
+		Historia psiquiátrica personal &   0.941  &  0.210  & 4.492& $<$ 0.0001  &2.56 (1.7,3.86) \\
+		Historia psiquiátrica familiar & 0.563  &  0.195 & 2.881 &0.004 & 1.76 (1.2,2.57)\\
+		Eventos estresantes&  0.676 &  0.237  &  2.853& 0.004 & 1.97 (1.24,3.13)\\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión logística para Diagnóstico clínico de la depresión postparto con función ``glm".}
+	\label{tab:9}
+\end{table}
+
+En esta ocasión, todos los parámetros son estadísticamente significativos al 1\% y posibles factores de riesgo para padecer síntomas de depresión mayor durante las 32 semanas postparto. \\
+
+Para terminar, la expresión estimada del modelo es
+\begin{equation*}
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\frac{\exp(-5.739+0.048X_1+0.085X_2+0.941X_3+0.563X_4+0.676X_5)}{1+\exp(-5.739+0.048X_1+0.085X_2+0.941X_3+0.563X_4+0.676X_5))},
+\end{equation*}
+
+donde $X_1=$ Neuroticismo, $X_2=$ Puntuación EPDS basal, $X_3=$ Historial psiquiátrico personal, $X_4=$ Historial psiquiátrico familiar y $X_5=$ vivencia de eventos estresantes durante el embarazo.\\
+
+
+\section{Modelo de Regresión Log-binomial}\label{cap:aplicacionlogbinomial} 
+
+Para ajustar los modelos de regresión log-binomial se utilizarán, además de la función ``glm", la función ``logbin'' y el método ``COPY" del software R. De este modo, para cada una de las tres variables respuesta con las que se está trabajando, se ajustará un mismo modelo tres veces. Las variables explicativas que se incluirán en los ajustes log-binomiales serán las incluidas en las regresiones logísticas. \\
+
+De la misma manera que en la sección anterior, se intentará dar un carácter instructivo a las explicaciones añadiendo interpretaciones de los resultados y resaltando mejoras e inconvinientes de cada una de las funciones usadas. 
+
+
+\subsection{Síntomas de depresión a las 8 semanas (EPDS$>9$)}\label{sec:logbinomial8}
+ \textbf{Función ``glm"}\\
+[0.3cm]
+Se ha ajustado el modelo mediante la función ``glm", indicando que la función de enlace en este caso sea ``log" ( \lstinline{family = binomial (link = "log")}). Pero R informa de un error:
+
+\begin{Verbatim}[formatcom=\color{Red},  xleftmargin=2.2cm]
+Error: no valid set of coefficients has been found: 
+         please supply starting values
+\end{Verbatim}
+
+Recordando el estudio de \textcite{COPY}, los autores explicaron que especificar el valor inicial del \textit{intercept} con un $-4$ siempre funcionó bien en la práctia porque, por algún motivo, \textit{``en  situaciones con covariables cuantitativas, la estimación de máxima verosimilitud (MLE) para el modelo log-binomial está en el límite del espacio de parámetros"}. \\
+
+Por lo tanto, siguiendo sus indicaciones, se procede a ajustar el modelo log-binomial con la función ``glm'' introduciendo los valores iniciales -4 para la constante y 0 para las variables explicativas.\\ 
+
+En esta ocasión, R ha devuelto varios mensajes de advertencia:
+\begin{Verbatim}[xleftmargin=2.5cm]
+Warning messages:
+1: step size truncated due to divergence
+...
+37: step size truncated: out of bounds
+38: glm.fit: algorithm did not converge
+39: glm.fit: algorithm stopped at boundary value
+\end{Verbatim}
+
+aunque no impiden que consiga obtener los valores del modelo. \\
+
+A continuación se incluyen la expresión del modelo (\ref{eq:log}), la fórmula para obtener la estimación de $\pi_{\mathsmaller{\boldsymbol{X}}}$  (\ref{eq:log2}) y la tabla de valores resultante (\ref{tab:10}).
+
+\begin{equation}
+\label{eq:log}
+\log(\hat{\pi}_{\mathsmaller{\boldsymbol{X}}})=-4.835+0.042X_1+0.068X_2+0.007X_3+0.219X_4.
+\end{equation}
+
+
+\begin{equation}
+\label{eq:log2}
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\exp(-4.835+0.042X_1+0.068X_2+0.007X_3+0.219X_4).
+\end{equation}
+
+
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & $\widehat{RR}$\\
+		\midrule
+		Constante &  -4.835&  0.334&-14.459 & $<$ 0.0001 &  \\
+		Neuroticismo &   0.042 & 0.006 &  6.753& $<$ 0.0001 & 1.043 \\
+		Puntuación EPDS &  0.068  &0.007  &10.157&  $<$ 0.0001 & 1.070\\
+		Apoyo social &  0.007 & 0.001   &8.139 &$<$ 0.0001 & 1.007\\
+		Historia psiquiátrica personal & 0.219 &  0.138 & 1.581  &  0.114 &1.245 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión log-binomial para los síntomas de depresión a las 8 semanas postparto con función ``glm'' y argumento ``start".}
+	\label{tab:10}
+\end{table}
+
+A diferencia del modelo de regresión logística, no todos los parámetros son significativos. Parece ser que, con el ajuste log-binomial, la historia psiquiátrica personal no es una variable relevante para explicar la variable respuesta (síntomas depresivos a las 8 semanas postparto) ni incluso con un 10\% de significación.\\
+
+ \textbf{Función ``logbin"}\\
+[0.3cm]
+La primera cuestión a comentar sobre el uso de esta función es que el coste computacional es muy alto: el tiempo que tarda en ejecutar el ajuste del modelo es mucho mayor que el utilizado con la función ``glm". Además, R ha comunicado el siguiente aviso:
+
+\begin{Verbatim}[xleftmargin=2.5cm]
+Warning message:
+nplbin: fitted probabilities numerically 1 occurred 
+\end{Verbatim}
+
+y no devuelve el p-valor, el estadístico $Z$ ni la desviación típica de la estimación de los parámetros, s.e.($\hat{\beta}$), ver Tabla (\ref{tab:11}). 
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & $\widehat{RR}$\\
+		\midrule
+		Constante &  -3.905 & NA  & NA &NA &  \\
+		Neuroticismo &  3.62e-02   & NA  & NA &NA &1.037  \\
+		Puntuación EPDS &  3.72e-02 & NA  & NA &NA &1.038 \\
+		Apoyo social (Puntiación Duke-UNC)& 7.77e-16   & NA  & NA &NA& 1.000 \\
+		Historia psiquiátrica personal & 2.55e-01  & NA  & NA &NA  &1.291 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión log-binomial para los síntomas de depresión a las 8 semanas postparto con función ``logbin".}
+	\label{tab:11}
+\end{table}
+
+Por lo tanto, se intenta solucionar este problema indicando en la función, a través del argumento \lstinline{bound.tol}, una tolerancia mayor que 0 dentro del espacio de parámetros. De esta manera, si el modelo ajustado está por encima de la tolerancia especificada, se asume que está dentro del espacio de parámetros y el método computacional termina antes si se encuentra un máximo interior.  \\
+
+Se han hecho varias pruebas fijando como tolerancia interior diferentes valores entre 0 y 1 pero en todos los casos la salida ha sido la misma que la adjuntada arriba. No se ha conseguido obtener todos los valores del modelo.\\
+
+ \textbf{Función ``COPY"}\\
+[0.3cm]
+En tercer lugar, se ha ajustado el modelo utilizando la función ``COPY", implementada en R por \textcite{Silvia}. Se han realizado ensayos con $n=100$, $n=1000$ y $n=10000$ copias. Cabe recordar, adicionalmente, que esta función ya tiene integrados los valores iniciales de -4 y 0 para la constante  y las variables explicativas, respectivamente. \\
+
+En los tres casos R ha devuelto un mensaje de advertencia:
+
+\begin{Verbatim}[xleftmargin=2.5cm]
+Warning message:
+step size truncated due to divergence
+\end{Verbatim}
+
+Parece ser que los problemas de convergencia siguen presentes en esta función pero, a pesar de ello, el ajuste del modelo es ejecutado. \\
+
+Comparando los resultados de las tres salidas con los obtenidos con la función ``glm", el que ofrece unos resultados más cercanos a los de la Tabla \ref{tab:10} es el modelo con $n=10000$ simulaciones, el cual se muestra en la Tabla (\ref{tab:12}): 
+\begin{equation*}
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\exp(-4.734+0.043X_1+0.064X_2+0.007X_3+0.155X_4).
+\end{equation*}
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & $\widehat{RR}$\\
+		\midrule
+		Constante &   -4.734  &0.299 &-15.815 & $<$ 0.0001 &  \\
+		Neuroticismo &   0.043 &0.005   &7.847 &$<$ 0.0001 &  1.044\\
+		Puntuación EPDS & 0.064 & 0.006 & 10.597  &$<$ 0.0001 &1.066 \\
+		Apoyo social&   0.007 &0.001 &  9.891 & $<$ 0.0001 & 1.007 \\
+		Historia psiquiátrica personal &  0.155 & 0.127  & 1.226  &   0.22 & 1.168\\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión log-binomial para los síntomas de depresión a las 8 semanas postparto con función ``COPY'' y  n=10000 copias.}
+	\label{tab:12}
+\end{table}
+
+Al igual que en el modelo logbinomial con ``glm", el único parámetro no significativo es el asociado a la variable de la existencia de un historial psiquiatrico personal. Los valores de los parámetros estimados son positivos por lo que las tres variables explicativas restantes son factores de riesgo de padecer síntomas depresivos a las 8 semanas postparto. Este hecho también es observable a partir de los riesgos relativos asociados a esas variables: en los tres casos el RR estimado es superior a 1, aunque por muy poco.\\
+
+Por lo que concierne a la interpretación del riesgo relativo estimado ($\widehat{RR}$), según los resultados de este modelo y poniendo como ejemplo la variable ``neuroticismo'', se observa como el RR asociado a un aumento de una unidad en la escala EPQR-A es $1.044$. Es decir, al comparar dos mujeres con las mismas características (mismos valores en el resto de covariables), la probabilidad de tener síntomas depresivos a las 8 semanas postparto es 1.044 veces mayor para la participante con una puntuación una unidad superior. El $\widehat{RR}$ asociado a un aumento de, por ejemplo, 5 unidades en la puntuación del cuestionario, es $\exp(5\cdot \hat{\beta}_{epqnT})=1.044^5=1.24$.\\
+
+\textbf{Posible explicación de los errores de estimación}\\
+[0.3cm]
+Cuando algunos valores para las variables separan perfectamente las respuestas positivas de las negativas, las observaciones tienen una probabilidad nula de respuesta positiva igual a 0 o 1 . Esta situación recibe el nombre de \textbf{separación} y es un problema debido a que las estimaciones para los parámetros $\beta$ asociados a dichas variables no convergen (ver \textcite{separation} para más detalles). \\
+
+Se ha utilizado la función de R ``glm'', del paquete \textit{safeBinaryRegression} \autocite{safebinary}, la cual detecta si existe el problema de la separación en un determinado modelo. El mensaje obtenido ha sido el siguiente: 
+\begin{Verbatim}[formatcom=\color{Red},  xleftmargin=0.5cm]
+Error in glm(epds8wc ~ epqnT + epds0 + duke + antpers, data = dppdat,: 
+The following terms are causing separation among the sample points: 
+(Intercept), epqnT, epds0, duke, antpersYes
+\end{Verbatim}
+
+Es decir que en los valores de las variables de este modelo se ha detectado separación y, tal vez, es este el motivo por el cual se han obtenido los problemas de convergencia al ajustar el modelo de regresión log-binomial.
+
+\subsection{Síntomas de depresión a las 32 semanas (EPDS$>9$)}
+ \textbf{Función ``glm''}\\
+[0.3cm]
+Así como el ajuste del modelo de regesión log-binomial mediante la función ``glm'' en el modelo anterior ha generado un problema computacional, en este caso con la variable respuesta ``incidencia de síntomas depresivos entre las 8 y las 32 semanas'' y las variables explicativas puntuación de neuroticismo en el cuestionario EPQR-A, puntuación basal de EPDS y situación económica, el software ha sido capaz de encontrar los estimadores máximo verosímiles. Dicho de otra forma, con estos datos la función ``glm" no ha tenido problemas de convergencia, ver Tabla (\ref{tab:13}).
+\begin{equation*}
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\exp(-4.827+0.037X_1+0.066X_2+0.591X_3).
+\end{equation*}
+
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & $\widehat{RR}$\\
+		\midrule
+		Constante & -4.827  &  0.571 & -8.457 & $<$ 0.0001 &  \\
+		Neuroticismo& 0.037  &  0.014&  2.606 & 0.009& 1.038  \\
+		Puntuación EPDS &  0.066  &  0.029 &  2.293 & 0.022& 1.068\\
+		Problemas económicos &  0.591 &   0.217  & 2.723 & 0.006 &1.806 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión log-binomial para los síntomas de depresión a las 32 semanas postparto con función ``glm".}
+	\label{tab:13}
+\end{table}
+
+Al comparar estos valores con los obtenidos al ajustar el modelo de regresión logística, lo primero que se observa es que estos son bastante semejantes. También en ambos casos todos los parámetros han resultado ser estadísticamente significativos al 5\% y los signos de las estimaciones de los parámetros han sido positivos (sugiriendo que las variables son posibles factores de riesgo).\\
+
+Otros resultados notables son los valores de los riesgos relativos estimados: todos son superiores a 1, tal como los OR estimados en la regresión logística, pero inferiores a los OR. Esto no es de extrañar, puesto que en la Sección \ref{sec:medidas} ya se a comentado la relación entre el risgo relativo y el \textit{odds ratio}: si RR $>1$, entonces OR $>$ RR.\\ 
+
+\textbf{Función ``logbin"}\\
+[0.3cm]
+Se ha ajustado de nuevo el modelo anterior, esta vez con la función ``logbin". Los resultados logrados son exactamente los mismos que los obtenidos con ``glm".\\ 
+
+De nuevo, la expresión para obtener la estimación de la probabilidad de $Y=1$ es:
+
+\begin{equation*}
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\exp(-4.827+0.037X_1+0.066X_2+0.591X_3).
+\end{equation*}
+
+En esta ocasión no ha sido necesario añadir ningún argumento de más en la función para evitar problemas de convergencia ni tampoco se han recibido mensajes de advertencia. Por lo tanto, se concluye que con estos datos la funció ``logbin'' es tan válida como ``glm'' aunque, una vez más, el tiempo de ejecución ha sido muy superior.\\
+
+\textbf{Función ``COPY"}\\
+[0.3cm]
+Al realizar pruebas ajustando el mismo modelo con cien, mil y diez mil simulaciones, se ha podido verificar como el resultado obtenido con el mayor número de copias es el más acertado: las estimaciones són más próximas a las obtenidas con ``glm'' y ``logbin". Además, el modelo con $n=100$ copias es, sin duda alguna, el que obtiene las estimaciones más malas.\\
+
+La formulación matemática y la tabla de valores del modelo son los siguientes:
+\begin{equation*} 
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\exp(-4.823+0.037X_1+0.066X_2+0.59X_3).
+\end{equation*}
+
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & $\widehat{RR}$\\
+		\midrule
+		Constante &   -4.823  &  0.571 & -8.455 & $<$ 0.0001 &  \\
+		Neuroticismo &  0.037   & 0.014  & 2.604&  0.009 & 1.038  \\
+		Puntuación EPDS &  0.066 &  0.029 &  2.292&  0.022& 1.068\\
+		Problemas económicos &  0.590   &0.217  &2.722 & 0.006 & 1.805 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión log-binomial para los síntomas de depresión a las 32 semanas postparto con función ``COPY'' y n=10000 copias.}
+	\label{tab:14}
+\end{table}
+Es importante señalar que en los tres casos R ha informado del mismo \textit{warning} (que ya se había recibido en los ajuste con ``COPY'' del modelo anterior): \textit{``step size truncated due to divergence"}. Pero en esta ocasión, adicionalmente al mensaje anterior, en los casos en los que se han indicado 100 y 1000 simulaciones se ha obtenido:
+\begin{Verbatim}[xleftmargin=2.5cm]
+Warning messages:
+1: In eval(expr, envir, enclos) :
+non-integer #successes in a binomial glm!
+\end{Verbatim}
+
+Sin embargo, estos avisos no han impedido obtener resultados válidos para el modelo. 
+
+\subsection{Diagnóstico clínico de la depresión postparto (DIGS)}
+El conjunto de datos necesarios para estudiar la presencia de síntomas de depresión mayor durante las 32 primeras semanas postparto en función de diversos factores de interés tomados en consideración, empleados para ajustar un modelo de regresión logbinomial, han ocasionado los mismos problemas de convergencia que ya han surgido en el primer modelo (Sección \ref{sec:logbinomial8}). \\
+
+Se inculyen a continuación las complicaciones surgidas y soluciones propuestas para cada una de las funciones usadas para ajustar el modelo.\\ 
+
+\textbf{Función ``glm"}\\
+[0.3cm]
+En primer lugar, la función ha manifestado la imposibilidad de encontrar una estimación para los coeficientes del modelo mediante el siguiente mensaje de error:
+\begin{Verbatim}[formatcom=\color{Red},  xleftmargin=2.2cm]
+Error: no valid set of coefficients has been found: 
+please supply starting values
+\end{Verbatim}
+
+En consecuencia, se ha procedido a fijar unos valores iniciales a los parámetros del predictor lineal. Una vez más, se han establecido las cifras $-4$ y $0$ para el \textit{intercept} y las variables regresoras, respectivamente.\\
+
+Pero R ha devuelto varios avisos, los mismos que los obtenidos con el modelo 1:
+\begin{Verbatim}[xleftmargin=2.5cm]
+Warning messages:
+1: step size truncated due to divergence
+...
+37: step size truncated: out of bounds
+38: glm.fit: algorithm did not converge
+39: glm.fit: algorithm stopped at boundary value
+\end{Verbatim}
+
+A pesar de que haya habido un problema de convergencia, el algoritmo ha sido capaz de detenerse en un valor límite dentro del espacio de parámetros y obtener la estimación máximo verosímil de los parámetros. El modelo correspondiente se adjunta en la Tabla (\ref{tab:15}).
+\begin{equation*}
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\exp(-4.654+0.029X_1+0.053X_2+0.686X_3+0.343X_4+0.564X_5).
+\end{equation*}
+
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor &$\widehat{RR}$\\
+		\midrule
+		Constante &   -4.654&  0.340 &-13.669 & $<$ 0.0001  &  \\
+		Neuroticismo &  0.029 &  0.009 & 3.253 & 0.001 & 1.029\\
+		Puntuación EPDS &  0.053 & 0.020 &  2.609  &0.009& 1.054 \\
+		Historia psiquiátrica personal &   0.686  & 0.170&  4.037 &$<$0.0001 &1.985 \\
+		Historia psiquiátrica familiar &   0.343  & 0.147 &   2.336  &0.019& 1.409\\
+		Eventos estresantes durante el embarazo &  0.564   &0.211 &  2.670 & 0.008 &1.757 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión log-binomial para el diagnóstico clínico de la depresión postparto con función ``glm".}
+	\label{tab:15}
+\end{table}
+
+Al paralelar estos resultados con los del ajuste logístico es interesante señalar que, en ambos casos, todos los parámetros han sido claramente significativos estadísticamente. También, se observa como todas las estimaciones del riesgo relativo son superiores a 1 y, por ende, los riesgos relativos asociados a cada una de las variables han resultado ser menores que sus respectivos $\widehat{OR}$ del model de regresión logística correspondiente.\\
+
+\textbf{Función ``logbin"}\\
+[0.3cm]
+Con estos datos, el tiempo de ejecución ha vuelto a ser muy alto. Asimismo, se ha recibido un mensaje de advertencia:
+\begin{Verbatim}[xleftmargin=2.5cm]
+Warning message:
+nplbin: fitted probabilities numerically 1 occurred 
+\end{Verbatim}
+
+y la función únicamente ha conseguido obtener la estimación de los parámetros (véase la Tabla (\ref{tab:16}) adjuntada bajo estas línias).
+\begin{equation*}
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\exp(4.569+0.032X_1+0.026X_2+0.693X_3+0.323X_4+0.609X_5).
+\end{equation*}
+
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & $\widehat{RR}$\\
+		\midrule
+		Constante &  -4.569 & NA & NA & NA &  \\
+		Neuroticismo &   0.032  & NA & NA & NA &  1.033\\
+		Puntuación EPDS & 0.026 & NA & NA & NA  & 1.026 \\
+		Historia psiquiátrica personal &  0.693& NA & NA & NA   & 1.999 \\
+		Historia psiquiátrica familiar & 0.323  & NA & NA & NA & 1.382\\
+		Eventos estresantes durante el embarazo & 0.609   & NA & NA & NA  & 1.839\\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión log-binomial para el diagnóstico clínico de la depresión postparto con función ``logbin".}
+	\label{tab:16}
+\end{table}
+
+Esta vez, además de intentar solucionar el problema cambiando el valor de tolerancia positiva especificando el interior del espacio de parametros mediante el argumento \lstinline{bound.tol}, se han hecho pruebas modificando (ampliando y reduciendo) el número de iteraciones máximo con \lstinline{maxit}. En todas las ocaciones se han obtenido los mismos resultados, los de la Tabla \ref{tab:16}, por lo que no se ha conseguido alcanzar la solución. \\
+
+\textbf{Función ``COPY"}\\
+[0.3cm]
+Por último, se ha ajustado el modelo mediante la función ``COPY". En los ajustes en los que se han determinado $n=100$ y $n=1000$ copias se ha obtenido, para cada iteración del algoritmo, el siguiente mensaje de advertencia:
+\begin{Verbatim}[xleftmargin=2.5cm]
+Warning messages:
+step size truncated due to divergence
+\end{Verbatim}
+
+Pese a estos avisos, se han obtenido resultados. También se ha logrado obtener resultados para el ajuste del modelo con $n=10000$ copias pero este caso, además de las advertencias anteriores, la función ha advertido en la última iteración:
+\begin{Verbatim}[xleftmargin=2.5cm]
+Warning messages:
+glm.fit: algorithm stopped at boundary value
+\end{Verbatim}
+
+El modelo más similar a los resultados anteriores, con ``glm'' y ``logbin", es el ajustado con mayor número de copias. Véase a continuación la formulación matemática y la tabla de valores (\ref{tab:17}) de dicho modelo:
+\begin{equation*}
+\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\exp(-4.487+0.027X_1+0.05X_2+0.671X_3+ 0.329X_4+ 0.582X_5).
+\end{equation*}
+
+\begin{table} [H]
+	\centering
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor &$\widehat{RR}$\\
+		\midrule
+		Constante &  -4.487 &  0.326 &-13.768  & $<$ 0.0001 &  \\
+		Neuroticismo & 0.027 &  0.009  & 3.215  &0.001 & 1.028 \\
+		Puntuación EPDS & 0.050  & 0.019 &  2.605 & 0.009 &1.052 \\
+		Historia psiquiátrica personal & 0.671  & 0.163 &  4.127 &$<$0.0001 & 1.956\\
+		Historia psiquiátrica familiar & 0.329  & 0.141 & 2.339 & 0.019 & 1.389\\
+		Eventos estresantes durante el embarazo & 0.582 &  0.203  & 2.869 & 0.004 &1.790 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Modelo de regresión log-binomial para Diagnóstico clínico de la depresión postparto con función ``COPY".}
+	\label{tab:17}
+\end{table}
+
+\textbf{Posible explicación de los errores de estimación}\\
+[0.3cm]
+De nuevo, se ha usado la función ``glm'' del paquete \textit{safeBinaryRegression} para examinar la presencia de separación en los valores de las variables del modelo y, una vez más, R ha indicado que las variables ``están causando separación entre los puntos de muestra''.\\
+
+Por esta razón, podría ser plausible pensar que esta sea la causa de los problemas de convergencia del modelo para la presencia de episodios depresivos mayores durante las 32 primeras semanas postparto.
+
+\section{Pruebas de bondad de ajuste}\label{cap:bondad}
+
+Para terminar con la aplicación de los modelos de regresión logística y log-binomial, se procede a comprobar la bondad del ajuste de los modelos ejecutados mediante las funciones ``glm'' y ``logbin'' a lo largo de los Apartados \ref{cap:aplicacionlogistica} y  \ref{cap:aplicacionlogbinomial}. \\
+
+Para ello, se ha realizado la prueba de \textit{Hosmer-Lemeshow}  \autocite{hosmer}, con la función \lstinline{hoslem.test} de R,  del paquete \textit{ResourceSelection} \autocite{hoslemtest}.
+
+Recordando la explicación de dicho test (ver Sección \ref{cap:logistica} para más detalles), en cada modelo se han dividido los individus en $g=10$ grupos, previamente ordenados según la probabilidad estimada de tener $Y=1$. El estadístico de la prueba es una $\chi^2_{HL}$ con $g-2$ grados de libertad por lo que todos los modelos han tenido 8 grados de libertad. El p-valor para el test es la probabilidad de que el valor $\chi^2$ en tablas sea mayor que el estadístico calculado. Las hipótesis a contrastar son: 
+\begin{center}
+	$H_0:$ el modelo se ajusta bien a los datos.\\ 
+	$H_1:$ el modelo NO se ajusta bien a los datos. 
+\end{center}
+Por esta razón, fijado un nivel de significación del 10\%, para aquellos modelos con un p-valor superior a $0.1$ se cocluirá que no hay evidencias de un mal ajuste.\\
+
+En la tabla adjuntada bajo estas línias se incluyen los resultados del test para cada uno de los modelos.
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ l | l c c } 
+		\toprule
+		\textbf{Modelo} & Función de R & Estadístico $\chi^2$ & p-valor\\
+		\midrule
+		\multirow{3}{10em}{Síntomas depresivos a las 8 semanas} & logística  &  10.092 & 0.259 \\ 
+		& \cellcolor[HTML]{ffe4e1}log-binomial ``glm"  & \cellcolor[HTML]{ffe4e1}35.526 & \cellcolor[HTML]{ffe4e1}2.14e-05\\ 
+		&\cellcolor[HTML]{ffe4e1}log-binomial ``logbin"  & \cellcolor[HTML]{ffe4e1}55.778  & \cellcolor[HTML]{ffe4e1}3.12e-09  \\ 
+		\midrule
+		\multirow{3}{10em}{Síntomas depresivos a las 32 semanas} & logística  & 8.367  & 0.398 \\ 
+		& log-binomial ``glm"   &  8.796    &0.360\\ 
+		& log-binomial ``logbin"   &  8.796  & 0.360 \\ 
+		\midrule
+		\multirow{3}{10em}{Diagnóstico de depresión mayor} & logística  &  11.442 & 0.178\\ 
+		& log-binomial ``glm"   &  12.238  &   0.141\\ 
+		& log-binomial ``logbin"   &  12.487 & 0.131\\
+		\bottomrule
+	\end{tabular}
+	\caption{Resultados test de bondad de ajuste de \textit{Hosmer-Lemeshow} para cada uno de los modelos.}
+	\label{tab:18}
+\end{table}
+Las filas coloreadas en rojo marcan los modelos con un p-valor inferior a $0.1$. Se observa como los tres modelos de regresión logística se ajustan bien a los datos mientras que, por lo que respecta a los modelos de regresión log-binomial ajustdos con las funciones ``glm'' y ``logbin'', estos únicamente han resultado ser buenos para los modelos 2 y 3. \\
+
+Una comprobación de que los modelos log-binomiales ajustados para la variable ``Síntomas de depresión a las 8 semanas postparto'' no se ajustan bien a los datos es que, en la sección \ref{sec:logbinomial8} en la que se han agregado los resultados de cada modelo, se han obtenido riesgos relativos estimados superiores o iguales a 1 mientras que los OR ajustados obtenidos en la regresión logística eran inferiores a esos valores de $\widehat{RR}$. En otras palabras, los resultados de los modelos ajustados mediante la regresión log-binomial contradicen los resultados de los modelos de regresión logística, cuyos ajustes parecen ser satisfactorios.\\
+
+Por último, es importante mencionar que no se han incluído las pruebas de bondad de ajuste para los modelos obtenidos mediante la función ``COPY'' puesto que habría que implementar una función específica para evaluar la calidad de estos modelos. Tampoco se ha llevado a cabo el test basado en el estadístico de la devianza debido a que todos los modelos incluyen variables contínuas y, como ya se ha mencionado en la Sección \ref{cap:logistica}, en esta situación la prueba no es adecuada. 

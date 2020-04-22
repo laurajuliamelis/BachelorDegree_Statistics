@@ -1,0 +1,14 @@
+[0] Config.pm:302> INFO - This is Biber 2.11
+[0] Config.pm:305> INFO - Logfile is 'TFG_presentacioÌ.blg'
+[47] biber-darwin:313> INFO - === Wed Jun 19, 2019, 23:32:45
+[258] Biber.pm:371> INFO - Reading './TFG_presentació.bcf'
+[388] Biber.pm:857> INFO - Found 5 citekeys in bib section 0
+[408] Biber.pm:3976> INFO - Processing section 0
+[426] Biber.pm:4136> INFO - Looking for bibtex format file 'references.bib' for section 0
+[429] bibtex.pm:1500> INFO - LaTeX decoding ...
+[478] bibtex.pm:1316> INFO - Found BibTeX data source 'references.bib'
+[612] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
+[612] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[612] Biber.pm:3804> INFO - Sorting list 'apa/global//global/global' of type 'entry' with template 'apa' and locale 'es-ES'
+[644] bbl.pm:617> INFO - Writing 'TFG_presentacioÌ.bbl' with encoding 'UTF-8'
+[663] bbl.pm:720> INFO - Output to TFG_presentacioÌ.bbl

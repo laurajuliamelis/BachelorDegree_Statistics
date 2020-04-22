@@ -1,0 +1,77 @@
+---
+title: "Exercici 1.7. Pressi? sangu?nea"
+author: "Laura Juli?"
+date: "16/10/2017"
+output: html_document
+---
+
+### Dades
+
+```{r}
+ y <- c(98, 160, 136, 128, 130, 114, 123, 134, 128, 107, 123, 125, 129, 132, 154, 115, 126, 132, 136, 130)
+```
+
+
+## Apartat a
+
+#### Escull la distribuci? a priori d'acord amb l'enunciat i justifica la teva elecci?:
+
+Sigui $y$ = 'nivell de pressi? sangu?nea',  el model estad?stic del problema ?s: M={p(y| ?) = Normal( ?, $\sigma$=13),  ? $\in$ R^+^}.
+Per tal de fer infer?ncia sobre el par?metre, formulem la distribuci? a priori de $?$ com ? ~ N(?~0~, $\sigma$~0~^2^). 
+
+Utilitzant el nostre coneixement previ a l'experiment obtenim que:   ? ~ N(125, 8^2^).
+```{r}
+mu0 <- 125
+sd0 <- 8 
+```
+
+
+## Apartat b
+
+#### Dibuixa en un mateix gr?fic la distribuci? a priori i la versemblan?a. Explica com has calculat la versemblan?a i comenta el gr?fic: 
+
+Calculem la funci? de versemblan?a un cop s'han recollit les dades, ja que aquesta ?s una funci? proporcional a la distribuci? de probabilitat de y, avaluada a les dades. Al tractar-se d'una Normal on la varian?a ?s coneguda i que per tant, l'?nic par?metre desconegut ?s ? (sobre el que desitjem fer la infer?ncia), la versemblan?a de les dades tindr? l'expressi? seg?ent: 
+
+$L(y| ?) {\propto}  exp [-? \frac{{\Sigma}(y_i -  ?)^2}{{\sigma}^2}]$.
+
+
+
+```{r}
+plot(function(x)dnorm(x, mean = mu0, sd = sd0), xlim = c(70, 180), ylab = "", xlab = "Mitjana y", lty = 1) 
+plot(function(x)dnorm(x, mean = mean(y), sd = 13), xlim = c(70, 180), add = T, lty = 2)   
+legend("topright", legend = c("A priori", "Versemblan?a"), lty = 1:2, cex = 0.8) 
+```
+
+
+El gr?fic de la distribuci? a priori s'ha obtingut amb els valors dels par?metres que ja coneixiem i el de la versemblan?a, amb la mitjana de la mostra i la desviaci? t?pica coneguda. 
+
+S'observa que la campana de la a priori ?s m?s alta perqu? t? una desviaci? t?pica m?s petita, ja que dibuixa la distribuci? del par?metre (la mitjana de la pressi? sangu?nea) i aquest, no pot allunyar-se molt de 125, ?s a dir, que no t? molta variabilitat.
+
+En canvi, la versemblan?a reflexa la informaci? que tenen les dades de la nostra mostra sobre $\mu$ (el par?metre). Aix? doncs, la campana est? centrada en 128 (mitjana mostral) y amb una variabilitat major (la coneguda).
+
+
+
+
+## Apartat c
+
+#### Dibuixa i comenta la distribuci? predictiva a priori.
+
+Com ja s'ha vist, abans de recollir les dades tenim ? ~ N(M=125, s=8^2^) per la qual cosa la predictiva a priori, que ?s la distribuci? marginal de la $y$, resulta:
+P($\tilde{y}$) = $\lmoustache$ P($\tilde{y}$ | $\mu$) d$\mu$.
+
+Per? no resoldrem anal?ticament la integral, sin? que es realitzar? una simulaci?.
+
+```{r}
+ M <- 200000 
+ sim <- rnorm(M, mu0, sd0) 
+ dist.pre.priori.sim <- rnorm(M, sim, 13)
+ 
+ hist(dist.pre.priori.sim,freq=FALSE,breaks=50,ylab='',xlab='Mitjana y',main='Distribuci? predictiva a priori')
+ lines(density(dist.pre.priori.sim))
+```
+
+S'estableix el nombre de simulacions en M=200000 per tal de millorar el resultat i es simulen M valors de la distribuci? a priori (variable *sim*). Llavors, per a cada valor simulat, simulem el model estad?stic (variable *dist.pre.priori.sim*).
+
+?s per aquest motiu que s'utilitzen $\mu$ = 125 i $\sigma$ = 8, que s?n els valors de la apriori, per a la primera simulaci?; aix? com les $\mu$ obtingudes en la primera simulacio i $\sigma$ = 13 per a la segona.
+
+Aix? doncs, aquest gr?fic de la distribuci? predictiva a priori, ens proporciona informaci? sobre l'espai mostral i a partir d'ell podem fer prediccions.

@@ -1,0 +1,412 @@
+---
+title: 'TASCA 2. Inferència no paramètrica: Rangs.'
+author: "Laura Julià Melis i Víctor Navarro Garcés"
+date: "26 de Maig de 2019"
+output: html_document
+---
+
+## Exercici 1
+
+#### 1. La inflamabilitat dels pijames infantils és un tema de seguretat important. Les dades de la taula adjunta corresponen a unes proves realitzades per cinc laboratoris diferents; els valors indicats són els d’un índex estàndard d’inflamabilitat. Cada laboratori va rebre 11 pijames d’un mateix model (en total 55 pijames) i va realitzar les corresponents proves. Com veurem, el problema central en aquest problema serà determinar si hi ha diferències en la manera de mesurar la inflamabilitat per part dels laboratoris.
+
+Introducció de les dades:
+```{r}
+inflamabilitat=c(
+  3.91,4.15,4.11,4.78,4.1,5.25,4.7,4.9,3.8,4.09,2.99,
+  2.7,3.4,3.6,3.22,4.08,4.13,3.8,3.87,4.3,3.45,3.3,
+  3.3,3.35,3.5,3.51,2.89,2.83,3.21,2.84,3.8,3.55,3.8,
+  3.37,3.26,3.46,2.78,2.71,3.39,2.93,3.27,2.96,2.6,2.82,
+  5.17,5.19,4.8,5.29,4.19,4.53,4.88,3.58,4.72,6.55,6.96
+)
+laboratori = factor(rep(c("L1","L2","L3","L4", "L5"), rep(11,5)))
+```
+
+
+**a) Realitza una prova de Kruskal-Wallis per determinar si hi ha alguna diferència entre laboratoris quant a la mediana de l’índex d’inflamabilitat. Indica les hipòtesis, el model associat, l’estadístic de test i la conclusió final d’aquesta prova sense utilitzar l’ordre kruskal.test de l’R.**
+
+**1. Definim el contrast d'hipòtesis a realitzar**
+
+Les hipòtesis nul·la ($H_0$) i alternativa ($H_1$) d'aquesta prova de Kruskal-Wallis són:
+
+$$H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4 = \mu_5$$
+$$H_1: \mu_i \neq \mu_j \quad i = [1,2,3,4,5] , j = [1,2,3,4,5], $$  per alguna parella de nivells i, j. És a dir, que algun parell sigui diferent entre si
+
+Aquí $\mu$ fa referència a la mediana poblacional de l'índex d’inflamabilitat per a cada  un dels laboratoris i, $i = 1:5$. 
+
+**2. Calculem els rangs**
+```{r}
+# Longitud total.
+N = length(inflamabilitat)
+N
+
+# Grandària dels grups.
+n_i = tapply(inflamabilitat, laboratori, length)
+n_i
+
+# Càlcul dels rangs com si estractes d'una sola mostra.
+inflamabilitat.rank = rank(inflamabilitat)
+inflamabilitat.rank
+
+# Suma dels rangs per cada grup (laboratori)
+sum.ranks = tapply(inflamabilitat.rank, laboratori, sum)
+sum.ranks
+```
+
+**3.Calculem l'estadístic del test (mesura de discrepància)**
+
+L'estadístic del test és:
+
+$$H= \frac{12}{N(N+1)} \cdot \sum^{5}_{i=1}\frac{R_{i·}^2}{n_i}-3(N+1)$$
+```{r}
+H = (12 / (N * (N + 1))) * sum((sum.ranks^2) / n_i) - 3 * (N + 1)
+H
+```
+
+Però alguns autors recomanen l’estadístic “corregit pels empats” $H’=\frac{H}{C}$, on:
+
+$$C=1- \frac{\sum^{2}_{i=i}(t_i^3-t_i)}{N^3-N}$$
+amb s=nombre de sèries de valors empatats i $t_i$= llargada de la sèrie i de valors empatatat. 
+
+Per tant, procedim a calcular-ho:
+```{r}
+ties<-summary(as.factor(inflamabilitat.rank), maxsum=1000)
+ties<-ties[ties>1]
+t_i<-ties
+t_i
+
+C = 1 - sum(t_i^3 - t_i) / (N^3 - N)
+H_cor<-H/C
+H_cor
+```
+
+Així doncs, tenim que el valor de l'estadístic és $H=35.50679$ i que l'estadístic corregit és $H'=35.52088$. Encara que és força semblant, per als posteriors càlculs es farà servir l'estadístic amb la correcció ja que en les nostres dades hi ha diversos empats. 
+
+**4. Calculem el p-valor i la regió de rebug**
+
+Tant l'estadístic com l'estadístic corregit segueixen asimptòticament una distribució chi-quadrat amb $a-1$ graus de llibertat, on a és el nombre de condicions diferentes (en aquest cas, a=5 laboratoris):
+$$H' \sim \chi^2_{a-1}$$
+
+```{r}
+pvalor <- 1-pchisq(H_cor, length(n_i)-1)
+pvalor
+```
+
+```{r}
+ChiT<-qchisq(0.95, (length(n_i)-1))
+ChiT
+```
+
+El p-valor per a la prova que estem realitzant és 3.630622e-07. 
+
+
+**5. Conclusió.**
+
+El criteri per prendre decisions en aquest test és que, si $H \ge\chi^2_\alpha(a-1)$, o bé si el p-valor és inferior al nivell de significació $\alpha$ (és a dir, que $P\{\chi^2\ge H|H_0\}\le \alpha$), llavors es rebutjarà $H_0$.
+
+En el nostre cas, com que p-valor = 3.63e-07 (< 0.05, amb un nivell de significació del 5%) i H'=35.52088 $> \chi^2_{\alpha}(a-1)$=9.487729, rebutjarem la hipòtesi nul·la d'igualtat de medianes entre les mesures dels diferents grups. Per tant, es conclou que hi ha alguna diferència entre laboratoris pel que fa a la mediana de l’índex d’inflamabilitat.
+
+
+**b) Utilitza l’ordre de R kruskal.test i compara els resultats que has obtingut amb els de l’R.**
+
+Fem servir la funció ``kruskal.test`` indicant com a arguments d'aquesta els vectors amb les mesures d’inflamabilitat i els diferents laboratoris:
+```{r}
+kruskal.test(inflamabilitat ~ laboratori)
+```
+
+L'output ens retorna l'estadístic del test (Kruskal-Wallis chi-squared = 35.521), els graus de llibertad (que com hem vist abans aquests es mesuraven fent $a-1$ i en el nostre cas $a=5$ i d'aquí que $df=5-1=4$) i el p-valor (p-value = 3.631e-07). 
+
+Veiem que els tres valors són pràcticament iguals als obtinguts en l'apartat 1 (només canvien alguns decimals a causa de l'arrodoniment que fa la funció kruskal.test), per la qual cosa, la conclusió a la que s'arriba és la mateixa. 
+
+
+**c) Fent servir altres proves addicionals si s’escau, descriu les hipòtesis de validesa del test utilitzat i indica si en aquest cas concret es compleixen o si el creus apropiat per les dades presentades.**
+
+Tres condicions de validesa del test de Kruskal-Wallis:
+
+(1) Les dades no provenen d'una normal. 
+
+En primer lloc s'estandaritzen les dades (restant a cada valor la mediana del grup al que pertany) i després, s'executa el test de normalitat.
+```{r}
+inflamabilitatl1 <- inflamabilitat[1:11] - rep(median(inflamabilitat[1:11]),11) 
+inflamabilitatl2 <- inflamabilitat[12:22] - rep(median(inflamabilitat[12:22]),11) 
+inflamabilitatl3 <- inflamabilitat[23:33] - rep(median(inflamabilitat[23:33]),11) 
+inflamabilitatl4 <- inflamabilitat[34:44] - rep(median(inflamabilitat[34:44]),11) 
+inflamabilitatl5 <- inflamabilitat[45:55] - rep(median(inflamabilitat[45:55]),11) 
+
+dades.est <- c(inflamabilitatl1,inflamabilitatl2,inflamabilitatl3,inflamabilitatl4,inflamabilitatl5)
+
+shapiro.test(dades.est)
+```
+Com que el p valor del test de normalitat Shapiro-Wilk és inferior a 0.05 es conclou que les dades no provenen d'una normal.
+
+(2) Les desviacions típiques dels $a$ diferents grups són iguals:
+
+$$\sigma_1=...=\sigma_a$$
+
+Ho comprovem visualment mitjançant un gràfic de boxplot:
+```{r}
+boxplot(dades.est~laboratori)
+```
+Sembla que les dades tenen una variancia similiar i per tant es pot considerar que hi ha homocedasticitat entre els grups.
+
+(3) Les distribucions de les submostres de cadascuna de les $a$ condicions són iguals:
+
+$$F_1\Bigg(\frac{Y-\mu_1}{\sigma_1}\Bigg)=...= F_a\Bigg(\frac{Y-\mu_a}{\sigma_a}\Bigg),$$
+on $\mu_i$ i $\sigma_i$ són la mitjana i la desviació típica per cada gru $i=1,2,..., a$.
+
+El test de Kolmogorov-Smirnov ens permet estudiar si les mostres provenen d'una matexia distribució, per tant el realitzem a continuació.
+
+**1. Hipòtesis**
+
+$H_0:$ les mostres provenen d'una mateixa distribució.
+
+$H_1:$ les mostres NO provenen d'una mateixa distribució.
+
+**2. Càlcul de l'estadístic i del p-valor mitjançant la funció ``ks.test``.**
+```{r}
+ks.test(dades.est[1:11], dades.est[12:22])
+ks.test(dades.est[1:11], dades.est[23:33])
+ks.test(dades.est[1:11], dades.est[34:44])
+ks.test(dades.est[1:11], dades.est[45:55])
+```
+
+**3. Conclusió.**
+Com que els p-valors són superiors a 0.05, no tenim evidències suficients per rebutjar la hipòtesis nul·la i es conclou que totes les dades provenen d'una mateixa distribució. 
+
+Així doncs, les hipòtesis de validesa del test de Kruskal-Wallis es compleixen i és apropiat haver-lo utilitzat amb aquestes dades. 
+
+
+
+## Exercici 2
+
+#### 2. Independentment del que hagis contestat a l’exercici anterior, es demana determinar si hi ha diferències entre els laboratoris 1 i 4, i entre 1 i 5 fent servir la prova basada en rangs de les que hem vist a classe que consideris més adient.
+
+
+**a) Indica les hipòtesis, l’estadístic de test i la conclusió final d’aquesta prova sense utilitzar les ordres ad hoc de l’R.**
+
+Per comparar els paràmetres de dos grups independents, es recomonable l'utilització del Test de Mann-Whitney-Wilcoxon. Com no s'especifica quin tipus de desigualtat es vol estudiar, es farà el test bilateral. 
+
+* ENTRE ELS GRUPS 1 I 4:
+
+
+**1. Definim el contrast d'hipòtesis a realitzar**
+
+
+
+$$H_0: \mu_1 = \mu_4 $$
+$$H_1: \mu_1 \neq \mu_4 $$
+
+
+**2. Calculem els rangs**
+
+
+```{r}
+# Longitud total.
+inf1_4 <- inflamabilitat[c(1:11,34:44)]
+lab1_4 <- laboratori[c(1:11,34:44)]
+lab1_4 <- droplevels(lab1_4)
+N1_4 = length(inf1_4)
+N1_4
+
+# Grandària dels grups.
+n_1_4 = tapply(inf1_4, lab1_4, length)
+n_1_4
+
+# Càlcul dels rangs com si estractes d'una sola mostra.
+inflamabilitat.rank1_4 = rank(inf1_4)
+inflamabilitat.rank1_4
+
+# Suma dels rangs per cada grup (laboratori)
+sum.ranks1_4 = tapply(inflamabilitat.rank1_4, lab1_4, sum)
+sum.ranks1_4
+```
+
+**3. Calculem l'estadístic del test (mesura de discrepància)**
+
+* Estadístic U de Mann-Whitney
+
+$$ U = min(R_{1·}- \frac{n1*(n1+1)}{2}, R_{2·}- \frac{n2*(n2+1)}{2}) $$
+
+* Estadístic W de Wilcoxon 
+
+$$ W = R_{1.}- \frac{n1*(n1+1)}{2} $$
+```{r}
+u1_4 =min(sum.ranks1_4[1]-((n_1_4[1]*(n_1_4[1]+1))/2),sum.ranks1_4[2]-((n_1_4[2]*(n_1_4[2]+1))/2))
+w1_4 <- sum.ranks1_4[1]-((n_1_4[1]*(n_1_4[1]+1))/2)
+u1_4
+w1_4
+```
+Hem obtingut :
+ $$ W = 116 $$
+ $$ U = 5 $$
+S'assumira un nivell de significació $\alpha$ del 0.05.
+ 
+Es rebutjara $H_0$ si:
+$$U \le U_{\alpha/2}(n,m) $$ 
+$$ U_{\alpha/2}(n,m) = 30 $$ 
+$$ U = 5 $$ 
+
+Com l'estadistic U es igual a 5, es pot considerar que hi ha suficient evidencia per rebutjar $H_0$ i per tant per considerar que els grups 1 i 4 no són iguals, ja que es compleix que $U \le U_{0.05/2}(11,11)$ 
+
+**4. Calculem l'interval de confiança**
+```{r}
+## Primer es calculen les nm diferencies 
+inf1 <- inf1_4[1:11]
+inf4 <- inf1_4[12:22]
+d1_4 <- vector()
+k <- 1
+for (i in 1:n_1_4[1]){
+  for ( j in 1:n_1_4[2]){
+    d1_4[k] <- inf1[i]-inf4[j]
+    k <- 1+k
+  }
+}
+
+## S'ordenen de menor a major les nm diferencies
+d1_4 <- sort(d1_4)
+
+## el nostre U d'alpha mig a la taula es 30
+u1_4 <- 30
+
+alpha <- u1_4+1
+v <- n_1_4[1]*n_1_4[2] - alpha+1
+
+c(d1_4[alpha],d1_4[v])
+```
+
+Interval de confiança de les diferencies = [0.74, 1.63]. Això vol dir que el grup 1 normalment es més gran que el 4, si fosin dependents en aquest interval tindria més rellevància el 0.
+
+* ENTRE ELS GRUPS 1 I 5:
+**1. Definim el contrast d'hipòtesis a realitzar**
+
+$$H_0: \mu_1 = \mu_5 $$
+
+$$H_1: \mu_1 \neq \mu_5 $$
+
+**2. Calculem els rangs**
+```{r}
+
+# Longitud total.
+inf1_5 <- inflamabilitat[c(1:11,45:55)]
+lab1_5 <- laboratori[c(1:11,45:55)]
+lab1_5 <- droplevels(lab1_4)
+N1_5 = length(inf1_5)
+N1_5
+
+# Grandària dels grups.
+n_1_5 = tapply(inf1_5, lab1_5, length)
+n_1_5
+
+# Càlcul dels rangs com si estractes d'una sola mostra.
+inflamabilitat.rank1_5 = rank(inf1_5)
+inflamabilitat.rank1_5
+
+# Suma dels rangs per cada grup (laboratori)
+sum.ranks1_5 = tapply(inflamabilitat.rank1_5, lab1_5, sum)
+sum.ranks1_5
+```
+
+**3. Calculem l'estadístic del test (mesura de discrepància)**
+
+* Estadístic U de Mann-Whitney
+
+$$ U = min(R_{1·}- \frac{n1*(n1+1)}{2}, R_{2·}- \frac{n2*(n2+1)}{2}) $$
+
+* Estadístic W de Wilcoxon 
+
+$$ W = R_{1.}- \frac{n1*(n1+1)}{2} $$
+```{r}
+u1_5 <- min(sum.ranks1_5[1]-((n_1_5[1]*(n_1_5[1]+1))/2),sum.ranks1_5[2]-((n_1_5[2]*(n_1_5[2]+1))/2))
+w1_5 <- sum.ranks1_5[1]-((n_1_5[1]*(n_1_5[1]+1))/2)
+u1_5
+w1_5
+```
+Hem obtingut :
+ $$ W = 27 $$
+ $$ U = 27 $$
+ 
+S'assumira un nivell de significació $\alpha$ del 0.05.
+ 
+Es rebutjara $H_0$ si:
+$$U \le U_{\alpha/2}(n,m) $$ 
+$$ U_{0.05/2}(11,11) = 30 $$ 
+$$ U = 27 $$ 
+
+Com l'estadistic U es igual a 27, es pot considerar que hi ha suficient evidencia per rebutjar $H_0$ i per tant per considerar que els grups 1 i 5 són diferents, ja que es compleix que $U \le U_{0.05/2}(11,11)$ 
+
+**4. Calculem l'interval de confiança**
+```{r}
+## Primer es calculen les nm diferencies 
+inf1 <- inf1_5[1:11]
+inf5 <- inf1_5[12:22]
+d1_5 <- vector()
+k <- 1
+for (i in 1:n_1_5[1]){
+  for ( j in 1:n_1_5[2]){
+    d1_5[k] <- inf1[i]-inf5[j]
+    k <- 1+k
+  }
+}
+
+## S'ordenen de menor a major les nm diferencies
+d1_5 <- sort(d1_5)
+
+## el nostre U d'alpha mig a la taula es 30
+u1_5 <- 30
+
+alpha2 <- u1_5+1
+v2 <- n_1_5[1]*n_1_5[2] - alpha2+1
+
+c(d1_5[alpha2],d1_5[v2])
+```
+
+Interval de confiança de les diferencies = [-1.38, -0.04]. Això vol dir que el grup 5 normalment es més gran que el 1, si fosin iguals en aquest interval tindria més rellevància el 0.
+
+**Conclusions Generals**
+
+Es pot veure com l'estadístic U entre els grups 1 i 4 és més baix que el dels grups 1 i 5, això es degut a que hi ha més diferencia entre els grups 1 i 4. Es pot corroborar amb els intervals de confiança, l'interval de confiança entre els grups 1 i 5 està molt proper al 0 per la part superior, mentre que l'interval de la comparació entre els grups 1 i 4 és més llunyà al 0.
+
+**b) Compara els resultats que has obtingut amb les que obtindries utilitzant els tests implementats amb l’R i discuteix ambdós resultats de manera similar a com hem fet a classe.**
+
+* Entre grup 1 i 4
+```{r}
+wilcox.test(inf1,inf4,conf.int = T, conf.level = .95)
+w1_4
+c(d1_4[alpha],d1_4[v])
+```
+
+
+Es pot comprovar com l'estadístic W dona igual pels dos mètodes. Segons la funció d'R es rebutjaria $H_0$, per tant igual que com s'ha dit en el mètode fet a "mà". 
+
+
+Pel que fa a l'interval de confiança, s'han obtingut els mateixos límits superiors i inferiors fent-lo manualment que amb la funció wilcox.test. 
+
+* Entre grup 1 i 5 
+```{r}
+wilcox.test(inf1,inf5,conf.int = T, conf.level = .95)
+w1_5
+c(d1_5[alpha2],d1_5[v2])
+```
+
+Es pot comprovar com l'estadístic W dona igual pels dos mètodes. Segons la funció d'R es rebutjaria $H_0$, per tant igual que com s'ha dit en el mètode fet a "mà". 
+
+Pel que fa a l'interval de confiança, s'han obtingut els mateixos límits superiors i inferiors fent-lo manualment que amb la funció wilcox.test. 
+
+
+**Conclusions Generals**
+
+Es pot veure que igual que s'ha concluit a l'apartat a) hi ha més evidencia en la no igualtat entre el grup 1 i 4 que entre el grup 1 i 5. El p-valor de la primera comparativa és molt més petit que el de la segona. Per tant es pot concloure que s'han obtingut els mateixos resultats pels dos mètodes.
+
+**c) Creus que cal fer una correcció addicional? Quina seria? Si creus que s’hauria de fer alguna altra correcció, aplica-la.**
+
+És adient calcular els p-valors ajustats amb el mètode de Bonferroni per tal de corregir i verificar els p-valors i les conclusions anteriors. Ho farem mitjançant la funció ``p.adjust`` del paquet "Stat".
+
+```{r, warning=FALSE}
+w1 <- wilcox.test(inf1,inf4,conf.int = T, conf.level = .95)
+w2 <- wilcox.test(inf1,inf5,conf.int = T, conf.level = .95)
+
+library(knitr)
+kable(data.frame("pvalor" = c(w1$p.value, w2$p.value), "pvalor ajustat" =p.adjust(c(w1$p.value, w2$p.value),method="bonferroni"),row.names=c("Laboratoris 1 i 4","Laboratoris 1 i 5")), caption= "Taula comparativa", align='c')
+```
+
+Pel que fa a la comparació entre els laboratoris 1 i 4, s'observa com el p-valor ha variat una mica però segueix essent significatiu de manera que la conclusió de rebutjar $H_0$ i considerar que els grups 1 i 4 no són iguals segueix vigent. En canvi, quant als laboratoris 1 i 5, la correcció ha fet que el p-valor passés (per poc) a ser no significatiu, per un nivell de significació del 5%; així, es conclou finalment que hi ha diferències entre els laboratoris 1 i 5.
+

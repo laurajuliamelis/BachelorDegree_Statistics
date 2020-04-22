@@ -1,0 +1,1 @@
+%%descomposicion QRA=[6 2 -1 -1; 2 4 1 0; -1 1 4 -1; -1 0 -1 3];b=[0;7;-1;-2];disp('metodo QR')[Q,R]=qr(A);b=Q*b;sol1=R\b

@@ -1,0 +1,16 @@
+[0] Config.pm:304> INFO - This is Biber 2.12
+[0] Config.pm:307> INFO - Logfile is 'TFG_Principal.blg'
+[52] biber-darwin:315> INFO - === Fri Nov 22, 2019, 20:00:11
+[89] Biber.pm:371> INFO - Reading 'TFG_Principal.bcf'
+[228] Biber.pm:889> INFO - Found 28 citekeys in bib section 0
+[250] Biber.pm:4093> INFO - Processing section 0
+[267] Biber.pm:4254> INFO - Looking for bibtex format file 'references.bib' for section 0
+[270] bibtex.pm:1523> INFO - LaTeX decoding ...
+[329] bibtex.pm:1340> INFO - Found BibTeX data source 'references.bib'
+[414] Utils.pm:193> WARN - month field 'Junio' in entry 'Silvia' is not an integer - this will probably not sort properly.
+[691] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[691] UCollate.pm:68> INFO - Overriding locale 'es-ES' defaults 'variable = shifted' with 'variable = non-ignorable'
+[691] Biber.pm:3921> INFO - Sorting list 'apa/global//global/global' of type 'entry' with template 'apa' and locale 'es-ES'
+[751] bbl.pm:636> INFO - Writing 'TFG_Principal.bbl' with encoding 'UTF-8'
+[828] bbl.pm:739> INFO - Output to TFG_Principal.bbl
+[828] Biber.pm:110> INFO - WARNINGS: 1

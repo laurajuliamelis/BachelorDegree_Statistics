@@ -1,0 +1,41 @@
+---
+title: "Per aprendre a utilitzar R Markdown"
+author: "Marta Piñol"
+date: "14 de septiembre de 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Trozos de código
+Se trata de escribir una o más líneas de código R que empiezan con ```{r} y
+acaban con una línea ```
+RStudio facilita mucho el trabajo con chunks.
+Las opciones se introducen entre las llaves:
+
+
+```{r version, echo=TRUE}
+getRversion()
+getwd()
+```
+
+## Código en linea
+Para insertar código en una línea de texto lo haremos con...
+Nuestra versión de R es la `r getRversion()`.
+El resultado aparece sin el código y proporciona un solo dato.
+
+## Links
+Use a plain http address or add a link to a phrase:
+
+http://example.com
+
+[linked phrase](http://example.com)
+
+## Blockquotes
+A friend once said:
+
+> It's always better to give
+> than to receive.
+

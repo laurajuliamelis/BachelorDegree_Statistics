@@ -1,0 +1,165 @@
+---
+title: "Regressió No Paramètrica"
+author: "Mireia Vilardell"
+date: "23 maig de 2018"
+output: html_document
+---
+
+
+
+## Estimació local de la Regressió 
+```{r}
+require(mlbench)
+require(sm)
+require(ggplot2)
+
+regressogram <- function(x,y,nbins=10,show.bins=TRUE,show.means=TRUE,show.lines=TRUE,
+                         x.lab="X",y.lab="Y",main="TITLE"){
+  xy <- data.frame(x=x,y=y)
+  xy <- xy[order(xy$x),]
+  z <- cut(xy$x,breaks=seq(min(xy$x),max(xy$x),length=nbins+1),
+           labels=1:nbins,include.lowest=TRUE)
+  xyz <- data.frame(xy,z=z)
+  MEANS <- c(by(xyz$y,xyz$z,FUN=mean))
+  x.seq <- seq(min(x),max(x),length=nbins+1)
+  midpts <- (x.seq[-1]+x.seq[-(nbins+1)])/2
+  d2 <- data.frame(midpts=midpts,MEANS=MEANS)
+  p <- ggplot(xyz, aes(x,y)) + geom_point() + ggtitle(main) + xlab(x.lab) + 
+    ylab(y.lab) + theme(text = element_text(size = 20))
+  if(show.bins) p <- p + geom_vline(xintercept=x.seq[-c(1,nbins+1)],linetype="dashed",color="blue")
+  if(show.means) p <- p + geom_point(data=d2, aes(x=midpts, y=MEANS), color="red", shape=18, size=5) 
+  if(show.lines) p <- p + geom_line(data=d2, aes(x=midpts, y=MEANS), color="red") 
+  return(p)
+}
+
+#Aquesta funció està inclosa en el paquet HoRM
+
+data(BostonHousing)
+# data(BostonHousing2)
+
+#Ajust d'una única recta
+bh.lm <- lm(rm ~ lstat, data = BostonHousing)
+plot(bh.lm)
+
+plot(BostonHousing$lstat, BostonHousing$rm)
+abline(coef = coef(bh.lm))
+
+#ajust per trams (nbins=4)
+
+nbins<-4
+z <- cut(BostonHousing$lstat,breaks=seq(min(BostonHousing$lstat),
+    max(BostonHousing$lstat),length=nbins+1), labels=1:nbins,include.lowest=TRUE)
+
+bh.lm1 <- lm(rm[z==1] ~ lstat[z==1], data = BostonHousing)
+bh.lm2 <- lm(rm[z==2] ~ lstat[z==2], data = BostonHousing)
+bh.lm3 <- lm(rm[z==3] ~ lstat[z==3], data = BostonHousing)
+bh.lm4 <- lm(rm[z==4] ~ lstat[z==4], data = BostonHousing)
+
+b1<-max(BostonHousing$lstat[z==1])
+b2<-max(BostonHousing$lstat[z==2])
+b3<-max(BostonHousing$lstat[z==3])
+
+
+
+plot(BostonHousing$lstat, BostonHousing$rm)
+#Detectar els punts de tall
+abline(v=c(b1,b2,b3), col=2)
+lines(BostonHousing$lstat[z==1],predict(bh.lm1),type="l",col=4)
+lines(BostonHousing$lstat[z==2],predict(bh.lm2),type="l",col=4)
+lines(BostonHousing$lstat[z==3],predict(bh.lm3),type="l",col=4)
+lines(BostonHousing$lstat[z==4],predict(bh.lm4),type="l",col=4)
+
+regressogram(BostonHousing$lstat, BostonHousing$rm, nbins=4,show.means=TRUE, show.lines=TRUE)
+```
+
+### ajust utilitzant una amplada de banda, 
+
+```{r}
+
+#Cal segmentar l'espai en t valors 
+# Cal optimitzar la formula per cada valor t +/- h (amplada de banda)
+#Els valors de x que per a un t donat estiguin a +/- h assignem un pes de 1, 0 altrament. És equivalent a utilitzar un kernel rectangular o uniforme
+
+require(KernSmooth)
+
+l1<-locpoly(x=BostonHousing$lstat, y=BostonHousing$rm, degree=1, kernel="rectangular", bandwidth = 2)
+plot(l1, type="l",col=4)
+points(BostonHousing$lstat, BostonHousing$rm)
+
+l2<-locpoly(y=BostonHousing$rm, x=BostonHousing$lstat, degree=1, kernel="rectangular", bandwidth = 0.5)
+plot(l2, type="l",col=4)
+points(BostonHousing$lstat, BostonHousing$rm)
+```
+
+### ajust utilitzant altres kernels, 
+ie Gaussian per l'ajust de cada t totes les obervacions x són utilitzades amb pesos que van des de (0,1], pes 1 si t=xi de manera decreixent en funció de quan a prop estan. h es refereix a la desviació estandard del kernel.
+
+```{r}
+require(np)
+bw2<-npregbw(BostonHousing$rm~BostonHousing$lstat,regtype="ll")
+                   
+np2<-npreg(bw2, regtype="ll")
+summary(np2)
+plot(np2, col=4)
+points(BostonHousing$lstat, BostonHousing$rm)
+
+# en la sm.regression s'uitlitza el kernel gaussià.
+
+bh.sm <- sm.regression(BostonHousing$lstat, BostonHousing$rm)
+
+bh.sm
+
+#Ajust amb polinomis locals, loess utilitza un kernel gaussià. 
+
+require(modreg)
+
+scatter.smooth(BostonHousing$rm ~ BostonHousing$lstat, span=0.2, degree=1, family="gaussian")
+
+scatter.smooth(BostonHousing$rm ~ BostonHousing$lstat, span=0.2, degree=2, family="gaussian")
+
+```
+
+## Regressió no paramètrica basada en l'introducció de restriccions
+
+```{r}
+require(glmnet)
+require(ISLR)
+require(HDeconometrics)
+data(Hitters)
+hitters.df<-subset(na.omit(Hitters))
+X=model.matrix(Salary~0 + ., data=hitters.df) # crea una matriu de disseny a partir de #ls variables, variables de tipus dummy
+Y=hitters.df$Salary
+
+#Here is a simple way to construct training and test sets from the
+
+train.ind = sample(nrow(X), round(nrow(X)/2))
+X.train = X[train.ind,]
+X.test = X[-train.ind,]
+Y.train = Y[train.ind]
+Y.test = Y[-train.ind]
+
+lambdas = 10^seq(-2,3.4,0.1)
+fm.lasso = glmnet(X.train,Y.train, alpha = 1, lambda = lambdas, thresh = 1e-12)
+#Setting alpha = 0 gives ridge regression.
+plot(fm.lasso, xvar="lambda")
+lasso=cv.glmnet(X.train,Y.train)
+
+pred = predict(fm.lasso, X.test)
+dim(pred)
+
+rmse = sqrt(apply((Y.test - pred)^2, 2, mean))
+plot(log(fm.lasso$lambda), rmse, type = "b", xlab = "Log(lambda)")
+sel.l<-exp(2)
+sel.l
+
+sel.l<-exp(4)
+sel.l
+
+fm.lasso
+
+coef(fm.lasso, s = exp(2))
+
+ coef(fm.lasso, s = exp(4))
+
+```
+

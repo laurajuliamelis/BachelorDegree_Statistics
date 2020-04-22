@@ -1,0 +1,197 @@
+---
+title: "Estimacio Densitat No Parametrica"
+author: "Mireia Vilardell"
+date: "16 maig de 2018"
+output: html_document
+---
+## Introducció de les Dades
+
+```{r}
+cdrate <- read.table("~/Mat_Classes_ProfMVilardell/2018/NoParametrica/EstimacioNPDensitat/cdrate.dat", quote="\"", comment.char="")
+
+names(cdrate)<-c("interes","tipus.entitat")
+cdrate$tipus.entitat<-as.factor(cdrate$tipus.entitat)
+summary(cdrate)
+
+interes = cdrate[,"interes"]
+
+```
+
+## Repas de Conceptes
+
+###1. Funció de Distribució Empírica
+
+```{r}
+Fn<-ecdf(cdrate$interes)
+plot(Fn, main="FDD per interes")
+#per cada grup
+Fn0<-cdrate[cdrate$tipus.entitat==0,"interes"]
+Fn1<-cdrate[cdrate$tipus.entitat==1,"interes"]
+par(mfrow=c(1,2))
+plot(Fn0, main="FDD per interes entitat==0" )
+plot(Fn1, main="FDD per interes entitat==1")
+
+```
+
+
+
+###2. Podem comparar Distribucions utilitzant l'Estadístic Kolmogorov-Smirnov
+
+```{r}
+ks.test(cdrate[cdrate$tipus.entitat==0,"interes"],cdrate[cdrate$tipus.entitat==1,"interes"])
+#també es pot triar entre realitzar un test exacte o una aproximació asintótica amb la distribució chi-quadrat
+```
+###3. Representació gráfica de dades (boxplot) es permet saber com és la forma de cadascuna de les distribucions
+
+```{r}
+par(mfrow=c(1,2))
+boxplot(cdrate$interes~cdrate$tipus.entitat)
+qqplot(cdrate[cdrate$tipus.entitat==0,"interes"],cdrate[cdrate$tipus.entitat==1,"interes"],xlab="entitat==0", ylab="entitat==1")
+```
+
+
+##Estimació de la densitat no Paramètrica
+
+Aquestes Aproximacions gràfiques poden resultat poc informatives.
+El càlcul de la funció de Distribució empírica pot resultar poc efectiu; 
+
+###1. Histograma
+
+Podem utilitzar la funció hist de l'R per determinar-ne la funció de densitat no paramètrica de les dades
+breaks és l'argument que ens indica com escollirà el nombre d'intervals
+freq=FALSE ens garateix que la representació obtinguda i els càculs que ens retorna (Values) conformen una area total de 1 al sumar totes les seves barres, per tant ens garanteix que serà una fdd
+l'argument right en dermina si volem tenir intervals tancats a l'esquerra(per defecte) o a la dreta. Permetria doncs canviar l'ancoratge.
+```{r}
+par(mfrow=c(2,2))
+
+#Per defecte aplica la regla de Sturges
+hist(interes, 
+     ylab = "densitat", main = "Histograma d'interes",freq=FALSE)
+
+#Calculem el nombre d'intervals òptims a partir de les transparències
+s.est<-min(sd(interes), IQR(interes)/1.35)
+s.est
+b<-3.491*s.est*(length(interes))^(-1/3)
+b
+intervals<-(max(interes)-min(interes))/b
+intervals
+min(interes)
+max(interes)
+min(interes)+5*b
+7.5+5*b
+7.4+5*b
+
+
+hist(interes, 
+  ylab = "densitat", main = "Histograma d'interes", 
+  breaks = 7,freq=FALSE)
+#Equival al mètode Scott o FD segons les dades
+
+hist(interes, 
+  ylab = "densitat", main = "Histograma d'interes", 
+  breaks = "Scott",freq=FALSE)
+
+hist(interes, 
+  ylab = "densitat", main = "Histograma d'interes", 
+  breaks = "FD",freq=FALSE)
+
+
+#Obtenció de les estimacions
+hist1<-hist(interes, 
+  ylab = "densitat", main = "Histograma d'interes", 
+  breaks = "Sturges",freq=FALSE)
+hist1
+
+```
+
+###2. Poligon de Freqüències
+
+```{r}
+
+# Per dibuixar polígon de freqüències:
+require(ggplot2)
+x = seq(from = 7.4, to = 9, by = 0.01)
+qplot(x, data = data.frame(x = interes), geom = "freqpoly", binwidth = 0.2)
+
+# Estimacions més suaus de la densitat:
+# S'aniran col·locant successivament en forma d'una matriu 3 x 2:
+par(mfrow = c(3,2))
+
+# Ajust normal:
+fx = dnorm(x, mean = mean(interes), sd = sd(interes))
+plot(x, fx,
+  type = "l",
+  xlab = "interes", ylab = "densitat", main = "Ajust normal")
+
+# Ajust normal per bancs i caixes per separat:
+mitjanes = tapply(interes, cdrate[,"tipus.entitat"], mean)
+desviacions = tapply(interes, cdrate[,"tipus.entitat"], sd)
+f.bancs = dnorm(x, mean = mitjanes[1], sd = desviacions[1])
+f.caixes = dnorm(x, mean = mitjanes[2], sd = desviacions[2])
+plot(x, f.bancs,
+  type = "l", col = "blue",
+  xlab = "interes", ylab = "densitat", main = "Ajust normal per separat",
+  ylim = c(0,1.7))
+lines(x, f.caixes)
+
+# Mixtura de dues normals:
+proporcions = tapply(interes, cdrate[,"tipus.entitat"], length) / length(interes)
+f.mixtura = proporcions[1] * f.bancs + proporcions[2] * f.caixes
+plot(x, f.mixtura,
+  type = "l",
+  xlab = "interes", ylab = "densitat", main = "Mixtura de dues normals")
+
+```
+
+
+###4. Estimacions utilitzant funcions nucli (Kernel)
+Es realitzen a partir de la funció density de l'R. Aquesta funció també retorna un conjunt de valors que poden ser útils per a la realització de diferents calculs amb l'estimació de la densitat resultant.
+
+```{r}
+f.noparam = density(interes)
+plot(f.noparam,
+  xlab = "interes", ylab = "densitat", main = "Ajust no parametric (nucli gaussia)")
+  
+# Determinació de l'amplada de finestra 'h' o "bandwidth".
+# Es pot donar un valor mitjançant l'argument 'bw' de la funció 'density'.
+# Si no s'especifica, per defecte s'avalua com s'indica a les transparències
+# (presentació "Estimacio_no_parametrica_densitat") de teoria per a nucli
+# gaussià, però amb el factor 0.9 en lloc d'1.059.
+# Anteriorment no hem especificat el valor de l'argument 'bw'. El valor escollit
+# per defecte, que coincideix amb la desviació típica del nucli, és:
+valor.h = f.noparam$bw
+valor.h
+# variància del nucli:
+var.h = valor.h^2
+var.h
+
+# L'argument 'bw' també pot ser un string indicant el mètode d'ajust de
+# l'amplada de finestra. Per a que coincideixi amb el mètode explicat a les
+# transparències (factor 1.059) cal indicar:
+f.noparam = density(interes, bw = "nrd")
+plot(f.noparam,
+  xlab = "interes", ylab = "densitat", 
+  main = "Ajust no parametric (nucli gaussia)", sub = "bw sgons Scott(1992)")
+
+valor.h = f.noparam$bw
+valor.h
+# variància del nucli:
+var.h = valor.h^2
+var.h
+# Per saber més sobre altres mètodes de determinació de l'amplada de finestra,
+# mireu l'ajuda de 'density'
+
+# Prova de diversos nuclis:
+par(mfrow=c(3,3))
+nuclis <- c("gaussian", "epanechnikov", "rectangular",
+  "triangular", "biweight", "cosine", "optcosine")
+sapply(nuclis, 
+  function(nom.nucli) plot(density(interes,kernel=nom.nucli),main=nom.nucli)
+)
+par(mfrow=c(1,1))
+```
+
+Sobre el dataset faithful
+data("faithful", package="datasets")
+que conté la durada en anys de cada erupció del Old Faithful geyser del parc Nacional de Yellowstone, USA i el temps d'espera entre cada erupció.
+Modelitza el temps d'espera.

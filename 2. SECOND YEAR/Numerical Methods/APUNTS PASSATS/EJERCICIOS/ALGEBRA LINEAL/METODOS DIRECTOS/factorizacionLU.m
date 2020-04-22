@@ -1,0 +1,1 @@
+%%Factorizacion LU para matrices dadasA=[1 6 0; 2 1 0; 0 2 1];b=[3;1;1];disp('factorizacion LU')[L,U,P]=lu(A);[L,U]=lu(A);x=U\(L\b);x%%otro ejercicio A=[6 -2 2 4; 12 -8 4 10; 3 -13 3 3; -6 4 2 -18];b=[0;-10;-39;-16];disp('Factorizacion LU')[L,U,P]=lu(A);[L,U]=lu(A);x=U\(L\b);x

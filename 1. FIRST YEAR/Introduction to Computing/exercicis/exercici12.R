@@ -1,0 +1,5 @@
+cat("Escriu dos nombres enters:","\n")
+x <- scan(n=1, quiet=TRUE)
+y <- scan(n=1, quiet=TRUE)
+z <- x>(2*y) || y>(2*x)
+cat(z, "\n")

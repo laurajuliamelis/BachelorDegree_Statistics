@@ -1,0 +1,248 @@
+## GAPMINDER
+
+#### 1. ENUNCIAT
+**Nom:** Gapminder (Dades socio-econòmiques per països)
+
+**Referència:** www.gapmider.org
+
+**Descripció:** Aquesta plana web és un repositori de dades per països de molts àmbits. Per construir aquest conjunt de dades,
+s'han seleccionat uns quants indicadors. Es pretén modelitzar les relacions d'aquests indicadors (o transformacions dels
+mateixos) amb _l'esperança de vida del país_. Les dades corresponen a l'any 2005.
+
+**Número de casos:** 165
+
+L'objectiu serà construir un model lineal general per explicar la variable Esperança de vida (LifeExpectancy) dels
+països en base a la informació continguda en la base de dades. Serà important la correcció i interpretació del
+model obtingut.
+
+**Indicacions:**
+
+-  Caldrà fer l'anàlisi exploratori preliminar per descriure les relacions observades
+
+- S'han de tractar les dades faltants
+
+- Si es poden millorar les relacions lineals o limitar l'efecte de dades influents, caldrà plantejar les transformacions que considereu adequades
+
+- Considereu el Continent com a variable categòrica, però agrupeu en una mateixa categoria els continents d'Asia i Oceania.
+
+- Al marge de la variable Continent, es poden considerar d'altres variables categòriques que puguin definirse a partir de categoritzar les numèriques
+
+- S'han de tenir en compte possibles interaccions entre les variables categòriques i numèriques
+
+- En la construcció del model, convé estudiar la presència de multicolinealitat i intentar reduir el seu efecte en el model per facilitar la interpretació
+
+- Caldrà construir el model fent servir alguna tècnica per seleccionar les variables (eliminació de predictors no significatius, mecanismes stepwise o selecció dels millors models per selecció de variables)
+
+- La validació del model s'ha de fer amb els gràfics i/o test oportuns per verificar les hipòtesis del model
+
+- S'ha d'incloure l'estudi de dades atípiques i/o influents
+
+- El model resultant ha de ser interpretat en terme de les relacions dels predictors seleccionats i el seu efecte sobre la variable resposta
+
+#### 2. PREPARACIÓ DE LES DADES
+Lectura del fitxer en format csv amb codificació amb coma decimal i separació amb punt i coma
+
+```{r}
+library(car)
+library(effects)
+Gapminder <- read.csv("Gapminder.csv", sep=";", dec=",")
+```
+
+
+Treiem la regió i posem el continent (variable categòrica) al final
+
+```{r}
+Gapminder=Gapminder[,c(1,4:22,3)]
+```
+
+Ajuntem Asia i Oceania per reduir les categories i perquè Oceania té pocs països (evitarem una categoria infrarepresentada)
+
+```{r}
+Gapminder[Gapminder$Continent=="OC","Continent"]="AS"
+Gapminder$Continent=factor(Gapminder$Continent)
+```
+
+En el summary es veu que hi ha dades faltants d'alguns camps
+
+Treiem la regió i posem el continent (variable categòrica) al final
+
+```{r}
+summary(Gapminder)
+```
+
+---
+
+Seleccionem els casos complerts:
+
+Ja que no podrem aplicar el mètode STEPWISE si tenim casos amb alguna variable amb dades faltants.
+
+```{r}
+Gapminder=na.omit(Gapminder) #Elimina tots els casos amb algún NA
+```
+
+Estudiem les relacions de les variables explicatives amb l'esperança de vida (var resposta):
+```{r}
+pairs(Gapminder[,2:8]) #Tots no hi caben, s'ha de fer a trossos
+pairs(Gapminder[,c(2,9:15)])
+```
+
+Mirem la primera linia (relacions amb LifeExpectancy), com que population i surface no sembla que sigui bona l'escala, haurem de prendre logaritmes per veure millor la relació.
+
+---
+
+La resposta (esperança de vida) té un rang força petit. No té massa sentit fer el logaritme perquè no canvia la mètrica
+Hi ha variables on la relació amb la resposta és clarament no lineal, afegim les variables transformades pel log
+
+```{r}
+Gapminder$lnPopulation=log(Gapminder$Population)
+Gapminder$lnSurface=log(Gapminder$Surface)
+Gapminder$lnPIBpc=log(Gapminder$PIBpc)
+Gapminder$lnInternetUsers=log(Gapminder$InternetUsers)
+Gapminder$lnMobiles=log(Gapminder$Mobiles)
+Gapminder$lnCo2pc=log(Gapminder$CO2pc)
+```
+
+Li posem etiquetes a cada cas (el nom del pais)
+
+```{r}
+dades=Gapminder[,-c(1,21)]
+row.names(dades)=Gapminder[,1]
+```
+
+2.2 Ajustem el model:
+
+Mètode AIC: AIC=-2log versemblança + 2#par
+
+Mètode BIC: BIC=-2log versemblança + log(n)#par
+
+* Si utilitzem el mètode BIC step(... k=log(n)) ens quedara un mètode més simple perquè és un mètode més estricte: descatra tots aquells predictors amb ... un valor de 10 o així.
+
+```{r}
+summary(m1 <- lm(LifeExpectancy ~ ., dades)) # MODEL COMPLET
+summary(m2 <- step(m1, direction = "both", k=log(nrow(dades)))) # STEPWISE per BIC
+```
+
+INTERPRETACIÓ: Si AlcohConsump augmenta 1 unitat, això suposa un decrement de -0.38498 en l'esperança de vida, mantenint la resta constant (ceteris paribus)
+
+Observem que BMImen i BMIfemale no tenen gaire sentit en quant a la relació amb l'esperança de vida (que no causalitat). Multicolineaitat entre ambdues????? -> vif
+
+
+2.2.1 Validem el model que ens ha donat el mètode stepwise:
+
+```{r}
+Anova(m2,type=3)
+```
+
+2.2.2 Anàlisi de multicolinealitat del model 2
+```{r}
+vif(m2)
+```
+
+Veiem que PIB BMImen i BMI female, sobre tot el BMI dels dos gènere estan relacionades (oblidem el PIB). Quin dels dos predictors deixem en el model?
+
+Ajustem el model amb una variable i amb l'altre (totes soles):
+```{r}
+plot(allEffects(m2))
+summary(m2a <- update(m2, .~.-BMImen))
+summary(m2b <- update(m2, .~.-BMIFemale))
+```
+
+Quin deixem? La que mantingui la màxima capacitat predictiva del model (R-squared)
+
+La R^2 més gran la obtenim quan eliminem les dones (0.8368), a més, si eliminem els homes BMIFemale deixa de ser significativa. 
+Com que lnSurface no és significatiu en el nou model, la treiem i tornem a fer el vif
+```{r}
+summary(m3 <- update(m2b, .~.-lnSurface))
+vif(m3)
+```
+
+Validem el model (les hipòtesis de variancia constant, normalitat dels residus etc.)
+
+Estudi dels residus:
+```{r}
+residualPlots(m3)
+```
+
+Els numeros ens indiquen si val la pena introduir el terme quadràtc (amb els pvalors). Així doncs, confirmem que una possible millora del model és la inclusió del PIB^2.
+
+```{r}
+summary(m4 <- update(m3,.~.+poly(lnPIBpc,2)-lnPIBpc)) 
+```
+poly(lnPIBpc,2) ja ens introdueix el terme lineal i el quadràtic (la paràbola), per tant no em surtira multicolinealitat i ens sobra ara el terme lineal del PIB,
+
+Test de raó de versemblança (es pot fer perquè un model inclou l'altre). 
+```{r}
+anova(m3,m4)
+```
+
+Gastant un grau de llibertat (de 138 a 137) hem reduit el RSS 140 i pico unitats. Veiem que el p valor és dignificatiu, per tant és millor. Si el pa valor fos major a 0.05, rebutjariem la inclusió del terme quadràtic (no val la pena gastar un grau de llibertat i ens quedariem amb el model més simple)
+
+Comprovem que aquest canvi és una millora:
+```{r}
+plot(allEffects(m4))
+residualPlots(m4)
+```
+
+Interpretació PIB essent una paràbola: un increment petit en el PIB, l'esperança de vida pràcticament no canvia. En canvi,  a partir de cert nivell de PIB, un increment unitari d'aquest, sí que suposa un gran increment en l'esperança de vida.
+
+Anàlisi de normalitat dels residus:
+```{r}
+shapiro.test(resid(m4))
+qqPlot(resid(m4))
+```
+
+Veiem regions mal explicades i influents (sudÀfrica i Swazilàndia)
+
+Ho comprovem:
+```{r}
+influencePlot(m4)
+```
+
+Obsrvacions vertaderament influencs: les de la taula. Leverage gran sí, pero a més distancia de cook gran.
+
+El model sobreestima o infraestima l'esperança de vida d'aquestes obs?
+Al ser negatiu, el model sobreestima (residu negatiu, fórmula dels residus!!!), ens dona una esperança major de la que realment observem.
+
+
+#### INCLOEM ARA LA VAR CATEGÒRICA (CONTINENTS)
+
+Comencem de nou incloint la var categòrica a 4 nivells, i també les possibles interaccions entre la categòrica i les numèriques. 
+Interaccions entre numèriques (continues) no les mirem.
+
+Principi de marginalitat.Eliminem allò no significatiu encara que hi hagi una interacció significativa? O si hi ha interacció deixem diractament les dues variables?
+
+```{r}
+dades=Gapminder[,-c(1)] #Ara no treiem el continent
+row.names(dades)=Gapminder[,1]
+```
+
+Model complet:
+```{r}
+summary(m5 <- lm(LifeExpectancy ~., dades)) 
+```
+Això només fa la variable resposta amb tota la resta però volem la interacció:
+```{r}
+summary(m5 <- lm(LifeExpectancy ~(.-Continent-BMIFemale)*Continent, dades)) 
+```
+Recordar que per defecte es fa un tipus treatment (BASELINE) i que per tant s'afegeixen les 3 dummies i l'intercept es la 4a categoria.
+
+"*": inclou la var sola i la interacció
+
+":": inclou només les interaccions
+
+Hem de depurar el model, treure les vars no significatives. Ho fem automàticament amb STEPWISE (normalment)
+```{r}
+summary(m6 <- step(m5, direction="both", k=log(nrow(dades)), trace=0)) # trace=0, només ens treu el model amb el que es queda, també podem veure els dos darrers (trade=2) i així..
+```
+
+```{r}
+Anova(m6, type=3)
+```
+
+R no considera la eliminació d'un factor si existeix la interacció significativa en el model. Ho podem fer a mà.
+
+Multicolinealitat:
+```{r}
+vif(m6)
+```
+

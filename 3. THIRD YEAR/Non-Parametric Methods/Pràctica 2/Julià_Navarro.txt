@@ -1,0 +1,203 @@
+﻿## 'TASCA 2. Inferència no paramètrica: Rangs.'
+## "Laura Julià Melis i Víctor Navarro Garcés"
+
+
+## Exercici 1
+
+### APARTAT A
+
+inflamabilitat=c(
+  3.91,4.15,4.11,4.78,4.1,5.25,4.7,4.9,3.8,4.09,2.99,
+  2.7,3.4,3.6,3.22,4.08,4.13,3.8,3.87,4.3,3.45,3.3,
+  3.3,3.35,3.5,3.51,2.89,2.83,3.21,2.84,3.8,3.55,3.8,
+  3.37,3.26,3.46,2.78,2.71,3.39,2.93,3.27,2.96,2.6,2.82,
+  5.17,5.19,4.8,5.29,4.19,4.53,4.88,3.58,4.72,6.55,6.96
+)
+laboratori = factor(rep(c("L1","L2","L3","L4", "L5"), rep(11,5)))
+
+
+# Longitud total.
+N = length(inflamabilitat)
+N
+
+# Grandària dels grups.
+n_i = tapply(inflamabilitat, laboratori, length)
+n_i
+
+# Càlcul dels rangs com si estractes d'una sola mostra.
+inflamabilitat.rank = rank(inflamabilitat)
+inflamabilitat.rank
+
+# Suma dels rangs per cada grup (laboratori)
+sum.ranks = tapply(inflamabilitat.rank, laboratori, sum)
+sum.ranks
+
+H = (12 / (N * (N + 1))) * sum((sum.ranks^2) / n_i) - 3 * (N + 1)
+H
+
+ties<-summary(as.factor(inflamabilitat.rank), maxsum=1000)
+ties<-ties[ties>1]
+t_i<-ties
+t_i
+
+C = 1 - sum(t_i^3 - t_i) / (N^3 - N)
+H_cor<-H/C
+H_cor
+
+pvalor <- 1-pchisq(H_cor, length(n_i)-1)
+pvalor
+
+ChiT<-qchisq(0.95, (length(n_i)-1))
+ChiT
+
+### APARTAT B
+
+kruskal.test(inflamabilitat ~ laboratori)
+
+### APARTAT C
+
+#### (1) Les dades no provenen d'una normal. 
+inflamabilitatl1 <- inflamabilitat[1:11] - rep(median(inflamabilitat[1:11]),11) 
+inflamabilitatl2 <- inflamabilitat[12:22] - rep(median(inflamabilitat[12:22]),11) 
+inflamabilitatl3 <- inflamabilitat[23:33] - rep(median(inflamabilitat[23:33]),11) 
+inflamabilitatl4 <- inflamabilitat[34:44] - rep(median(inflamabilitat[34:44]),11) 
+inflamabilitatl5 <- inflamabilitat[45:55] - rep(median(inflamabilitat[45:55]),11) 
+
+dades.est <- c(inflamabilitatl1,inflamabilitatl2,inflamabilitatl3,inflamabilitatl4,inflamabilitatl5)
+
+shapiro.test(dades.est)
+
+#### (2) Les desviacions típiques dels $a$ diferents grups són iguals:
+boxplot(dades.est~laboratori)
+
+#### (3) Les distribucions de les submostres de cadascuna de les $a$ condicions són iguals:
+ks.test(dades.est[1:11], dades.est[12:22])
+ks.test(dades.est[1:11], dades.est[23:33])
+ks.test(dades.est[1:11], dades.est[34:44])
+ks.test(dades.est[1:11], dades.est[45:55])
+
+
+
+
+## Exercici 2
+
+### APARTAT A
+
+##### Laboratoris 1 i 4
+# Longitud total.
+inf1_4 <- inflamabilitat[c(1:11,34:44)]
+lab1_4 <- laboratori[c(1:11,34:44)]
+lab1_4 <- droplevels(lab1_4)
+N1_4 = length(inf1_4)
+N1_4
+
+# Grandària dels grups.
+n_1_4 = tapply(inf1_4, lab1_4, length)
+n_1_4
+
+# Càlcul dels rangs com si estractes d'una sola mostra.
+inflamabilitat.rank1_4 = rank(inf1_4)
+inflamabilitat.rank1_4
+
+# Suma dels rangs per cada grup (laboratori)
+sum.ranks1_4 = tapply(inflamabilitat.rank1_4, lab1_4, sum)
+sum.ranks1_4
+
+u1_4 =min(sum.ranks1_4[1]-((n_1_4[1]*(n_1_4[1]+1))/2),sum.ranks1_4[2]-((n_1_4[2]*(n_1_4[2]+1))/2))
+w1_4 <- sum.ranks1_4[1]-((n_1_4[1]*(n_1_4[1]+1))/2)
+u1_4
+w1_4
+
+## Primer es calculen les nm diferencies 
+inf1 <- inf1_4[1:11]
+inf4 <- inf1_4[12:22]
+d1_4 <- vector()
+k <- 1
+for (i in 1:n_1_4[1]){
+  for ( j in 1:n_1_4[2]){
+    d1_4[k] <- inf1[i]-inf4[j]
+    k <- 1+k
+  }
+}
+
+## S'ordenen de menor a major les nm diferencies
+d1_4 <- sort(d1_4)
+
+## el nostre U d'alpha mig a la taula es 30
+u1_4 <- 30
+
+alpha <- u1_4+1
+v <- n_1_4[1]*n_1_4[2] - alpha+1
+
+c(d1_4[alpha],d1_4[v])
+
+##### Laboratoris 1 i 5 
+# Longitud total.
+inf1_5 <- inflamabilitat[c(1:11,45:55)]
+lab1_5 <- laboratori[c(1:11,45:55)]
+lab1_5 <- droplevels(lab1_4)
+N1_5 = length(inf1_5)
+N1_5
+
+# Grandària dels grups.
+n_1_5 = tapply(inf1_5, lab1_5, length)
+n_1_5
+
+# Càlcul dels rangs com si estractes d'una sola mostra.
+inflamabilitat.rank1_5 = rank(inf1_5)
+inflamabilitat.rank1_5
+
+# Suma dels rangs per cada grup (laboratori)
+sum.ranks1_5 = tapply(inflamabilitat.rank1_5, lab1_5, sum)
+sum.ranks1_5
+
+u1_5 <- min(sum.ranks1_5[1]-((n_1_5[1]*(n_1_5[1]+1))/2),sum.ranks1_5[2]-((n_1_5[2]*(n_1_5[2]+1))/2))
+w1_5 <- sum.ranks1_5[1]-((n_1_5[1]*(n_1_5[1]+1))/2)
+u1_5
+
+## Primer es calculen les nm diferencies 
+inf1 <- inf1_5[1:11]
+inf5 <- inf1_5[12:22]
+d1_5 <- vector()
+k <- 1
+for (i in 1:n_1_5[1]){
+  for ( j in 1:n_1_5[2]){
+    d1_5[k] <- inf1[i]-inf5[j]
+    k <- 1+k
+  }
+}
+
+## S'ordenen de menor a major les nm diferencies
+d1_5 <- sort(d1_5)
+
+## el nostre U d'alpha mig a la taula es 30
+u1_5 <- 30
+
+alpha2 <- u1_5+1
+v2 <- n_1_5[1]*n_1_5[2] - alpha2+1
+
+c(d1_5[alpha2],d1_5[v2])
+
+
+### APARTAT B
+
+##### Entre grup 1 i 4
+```{r}
+wilcox.test(inf1,inf4,conf.int = T, conf.level = .95)
+w1_4
+c(d1_4[alpha],d1_4[v])
+
+##### Entre grup 1 i 5 
+
+wilcox.test(inf1,inf5,conf.int = T, conf.level = .95)
+w1_5
+c(d1_5[alpha2],d1_5[v2])
+
+### APARTAT C
+
+w1 <- wilcox.test(inf1,inf4,conf.int = T, conf.level = .95)
+w2 <- wilcox.test(inf1,inf5,conf.int = T, conf.level = .95)
+
+library(knitr)
+kable(data.frame("pvalor" = c(w1$p.value, w2$p.value), "pvalor ajustat" =p.adjust(c(w1$p.value, w2$p.value),method="bonferroni"),row.names=c("Laboratoris 1 i 4","Laboratoris 1 i 5")), caption= "Taula comparativa", align='c')
+

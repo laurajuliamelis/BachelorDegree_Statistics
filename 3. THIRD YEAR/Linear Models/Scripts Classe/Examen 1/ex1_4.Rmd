@@ -1,0 +1,100 @@
+---
+title: "Ejercicio 1.4."
+author: "Marta Piñol"
+date: "19 de septiembre de 2017"
+output:
+  html_document: default
+  pdf_document: default
+---
+La siguiente tabla contiene los mejores tiempos conseguidos en algunas pruebas de velocidad en
+atletismo en los Juegos Ol´impicos de Atlanta:
+
+(com fer una taula)
+
+distancia | tiempo hombres | tiempo mujeres
+----------|----------------|---------------
+100       | 9.84           | 10.94
+
+Si tomamos como variable regresora o independiente la distancia (metros) y como variable respuesta o dependiente el tiempo (segundos):
+
+
+
+## Apartado (a) 
+Calcular la recta de regresión simple con los datos de los hombres y dibujarla. Dibujar el gráfico de los residuos con la distancia y el gr´afico con las predicciones. Calcular la suma de cuadrados de los residuos y el $R^2$.
+
+-> Si posem algo entre $ s'enten com a fórmula LATe
+
+```{r}
+dist <- c(100,200,400,800,1500,5000,10000,42192)
+tiempoh <- c(9.84, 19.32, 43.19, 102.58, 215.78, 787.96, 1627.34, 7956.00)
+tiempom <- c(10.94, 22.12, 48.25, 117.73, 240.83, 899.88, 1861.63, 8765.00)
+summary(dist)
+summary(tiempoh)
+```
+
+La recta de regresión és:
+```{r}
+g <- lm(tiempoh ~ dist)
+coef(g)
+```
+
+La recta és $y = -78.23 + 0.19x$.
+
+Gràfic dels residus:
+
+```{r}
+plot(dist, residuals(g))
+```
+
+No sembla que els punts estiguin al atzar al voltant del 0. Tenim un punt molt llunyà al conjunt de les dades...No pinta bé.
+
+Gràfic de les prediccions:
+```{r}
+plot(dist, predict(g))
+```
+Tenim un punt lluny que és un punt influyent (determina cap a on tira la recta). Situació que no hauria de passar.
+
+La suma de quadrats dels residus és:
+```{r}
+sum(residuals(g)^2)
+```
+
+El coeficient de determinació $R^2$:
+```{r}
+ss <- summary(g)
+ss$r.squared
+```
+L'ajust entre la recta i els punts és molt bo. Això no té per que voler dir que el model sigui correcte.
+
+## La recta amb logaritmes
+La recta de regresión és:
+```{r}
+lg <- lm(log(tiempoh) ~ log(dist))
+coef(lg)
+```
+La recta és $y = -2-88 + 1.12x$.
+
+Gràfic dels residus:
+
+```{r}
+plot(dist, residuals(lg))
+```
+
+No sembla que els punts estiguin al atzar al voltant del 0. Tenim un punt molt llunyà al conjunt de les dades...No pinta bé.
+
+Gràfic de les prediccions:
+```{r}
+plot(dist, predict(lg))
+```
+Tenim un punt lluny que és un punt influyent (determina cap a on tira la recta). Situació que no hauria de passar.
+
+La suma de quadrats dels residus és:
+```{r}
+sum(residuals(lg)^2)
+```
+
+El coeficient de determinació $R^2$:
+```{r}
+ss <- summary(lg)
+ss$r.squared
+```

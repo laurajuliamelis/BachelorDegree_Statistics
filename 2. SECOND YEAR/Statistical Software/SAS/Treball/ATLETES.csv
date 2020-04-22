@@ -1,0 +1,500 @@
+id;name;nationality;sex;height;weight;sport;gold;silver;bronze
+736041664;A Jesus Garcia;ESP;male;1.72;64;athletics;0;0;0
+532037425;A Lam Shin;KOR;female;1.68;56;fencing;0;0;0
+435962603;Aaron Brown;CAN;male;1.98;79;athletics;0;0;1
+521041435;Aaron Cook;MDA;male;1.83;80;taekwondo;0;0;0
+33922579;Aaron Gate;NZL;male;1.81;71;cycling;0;0;0
+173071782;Aaron Royle;AUS;male;1.8;67;triathlon;0;0;0
+266237702;Aaron Russell;USA;male;2.05;98;volleyball;0;0;1
+382571888;Aaron Younger;AUS;male;1.93;100;aquatics;0;0;0
+87689776;Aauri Lorena Bokesa;ESP;female;1.8;62;athletics;0;0;0
+997877719;Ababel Yeshaneh;ETH;female;1.65;54;athletics;0;0;0
+343694681;Abadi Hadis;ETH;male;1.7;63;athletics;0;0;0
+591319906;Abbas Abubakar Abbas;BRN;male;1.75;66;athletics;0;0;0
+258556239;Abbas Qali;IOA;male;;;aquatics;0;0;0
+376068084;Abbey D'Agostino;USA;female;1.61;49;athletics;0;0;0
+162792594;Abbey Weitzeil;USA;female;1.78;68;aquatics;1;1;0
+521036704;Abbie Brown;GBR;female;1.76;71;rugby sevens;0;0;0
+149397772;Abbos Rakhmonov;UZB;male;1.61;57;wrestling;0;0;0
+256673338;Abbubaker Mobara;RSA;male;1.75;64;football;0;0;0
+337369662;Abby Erceg;NZL;female;1.75;68;football;0;0;0
+334169879;Abd Elhalim Mohamed Abou;EGY;male;2.1;88;volleyball;0;0;0
+215053268;Abdalaati Iguider;MAR;male;1.73;57;athletics;0;0;0
+763711985;Abdalelah Haroun;QAT;male;1.85;80;athletics;0;0;0
+924593601;Abdalla Targan;SUD;male;1.77;65;athletics;0;0;0
+578032534;Abdel Aziz Mehelba;EGY;male;1.76;80;shooting;0;0;0
+890222258;Abdelati El Guesse;MAR;male;1.9;72;athletics;0;0;0
+803161695;Abdelaziz Merzougui;ESP;male;1.75;67;athletics;0;0;0
+189931373;Abdelaziz Mohamed Ahmed;SUD;male;1.81;72;aquatics;0;0;0
+677622742;Abdelghani Demmou;ALG;male;1.85;75;football;0;0;0
+349871091;Abdelhafid Benchabla;ALG;male;1.86;;boxing;0;0;0
+904808208;Abdelhakim Amokrane;ALG;male;1.86;70;football;0;0;0
+23564778;Abdelkader Chadi;ALG;male;1.78;;boxing;0;0;0
+133974151;Abdelkadir Salhi;ALG;male;1.85;79;football;0;0;0
+189886442;Abdelkebir Ouaddar;MAR;male;1.74;67;equestrian;0;0;0
+199516300;Abdelkhalek Elbanna;EGY;male;1.93;95;rowing;0;0;0
+570342175;Abdellatif Mohamed Ahmed Mohamed;EGY;male;1.76;120;wrestling;0;0;0
+517007712;Abdelmajid El Hissouf;MAR;male;1.7;56;athletics;0;0;0
+512730813;Abdelmalik Lahoulou;ALG;male;1.77;72;athletics;0;0;0
+934545704;Abdelrahman Salah Orabi Abdelgawwad;EGY;male;1.85;;boxing;0;0;0
+514096508;Abdelraouf Benguit;ALG;male;1.7;65;football;0;0;0
+388896171;Abderrahmane Benamadi;ALG;male;1.83;90;judo;0;0;0
+285603057;Abderrahmane Mansouri;ALG;male;1.72;66;cycling;0;0;0
+545134894;Abderrahmane Meziane;ALG;male;1.68;62;football;0;0;0
+64529046;Abdi Hakin Ulad;DEN;male;1.75;57;athletics;0;0;0
+917755766;Abdi Nageeye;NED;male;1.65;54;athletics;0;0;0
+184980926;Abdi Waiss Mouhyadin;DJI;male;1.6;60;athletics;0;0;0
+702606719;Abdoul Khadre Mbaye Niane;SEN;male;1.9;90;aquatics;0;0;0
+259675127;Abdoulkarim Fawziya;CMR;female;1.8;67;volleyball;0;0;0
+469953606;Abdoullah Bamoussa;ITA;male;;;athletics;0;0;0
+962468808;Abdoulrazak Issoufou Alfaga;NIG;male;2.07;98;taekwondo;0;1;0
+958967643;Abdul Khalili;SWE;male;1.81;71;football;0;0;0
+325809293;Abdul Omar;GHA;male;;;boxing;0;0;0
+152408417;Abdul Wahab Zahiri;AFG;male;1.75;68;athletics;0;0;0
+262868423;Abdulaziz Alshatti;IOA;male;;;fencing;0;0;0
+101781750;Abdulkadir Abdullayev;AZE;male;1.88;;boxing;0;0;0
+5763609;Abdullah Abkar Mohammed;KSA;male;1.72;73;athletics;0;0;0
+969824503;Abdullah Alrashidi;IOA;male;1.83;84;shooting;0;0;1
+897549624;Abdullah Hel Baki;BAN;male;;;shooting;0;0;0
+153457;Abdullahi Shehu;NGR;male;1.7;;football;0;0;1
+803368584;Abdullo Tangriev;UZB;male;1.9;132;judo;0;0;0
+937153550;Abdulrahman Al Faihan;IOA;male;;;shooting;0;0;0
+746318262;Abdulrashid Sadulaev;RUS;male;1.77;86;wrestling;1;0;0
+841446548;Abdulrazzaq Murad;QAT;male;1.86;77;handball;0;0;0
+884912875;Abeku Gyekye Jackson;GHA;male;;;aquatics;0;0;0
+146197583;Abhinav Bindra;IND;male;1.75;70;shooting;0;0;0
+884912136;Abigail Johnston;USA;female;1.66;61;aquatics;0;0;0
+221052317;Abigel Joo;HUN;female;1.83;76;judo;0;0;0
+157637514;Ablaikhan Zhussupov;KAZ;male;1.75;;boxing;0;0;0
+78813419;Abraham Kipchirchir Rotich;BRN;male;1.83;65;athletics;0;0;0
+555457991;Abraham Naibei Cheroben;BRN;male;1.76;60;athletics;0;0;0
+877850429;Abraham Niyonkuru;BDI;male;1.62;52;athletics;0;0;0
+369092977;Abrar Osman;ERI;male;1.68;58;athletics;0;0;0
+602585498;Abubaker Haydar Abdalla;QAT;male;1.8;60;athletics;0;0;0
+140663745;Achraf Kharroubi;MAR;male;1.6;;boxing;0;0;0
+507726155;Adam Batirov;BRN;male;1.65;71;wrestling;0;0;0
+60265240;Adam Cwalina;POL;male;1.87;81;badminton;0;0;0
+256805041;Adam Decker;HUN;male;2.03;115;aquatics;0;0;0
+275689888;Adam Dixon;GBR;male;1.69;70;hockey;0;0;0
+136977152;Adam Froese;CAN;male;1.82;81;hockey;0;0;0
+487206822;Adam Gemili;GBR;male;1.78;75;athletics;0;0;0
+236523132;Adam Imer;BRA;male;1.82;88;hockey;0;0;0
+682367963;Adam Kszczot;POL;male;1.78;68;athletics;0;0;0
+624366946;Adam Lundqvist;SWE;male;1.74;70;football;0;0;0
+394945344;Adam Marosi;HUN;male;1.81;75;modern pentathlon;0;0;0
+970243540;Adam Okruashvili;GEO;male;1.89;130;judo;0;0;0
+765490473;Adam Pattantyus;HUN;male;1.75;71;table tennis;0;0;0
+561951036;Adam Peaty;GBR;male;1.93;88;aquatics;1;1;0
+785166259;Adam Sebastian Helcelet;CZE;male;1.9;92;athletics;0;0;0
+846863992;Adam Telegdy;HUN;male;1.94;77;aquatics;0;0;0
+390173289;Adam Vella;AUS;male;1.78;92;shooting;0;0;0
+266751447;Adam Viktora;SEY;male;1.88;94;aquatics;0;0;0
+983184686;Adam Wisniewski;POL;male;1.93;93;handball;0;0;0
+184652432;Adam Yates;GBR;male;1.72;58;cycling;0;0;0
+983411298;Adam van Koeverden;CAN;male;1.82;85;canoe;0;0;0
+685532077;Adama Diatta;SEN;male;1.65;57;wrestling;0;0;0
+222063859;Adama Jammeh;GAM;male;;;athletics;0;0;0
+46940649;Adas Juskevicius;LTU;male;1.94;90;basketball;0;0;0
+512592841;Adel Gholami;IRI;male;1.95;88;volleyball;0;0;0
+302277635;Adel Mechaal;ESP;male;1.82;71;athletics;0;0;0
+216864827;Adel Mojallalimoghadam;IRI;male;1.85;82;canoe;0;0;0
+153013732;Adela Bruns;CZE;female;1.71;60;shooting;0;0;0
+123916473;Adela Hanzlickova;CZE;female;1.71;67;wrestling;0;0;0
+325622113;Adelina Bogus;ROU;female;1.86;75;rowing;0;0;1
+518639420;Adelina Pastor;ROU;female;1.68;56;athletics;0;0;0
+457663778;Adelinde Cornelissen;NED;female;1.68;55;equestrian;0;0;0
+259002430;Adeline Maria Gray;USA;female;1.73;77;wrestling;0;0;0
+303297765;Adem Boudjemline;ALG;male;1.8;85;wrestling;0;0;0
+993710181;Adenizia da Silva;BRA;female;1.87;65;volleyball;0;0;0
+878847288;Adham Ahmed Saleh Kahk;EGY;male;1.6;66;wrestling;0;0;0
+75289002;Adilbek Niyazymbetov;KAZ;male;1.8;;boxing;0;1;0
+930618704;Adilson da Silva;BRA;male;1.7;79;golf;0;0;0
+890593128;Aditi Ashok;IND;female;1.73;57;golf;0;0;0
+456381770;Adlan Abdurashidov;RUS;male;1.72;;boxing;0;0;0
+256936407;Adnan Maric;SWE;male;1.83;78;football;0;0;0
+637015297;Adrian Andres Puentes Perez;CUB;male;1.71;76;archery;0;0;0
+787208883;Adrian Baches;BRA;male;1.84;83;aquatics;0;0;0
+941631433;Adrian Blocki;POL;male;1.74;62;athletics;0;0;0
+839462979;Adrian Chacon;CUB;male;1.87;90;athletics;0;0;0
+284555275;Adrian Crisan;ROU;male;1.86;85;table tennis;0;0;0
+366608701;Adrian Dziolko;POL;male;1.89;85;badminton;0;0;0
+679510102;Adrian Eduardo Goide Arredondo;CUB;male;1.91;80;volleyball;0;0;0
+242818896;Adrian Edward Zielinski;POL;male;1.7;94;weightlifting;0;0;0
+400838338;Adrian Gavira Collado;ESP;male;1.93;89;volleyball;0;0;0
+557196811;Adrian Gomboc;SLO;male;1.7;69;judo;0;0;0
+653186701;Adrian Griffith;BAH;male;1.78;75;athletics;0;0;0
+217850967;Adrian Ignacio Carambula Raurich;ITA;male;1.82;83;volleyball;0;0;0
+370799805;Adrian Juhasz;HUN;male;1.88;89;rowing;0;0;0
+714030791;Adrian Oquendo;CUB;male;1.89;87;rowing;0;0;0
+915726586;Adrian Portela;ARG;male;1.85;95;handball;0;0;0
+80367651;Adriana Aparecida da Silva;BRA;female;1.66;52;athletics;0;0;0
+593328448;Adriana Araujo;BRA;female;1.67;;boxing;0;0;0
+770039735;Adriana Diaz;PUR;female;1.6;50;table tennis;0;0;0
+228337858;Adriana Martin;ESP;female;1.62;65;archery;0;0;0
+529241363;Adriana Moises;BRA;female;1.7;65;basketball;0;0;0
+439382128;Adrien Bart;FRA;male;1.85;84;canoe;0;0;0
+326016199;Adrien Dipanda;FRA;male;2.02;105;handball;0;1;0
+664737236;Adrien Niyonshuti;RWA;male;1.65;68;cycling;0;0;0
+447910544;Adrienne Martelli;USA;female;1.86;77;rowing;0;0;0
+835610998;Adzo Rebecca Kpossi;TOG;female;1.58;53;aquatics;0;0;0
+26797739;Ae-Ri Noort;NED;female;1.6;49;rowing;0;0;0
+577601340;Afa Ismail;MDV;female;;;athletics;0;0;0
+16830155;Afaf Elhodhod;EGY;female;1.63;75;shooting;0;0;0
+508610852;Afef Ben Ismail;TUN;female;1.73;60;canoe;0;0;0
+477738986;Africa Zamorano Sanz;ESP;female;1.7;58;aquatics;0;0;0
+998446972;Afrodite Zegers;NED;female;1.61;58;sailing;0;0;0
+42409524;Agata Forkasiewicz;POL;female;1.68;54;athletics;0;0;0
+28097741;Agatha Bednarczuk;BRA;female;1.82;70;volleyball;0;1;0
+23462736;Ageze Guadie;ISR;male;1.75;56;athletics;0;0;0
+971796358;Aglaia Pezzato;ITA;female;1.75;60;aquatics;0;0;0
+810258362;Agnes Osazuwa;NGR;female;1.62;65;athletics;0;0;0
+107504792;Agnes Raharolahy;FRA;female;1.67;58;athletics;0;0;0
+320335499;Agnese Pastare;LAT;female;1.79;68;athletics;0;0;0
+220410298;Agnete Kirk Thinggaard;DEN;female;1.72;62;equestrian;0;0;0
+726686017;Agnieszka Dygacz;POL;female;1.6;47;athletics;0;0;0
+517578131;Agnieszka Jadwiga Wieszczek-Kordus;POL;female;1.75;69;wrestling;0;0;0
+120505360;Agnieszka Jerzyk;POL;female;1.7;59;triathlon;0;0;0
+665715516;Agnieszka Kobus;POL;female;1.77;68;rowing;0;0;1
+935702937;Agnieszka Nagay;POL;female;1.69;61;shooting;0;0;0
+220520929;Agnieszka Radwanska;POL;female;1.73;59;tennis;0;0;0
+527420548;Agnieszka Skrzypulec;POL;female;1.66;53;sailing;0;0;0
+983479171;Agnieszka Szwarnog;POL;female;1.65;51;athletics;0;0;0
+638298176;Agustin Mazzilli;ARG;male;1.73;77;hockey;1;0;0
+833236523;Agustin Vidal;ARG;male;1.94;100;handball;0;0;0
+794585269;Agustina Albertarrio;ARG;female;1.65;55;hockey;0;0;0
+441542780;Agustina Habif;ARG;female;1.65;55;hockey;0;0;0
+213448220;Ahmad Abughaush;JOR;male;1.78;68;taekwondo;1;0;0
+443237540;Ahmad Alafasi;IOA;male;;;shooting;0;0;0
+942902378;Ahmad Amsyar Azman;MAS;male;1.62;62;aquatics;0;0;0
+684631479;Ahmad Hazer;LIB;male;1.88;80;athletics;0;0;0
+67793782;Ahmed Abdelaal;EGY;male;1.88;89;volleyball;0;0;0
+935849614;Ahmed Abdelhay;EGY;male;1.97;87;volleyball;0;0;0
+786273274;Ahmed Abelrahman;EGY;male;1.65;60;judo;0;0;0
+672789779;Ahmed Afifi;EGY;male;1.94;92;volleyball;0;0;0
+873200853;Ahmed Akram;EGY;male;1.88;80;aquatics;0;0;0
+862822782;Ahmed Ali;SUD;male;1.73;75;athletics;0;0;0
+9418987;Ahmed Attellesey;LBA;male;;;aquatics;0;0;0
+180751684;Ahmed Bader Magour;QAT;male;1.9;90;athletics;0;0;0
+364294388;Ahmed Darwish;EGY;male;1.72;80;shooting;0;0;0
+23970897;Ahmed El Kotb;EGY;male;1.97;80;volleyball;0;0;0
+837684987;Ahmed El-Nemr;EGY;male;1.83;84;archery;0;0;0
+635571670;Ahmed Elahmar;EGY;male;1.81;79;handball;0;0;0
+64299896;Ahmed Gebrel;PLE;male;;;aquatics;0;0;0
+215275770;Ahmed Goumar;NIG;male;1.8;73;judo;0;0;0
+663592491;Ahmed Ibrahim;IRQ;male;1.84;80;football;0;0;0
+916701520;Ahmed Kamar;EGY;male;1.75;60;shooting;0;0;0
+114527133;Ahmed Mathlouthi;TUN;male;1.9;90;aquatics;0;0;0
+205324342;Ahmed Mohamed;EGY;male;1.7;73;shooting;0;0;0
+162169475;Ahmed Mohamed;EGY;male;1.85;144;weightlifting;0;0;0
+739968078;Ahmed Mohamed Ibrahim Saad;EGY;male;1.65;85;wrestling;0;0;0
+575397765;Ahmed Ragab;EGY;male;1.74;81;sailing;0;0;0
+101574216;Ahmed Saad;EGY;male;1.6;62;weightlifting;0;0;0
+105465611;Ahmed Shaban;EGY;male;1.9;95;shooting;0;0;0
+585852107;Ahmet Li;TUR;male;1.73;67;table tennis;0;0;0
+696999235;Ahmet Orken;TUR;male;1.77;69;cycling;0;0;0
+47988332;Ahreum Na;KOR;female;1.63;55;cycling;0;0;0
+138385356;Ahymara Espinoza;VEN;female;1.8;99;athletics;0;0;0
+730862558;Ai Fukuhara;JPN;female;1.56;48;table tennis;0;0;1
+488478701;Ai Kondo Yoshida;JPN;female;1.61;58;sailing;0;0;0
+975475720;Ai Ueda;JPN;female;1.55;44;triathlon;0;0;0
+544308054;Ai Wen Yu;TPE;female;1.57;52;shooting;0;0;0
+696719880;Aiaal Lazarev;KGZ;male;1.95;125;wrestling;0;0;0
+634178292;Aichen Wang;CHN;male;1.85;75;sailing;0;0;0
+537808926;Aida Fall;SEN;female;1.93;95;basketball;0;0;0
+155951731;Aida Mohamed;HUN;female;1.62;58;fencing;0;0;0
+531077009;Aida Roman;MEX;female;1.69;64;archery;0;0;0
+750356217;Aida Shanaeva;RUS;female;1.73;63;fencing;0;0;0
+248085477;Aidan Roach;AUS;male;1.87;88;aquatics;0;0;0
+743883365;Aika Hakoyama;JPN;female;1.76;62;aquatics;0;0;1
+110469224;Aikaterini Nikolaidou;GRE;female;1.8;70;rowing;0;0;0
+823094336;Aikaterini-Maria Kontochristopoulou;GRE;female;1.68;58;fencing;0;0;0
+574808106;Aiko Hayashi;JPN;female;1.66;56;aquatics;0;0;1
+676958658;Aiko Sugihara;JPN;female;1.46;35;gymnastics;0;0;0
+420613340;Aileen Reid;IRL;female;1.69;53;triathlon;0;0;0
+172676108;Ailen Valente;ARG;female;1.67;58;gymnastics;0;0;0
+971329341;Ailly Luciano;NED;female;1.71;69;handball;0;0;0
+356290857;Ailun Guo;CHN;male;1.92;85;basketball;0;0;0
+273034565;Aimee Fisher;NZL;female;1.83;99;canoe;0;0;0
+266091485;Aimee Willmott;GBR;female;1.71;66;aquatics;0;0;0
+912490592;Aina Cid I Centelles;ESP;female;1.7;60;rowing;0;0;0
+674464910;Ainhoa Hernandez;ESP;female;1.8;88;handball;0;0;0
+14183642;Ainhoa Murua;ESP;female;1.6;48;triathlon;0;0;0
+871394696;Ainur Yesbergenova;KAZ;female;1.64;49;taekwondo;0;0;0
+635098552;Airi Hatakeyama;JPN;female;1.71;46;gymnastics;0;0;0
+965051843;Airine Palsyte;LTU;female;1.87;63;athletics;0;0;0
+840071617;Aisen Chen;CHN;male;1.68;60;aquatics;2;0;0
+704825548;Aisha Praught;JAM;female;1.62;50;athletics;0;0;0
+704391947;Aislin Jones;AUS;female;1.57;51;shooting;0;0;0
+273177958;Aisuluu Tynybekova;KGZ;female;1.7;58;wrestling;0;0;0
+191963338;Aitor Martinez Rodriguez;ESP;male;1.83;78;aquatics;0;0;0
+678408880;Aivi Luik;AUS;female;1.63;58;football;0;0;0
+234338084;Ajee Wilson;USA;female;1.73;61;athletics;0;0;0
+374861025;Ajla del Ponte;SUI;female;1.68;56;athletics;0;0;0
+504635619;Ajna Kesely;HUN;female;1.65;54;aquatics;0;0;0
+680600926;Akalani Baravilala;USA;female;1.68;74;rugby sevens;0;0;0
+213555250;Akane Kuroki;JPN;female;1.65;50;equestrian;0;0;0
+58865414;Akane Shibata;JPN;female;1.53;50;hockey;0;0;0
+677730191;Akane Yamaguchi;JPN;female;1.56;55;badminton;0;0;0
+265984930;Akani Simbine;RSA;male;1.76;74;athletics;0;0;0
+285797294;Akashdeep Singh;IND;male;1.78;70;hockey;0;0;0
+769580282;Akeem Haynes;CAN;male;1.68;71;athletics;0;0;1
+194243947;Akela Jones;BAR;female;1.86;77;athletics;0;0;0
+58705332;Aki Mitsuhashi;JPN;female;1.66;59;hockey;0;0;0
+921789441;Aki Yazawa;JPN;female;1.56;50;canoe;0;0;0
+327133724;Akihiko Nakamura;JPN;male;1.8;73;athletics;0;0;0
+346354435;Akiko Sato;JPN;female;1.62;58;shooting;0;0;0
+850163240;Akira Ioane;NZL;male;1.94;113;rugby sevens;0;0;0
+816408353;Akira Yanase;JPN;male;1.91;95;aquatics;0;0;0
+959689266;Akossiwa Claire Ayivon;TOG;female;;;rowing;0;0;0
+152032519;Akua Obeng-Akrofi;GHA;female;;;athletics;0;0;0
+593452734;Alaa Ali;IRQ;male;1.78;68;football;0;0;0
+747058984;Alaaeldin Abouelkassem;EGY;male;1.88;87;fencing;0;0;0
+249203070;Alade Aminu;NGR;male;2.1;102;basketball;0;0;0
+158571661;Alain Sign;GBR;male;1.81;84;sailing;0;0;0
+471888446;Alan Campbell;GBR;male;1.91;96;rowing;0;0;0
+275659106;Alan Hatherly;RSA;male;1.78;62;cycling;0;0;0
+488926827;Alan Sinclair;GBR;male;1.92;96;rowing;0;0;0
+386179468;Alan Sothern;IRL;male;1.78;76;hockey;0;0;0
+68100583;Alana Barber;NZL;female;1.63;52;athletics;0;0;0
+662496867;Alana Boyd;AUS;female;1.71;59;athletics;0;0;0
+812220330;Alanna Kennedy;AUS;female;1.76;63;football;0;0;0
+923852920;Alastair Brogdon;GBR;male;1.83;76;hockey;0;0;0
+533114803;Alba Torrens;ESP;female;1.91;68;basketball;0;1;0
+551413911;Albachir Mouctar;NIG;male;1.78;76;aquatics;0;0;0
+92096398;Albane Valenzuela;SUI;female;1.74;58;golf;0;0;0
+930879907;Albert Espanol Lifante;ESP;male;1.89;86;aquatics;0;0;0
+596935178;Albert Gaun;RUS;male;1.85;80;taekwondo;0;0;0
+70764024;Albert Hermoso Farras;ESP;male;1.68;65;equestrian;0;0;0
+172435291;Albert Kibichii Rop;BRN;male;1.77;63;athletics;0;0;0
+389597142;Albert Puig Garrich;ESP;male;1.84;78;aquatics;0;0;0
+184326688;Albert Ramon Ramirez;VEN;male;1.82;;boxing;0;0;0
+100190722;Albert Ramos-Vinolas;ESP;male;1.88;80;tennis;0;0;0
+366742302;Albert Saritov;ROU;male;1.88;100;wrestling;0;0;1
+670559048;Albert Selimov;AZE;male;1.71;;boxing;0;0;0
+124573287;Albert Subirats;VEN;male;1.9;85;aquatics;0;0;0
+635016740;Alberth Bravo;VEN;male;1.99;88;athletics;0;0;0
+502881474;Alberth Elis;HON;male;1.84;77;football;0;0;0
+583503806;Albertina Cruz Kassoma;ANG;female;1.92;105;handball;0;0;0
+804217525;Alberto Alvarez;MEX;male;1.91;78;athletics;0;0;0
+331799449;Alberto Ezequiel Melian;ARG;male;1.7;;boxing;0;0;0
+532248667;Alberto Fernandez;ESP;male;1.8;115;shooting;0;0;0
+566773050;Alberto Ignacio Palmetta;ARG;male;1.75;;boxing;0;0;0
+220269839;Alberto Munarriz Egana;ESP;male;1.98;105;aquatics;0;0;0
+861268031;Alberto Ricchetti;ITA;male;1.86;88;canoe;0;0;0
+663206046;Albin Lagergren;SWE;male;1.86;94;handball;0;0;0
+966601149;Albina Shakirova;RUS;female;1.65;50;shooting;0;0;0
+74286490;Aldemir da Silva Junior;BRA;male;1.93;80;athletics;0;0;0
+46123715;Aldo Montano;ITA;male;1.84;82;fencing;0;0;0
+343089125;Alec Potts;AUS;male;1.85;77;archery;0;0;1
+210525666;Aleixo-Platini Menga;GER;male;1.82;82;athletics;0;0;0
+969294495;Alejandra Betancur;COL;female;1.6;82;rugby sevens;0;0;0
+388913856;Alejandra Garza Garza;MEX;female;1.65;75;weightlifting;0;0;0
+883610308;Alejandra Jhonay Benitez Romero;VEN;female;1.69;62;fencing;0;0;0
+694204413;Alejandra Llaneza;MEX;female;1.58;48;golf;0;0;0
+400375379;Alejandra Orozco;MEX;female;1.57;56;aquatics;0;0;0
+151538357;Alejandra Ortega;MEX;female;1.65;57;athletics;0;0;0
+281414786;Alejandra Quereda;ESP;female;1.75;54;gymnastics;0;1;0
+471263119;Alejandra Teran;MEX;female;1.76;73;fencing;0;0;0
+929131268;Alejandra Valencia;MEX;female;1.75;74;archery;0;0;0
+419155357;Alejandra Zavala Vazquez;MEX;female;1.65;85;shooting;0;0;0
+440339638;Alejandro Enrique Valdes Tobier;CUB;male;1.65;65;wrestling;0;0;0
+691394107;Alejandro Foglia Costa;URU;male;1.9;96;sailing;0;0;0
+813391088;Alejandro Valverde Belmonte;ESP;male;1.77;63;cycling;0;0;0
+288835407;Aleksandar Aleksandrov;AZE;male;1.89;93;rowing;0;0;0
+299839075;Aleksandar IVOVIC;MNE;male;1.97;107;aquatics;0;0;0
+371740701;Aleksandar Karakasevic;SRB;male;1.78;85;table tennis;0;0;0
+150583899;Aleksandar Kukolj;SRB;male;1.94;94;judo;0;0;0
+156829148;Aleksandar Nikolov;BUL;male;1.85;75;aquatics;0;0;0
+39610779;Aleksandar RADOVIC;MNE;male;1.91;98;aquatics;0;0;0
+150706476;Aleksandr Krasnykh;RUS;male;1.88;80;aquatics;0;0;0
+461398245;Aleksandr Lipatov;RUS;male;1.84;77;canoe;0;0;0
+825626228;Aleksandr Markov;RUS;male;1.79;70;equestrian;0;0;0
+26501082;Aleksandr Popkov;RUS;male;1.85;80;aquatics;0;0;0
+442737224;Aleksandr Sadovnikov;RUS;male;1.93;85;aquatics;0;0;0
+928101165;Aleksandra Cotti;ITA;female;1.67;65;aquatics;0;1;0
+15347644;Aleksandra Crvendakic;SRB;female;1.87;76;basketball;0;0;1
+398269007;Aleksandra Jarmolinska;POL;female;1.6;67;shooting;0;0;0
+344407164;Aleksandra Krunic;SRB;female;1.63;55;tennis;0;0;0
+598990857;Aleksandra Patskevich;RUS;female;1.69;49;aquatics;1;0;0
+832551080;Aleksandra Romanova;KAZ;female;1.68;58;athletics;0;0;0
+778823226;Aleksandra Socha;POL;female;1.74;66;fencing;0;0;0
+146965989;Aleksandra Urbanczyk;POL;female;1.72;64;aquatics;0;0;0
+265023366;Aleksandrs Samoilovs;LAT;male;1.96;98;volleyball;0;0;0
+282139882;Aleksei Brianskii;RUS;male;1.92;82;aquatics;0;0;0
+646633611;Aleksei Kurbatov;RUS;male;;;cycling;0;0;0
+200955001;Aleksejs Rumjancevs;LAT;male;1.85;90;canoe;0;0;0
+285964258;Aleksejs Saramotins;LAT;male;1.85;75;cycling;0;0;0
+169040459;Aleksey Mochalov;UZB;male;1.86;90;canoe;0;0;0
+191984367;Aleksi Ojala;FIN;male;1.8;62;athletics;0;0;0
+462274321;Alemu Bekele;BRN;male;1.62;59;athletics;0;0;0
+571628094;Alen Zasieiev;UKR;male;1.85;125;wrestling;0;0;0
+871020123;Alena Abramchuk;BLR;female;1.82;95;athletics;0;0;0
+603507285;Alena Amialiusik;BLR;female;1.69;52;cycling;0;0;0
+390806588;Alena Furman;BLR;female;1.79;65;rowing;0;0;0
+84230211;Alena Sharp;CAN;female;1.68;69;golf;0;0;0
+30712954;Alena Sobaleva;BLR;female;1.78;87;athletics;0;0;0
+906750380;Alesha Widdall;USA;female;1.73;65;hockey;0;0;0
+779596907;Alessandra Aguilar;ESP;female;1.65;50;athletics;0;0;0
+236415837;Alessandra Patelli;ITA;female;1.8;70;rowing;0;0;0
+820764186;Alessandra Perilli;SMR;female;1.69;73;shooting;0;0;0
+630246233;Alessandro De Marchi;ITA;male;1.81;66;cycling;0;0;0
+24174970;Alessandro Fabian;ITA;male;1.86;77;triathlon;0;0;0
+213338722;Alessandro Nora;ITA;male;1.91;85;aquatics;0;0;1
+346410285;Alessandro Velotto;ITA;male;1.86;85;aquatics;0;0;1
+5076328;Alessia Gennari;ITA;female;1.84;68;volleyball;0;0;0
+559742871;Alessia Maurelli;ITA;female;1.68;48;gymnastics;0;0;0
+488353513;Alessia Orro;ITA;female;1.8;74;volleyball;0;0;0
+767623428;Alessia Polieri;ITA;female;1.63;55;aquatics;0;0;0
+389711690;Alessia Trost;ITA;female;1.88;70;athletics;0;0;0
+636505415;Aletta Jorritsma;NED;female;1.86;76;rowing;0;0;0
+746309995;Alev Kelter;USA;female;1.68;74;rugby sevens;0;0;0
+178787882;Alex Abrines;ESP;male;1.98;93;basketball;0;0;1
+527236860;Alex Amankwah;GHA;male;;;athletics;0;0;0
+24122998;Alex Beddoes;COK;male;1.81;74;athletics;0;0;0
+334218519;Alex Bowen;USA;male;1.96;102;aquatics;0;0;0
+962040149;Alex Casasayas;ESP;male;1.83;78;hockey;0;0;0
+794799982;Alex Cejka;GER;male;1.68;65;golf;0;0;0
+566695148;Alex Garcia;BRA;male;1.92;102;basketball;0;0;0
+204746498;Alex Garcia Mendoza;CUB;male;1.86;110;judo;0;0;0
+544745828;Alex Gregory;GBR;male;1.98;97;rowing;1;0;0
+851889356;Alex Hua Tian;CHN;male;1.9;70;equestrian;0;0;0
+212901658;Alex Kennedy;NZL;male;1.96;96;rowing;0;0;0
+967635529;Alex Maloney;NZL;female;1.58;56;sailing;0;1;0
+723568012;Alex Morgan;USA;female;1.7;59;football;0;0;0
+531765497;Alex Obert;USA;male;1.96;105;aquatics;0;0;0
+557501936;Alex Ranghieri;ITA;male;2;94;volleyball;0;0;0
+240862321;Alex Roelse;USA;male;2.04;115;aquatics;0;0;0
+107240268;Alex Rose;SAM;male;;;athletics;0;0;0
+58596600;Alex Sobers;BAR;male;1.88;66;aquatics;0;0;0
+703205900;Alex William Pombo Silva;BRA;male;1.74;73;judo;0;0;0
+636907352;Alex Wright;IRL;male;1.75;62;athletics;0;0;0
+893073673;Alex di Giorgio;ITA;male;1.85;75;aquatics;0;0;0
+644656107;Alexa Moreno;MEX;female;1.47;45;gymnastics;0;0;0
+898510239;Alexander Belonogoff;AUS;male;1.87;90;rowing;0;1;0
+583622968;Alexander Brouwer;NED;male;1.98;90;volleyball;0;0;1
+771200886;Alexander Bryukhankov;RUS;male;1.84;79;triathlon;0;0;0
+525300567;Alexander Bury;BLR;male;1.84;94;tennis;0;0;0
+750329482;Alexander Choupenitch;CZE;male;1.96;89;fencing;0;0;0
+737791847;Alexander Edmondson;AUS;male;1.84;76;cycling;0;1;0
+3104691;Alexander Fransson;SWE;male;1.8;75;football;0;0;0
+100528515;Alexander Gehbauer;AUT;male;1.85;70;cycling;0;0;0
+515896035;Alexander Hartmann;AUS;male;1.98;91;athletics;0;0;0
+986385043;Alexander Hendrickx;BEL;male;1.85;82;hockey;0;0;0
+711926626;Alexander Hill;AUS;male;1.93;91;rowing;0;1;0
+45190859;Alexander Horst;AUT;male;1.86;88;volleyball;0;0;0
+724710281;Alexander Huber;AUT;male;1.79;64;volleyball;0;0;0
+604407494;Alexander John;GER;male;1.85;84;athletics;0;0;0
+300967214;Alexander Karwoski;USA;male;1.94;90;rowing;0;0;0
+41863727;Alexander Kosenkow;GER;male;1.78;74;athletics;0;0;0
+5256036;Alexander Leksell;SWE;male;1.76;78;football;0;0;0
+37893138;Alexander Lerionka Sampao;KEN;male;;67;athletics;0;0;0
+911821683;Alexander Lesun;RUS;male;1.85;74;modern pentathlon;1;0;0
+703140166;Alexander Lloyd;AUS;male;1.89;89;rowing;0;0;0
+994257957;Alexander Massialas;USA;male;1.88;81;fencing;0;1;1
+517168133;Alexander Milosevic;SWE;male;1.92;77;football;0;0;0
+589365060;Alexander Molerio Quintana;CUB;male;1.69;75;shooting;0;0;0
+536913332;Alexander Naddour;USA;male;1.71;70;gymnastics;0;0;1
+110525640;Alexander Peya;AUT;male;1.82;80;tennis;0;0;0
+658069337;Alexander Russo;BRA;male;1.73;61;athletics;0;0;0
+648973939;Alexander Schmirl;AUT;male;1.76;95;shooting;0;0;0
+961318209;Alexander Shatilov;ISR;male;1.83;77;gymnastics;0;0;0
+909129710;Alexander Shibaev;RUS;male;1.92;80;table tennis;0;0;0
+452039868;Alexander Sigurbjornsson;ESP;male;1.8;80;rowing;0;0;0
+484197906;Alexander Sukhorukov;RUS;male;1.96;93;aquatics;0;0;0
+120799596;Alexander Volkov;RUS;male;2.1;90;volleyball;0;0;0
+745034260;Alexandr Spac;MDA;male;1.64;77;weightlifting;0;0;0
+188141447;Alexandr Yemelyanov;KAZ;male;1.84;97;canoe;0;0;0
+928138606;Alexandr Zaichikov;KAZ;male;1.8;105;weightlifting;0;0;1
+878621949;Alexandra Burghardt;GER;female;1.81;70;athletics;0;0;0
+566681185;Alexandra Danson;GBR;female;1.67;56;hockey;1;0;0
+612116227;Alexandra Hagan;AUS;female;1.82;75;rowing;0;0;0
+383231190;Alexandra Keresztesi;ARG;female;1.83;72;canoe;0;0;0
+191014767;Alexandra Lacrabere;FRA;female;1.77;73;handball;0;1;0
+486083635;Alexandra Longova;SVK;female;1.73;51;archery;0;0;0
+30769207;Alexandra Martinez;BRA;female;1.77;68;handball;0;0;0
+921114489;Alexandra Mirca;MDA;female;1.68;70;archery;0;0;0
+338753895;Alexandra Nemich;KAZ;female;1.68;46;aquatics;0;0;0
+599952871;Alexandra Oquendo;PUR;female;1.89;75;volleyball;0;0;0
+125810149;Alexandra Popp;GER;female;1.74;65;football;1;0;0
+891965491;Alexandra Privalova;BLR;female;1.78;66;table tennis;0;0;0
+71010173;Alexandra Raisman;USA;female;1.58;52;gymnastics;1;2;0
+256577556;Alexandra Razarenova;RUS;female;1.68;56;triathlon;0;0;0
+692519892;Alexandra Tavernier;FRA;female;1.7;82;athletics;0;0;0
+443690040;Alexandra Touretski;SUI;female;1.7;58;aquatics;0;0;0
+475551107;Alexandra Wenk;GER;female;1.8;63;aquatics;0;0;0
+872947130;Alexandra Wester;GER;female;1.8;64;athletics;0;0;0
+753747706;Alexandre Ayache;FRA;male;1.8;80;equestrian;0;0;0
+356907302;Alexandre Bouzaid;SEN;male;1.68;75;fencing;0;0;0
+538814395;Alexandre Camarasa;FRA;male;1.93;100;aquatics;0;0;0
+333303277;Alexandre Camargo;BRA;male;1.77;75;fencing;0;0;0
+718560734;Alexandre Haldemann;SUI;male;1.86;81;aquatics;0;0;0
+203028845;Alexandre Iddir;FRA;male;1.84;90;judo;0;0;0
+391830541;Alexandre de Paeuw;BEL;male;1.78;75;hockey;0;0;0
+350839117;Alexandres Gounas;GRE;male;1.79;73;aquatics;0;0;0
+72024697;Alexandrina Cabral;ESP;female;1.75;62;handball;0;0;0
+17092453;Alexandro Pozzer;BRA;male;1.92;107;handball;0;0;0
+809372786;Alexandros Papamichail;GRE;male;1.78;63;athletics;0;0;0
+992947913;Alexei Klimov;RUS;male;1.82;88;shooting;0;0;0
+621322055;Alexei Sancov;MDA;male;1.88;85;aquatics;0;0;0
+434694198;Alexej Prochorow;GER;male;1.91;138;weightlifting;0;0;0
+271488726;Alexey Alipov;RUS;male;1.74;80;shooting;0;0;0
+251192385;Alexey Cheremisinov;RUS;male;1.83;75;fencing;1;0;0
+318060996;Alexey Denisenko;RUS;male;1.85;68;taekwondo;0;1;0
+221070420;Alexey Dergunov;KAZ;male;1.87;95;canoe;0;0;0
+333787984;Alexey Verbov;RUS;male;1.83;79;volleyball;0;0;0
+527521403;Alexey Yakimenko;RUS;male;1.84;80;fencing;0;0;0
+448880966;Alexi Pappas;GRE;female;;;athletics;0;0;0
+524151751;Alexis Gonzalez;ARG;male;1.84;85;volleyball;0;0;0
+491625914;Alexis Raynaud;FRA;male;1.72;78;shooting;0;0;1
+166278707;Alexis Santos;POR;male;1.85;74;aquatics;0;0;0
+697622072;Alexis Soto;ARG;male;1.64;66;football;0;0;0
+194257222;Alexis Vuillermoz;FRA;male;1.73;60;cycling;0;0;0
+860974311;Alexus Laird;SEY;female;1.72;61;aquatics;0;0;0
+108252301;Alfonso Antonio Leyva Yepez;MEX;male;1.81;85;wrestling;0;0;0
+231869553;Alfonso Benavides Lopez de Ayala;ESP;male;1.82;86;canoe;0;0;0
+475919800;Alfred Kipketer;KEN;male;1.67;60;athletics;0;0;0
+450635887;Alfredo Campo;ECU;male;1.92;90;cycling;0;0;0
+736830151;Alfredo Talavera;MEX;male;1.88;84;football;0;0;0
+233231940;Alhussein Gambour;LBA;male;1.75;68;rowing;0;0;0
+604740736;Ali Adnan;IRQ;male;1.8;76;football;0;0;0
+461686848;Ali Elghrari;LBA;male;;;archery;0;0;0
+668278260;Ali Eren Demirezen;TUR;male;1.89;;boxing;0;0;0
+737778764;Ali Faez;IRQ;male;1.84;75;football;0;0;0
+800154411;Ali Hashemi;IRI;male;1.78;93;weightlifting;0;0;0
+931441337;Ali Hisny;IRQ;male;1.77;70;football;0;0;0
+670890480;Ali Kaya;TUR;male;1.75;54;athletics;0;0;0
+732766543;Ali Khalafalla;EGY;male;1.82;78;aquatics;0;0;0
+702507964;Ali Khamis Khamis;BRN;male;1.82;70;athletics;0;0;0
+969053827;Ali Krieger;USA;female;1.68;63;football;0;0;0
+716391442;Ali Messaoudi;ALG;male;1.78;63;athletics;0;0;0
+768503351;Ali Nouisri;TUN;male;1.84;75;cycling;0;0;0
+853472045;Ali Pakdaman;IRI;male;1.93;94;fencing;0;0;0
+89809268;Ali Riley;NZL;female;1.63;57;football;0;0;0
+472145214;Ali Suljic;SWE;male;1.89;80;football;0;0;0
+429169523;Ali Yousef Al Rumaihi;QAT;male;1.77;86;equestrian;0;0;0
+220820586;Ali Zein Mohamed;EGY;male;1.9;83;handball;0;0;0
+76451177;Alia Atkinson;JAM;female;1.73;71;aquatics;0;0;0
+432850961;Alia Saeed Mohammed;UAE;female;1.58;54;athletics;0;0;0
+502227727;Aliaksandr Bersanau;BLR;male;1.76;94;weightlifting;0;0;0
+23998076;Aliaksandr Buikevich;BLR;male;1.91;80;fencing;0;0;0
+564017885;Aliaksandr Liakhovich;BLR;male;1.72;65;athletics;0;0;0
+68967384;Aliaksandra Herasimenia;BLR;female;1.74;58;aquatics;0;0;1
+775336377;Aliaksandra Tarasava;BLR;female;1.7;64;basketball;0;0;0
+185532375;Aliaksei Mzhachyk;BLR;male;1.9;136;weightlifting;0;0;0
+481292461;Alican Kaynar;TUR;male;1.91;98;sailing;0;0;0
+198660870;Alice Aprot Nawowuna;KEN;female;1.52;54;athletics;0;0;0
+824189087;Alice Ingley;AUS;female;1.72;80;archery;0;0;0
+200278263;Alice Mizzau;ITA;female;1.8;65;aquatics;0;0;0
+273156241;Alice Naber-Lozeman;NED;female;1.68;62;equestrian;0;0;0
+713167631;Alice Richardson;GBR;female;1.72;69;rugby sevens;0;0;0
+965421454;Alice Schlesinger;GBR;female;1.65;65;judo;0;0;0
+693106463;Alice Sinno;ITA;female;1.75;69;sailing;0;0;0
+350838880;Alice Sotero;ITA;female;1.66;53;modern pentathlon;0;0;0
+598475958;Alicia Blagg;GBR;female;1.65;65;aquatics;0;0;0
+537043954;Alicia Brown;CAN;female;1.65;57;athletics;0;0;0
+247476216;Alicia Cebrian Martinez de Lagos;ESP;female;1.68;68;sailing;0;0;0
+556923374;Alicia Coutts;AUS;female;1.76;69;aquatics;0;0;0
+906544891;Alicia Magaz;ESP;female;1.61;60;hockey;0;0;0
+404345231;Alicia Quirk;AUS;female;1.73;64;rugby sevens;1;0;0
+284199636;Alicja Tchorz;POL;female;1.76;68;aquatics;0;0;0
+297498164;Alin Alexuc Ciurariu;ROU;male;1.91;105;wrestling;0;0;0

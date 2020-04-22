@@ -1,0 +1,144 @@
+---
+title: "NonParam2poblacions"
+author: "Mireia Vilardell"
+date: "31 de marzo de 2018"
+output: html_document
+---
+##Exercici 1 de la Llista del Jordi Ocaña
+### PAS 0; Introducció de les dades
+
+
+```{r}
+
+entrenades = c(78, 64, 75, 45, 82)
+control = c(110, 70, 53, 51)
+```
+### PAS 1; Definir el contrast d'hipotesis
+
+$H_{0}=\mu_{entrenades}=\mu_{control}$
+
+$H_{1}=\mu_{entrenades}< \mu_{control}$
+
+### PAS 2; Definir els calculs necessaris per contrstuir l'estadístic de test (o mesura de discrepancia) per a la realització del test de la U-Mann Whitney
+
+
+```{r}
+n1<-length(entrenades)
+n2<-length(control)
+rangs<-rank(c(entrenades, control))
+R1<-sum(rangs[1:5])
+R2<-sum(rangs[6:9])
+#Aquests valor de R1 i R2 es corregeix per la suma minima que aconseguiria cada grup. 
+#La suma minima es correspon amb la suma de rangs que s'obtindria si tot el grup li corresponen els rangs mes baixos 
+R1<-R1 -(n1*(n1+1)/2)
+R2<-R2-(n2*(n2+1)/2)
+```
+
+### PAS 3; Calcular l'estadístic de test a mà
+
+```{r}
+U<-min(R1,R2)
+R1
+R2
+U
+```
+
+
+### PAS 4; Cal fer una correcció?
+Hi ha dos tipus de correccions una pel cas d'empats i una pel cas de continuitat si no podem assumir asintóticament que les dades tenen magnituds lo suficientment grans com per poder considerar continuitat (que no seria el cas que aquí es presenta). Caldria mirar només per tant si hi ha empats. 
+
+```{r}
+summary(as.factor(rangs), maxsum=1000)
+```
+
+Veíem doncs que no hauríem de fer cap correcció en aquest cas. Recordeu que la correcció per empats o la correcció per continuitat només es pot fer amb l'aproximació asintótica a la Normal i aquesta última només es válida per tamanys mostrals grans (habitualment fora de la taula).
+
+### PAS 5; Definir la regió de rebuig;  resultat del test (a mà)
+
+Com amb qualsevol test podem comparar el resultat del nostre estadístic de test amb el valor teoric de les taules apropiades o bé a partir de la distriucio de l'estadistic de test calcular-ne el pvalor i comparar-lo amb el nivell de significació.
+Per aquest cas, en qualsevol de les opcions que triem, haurem de fer servir la distribució exacte (tamanys mostrals menors de 10) unilateral (contrast hipotesis que hem escrit) de l'estadístic de test.
+
+La recomanació es fer aquest calculs consultant les taules penjades a la web ja que les distribucions teoriques que fa servir l'R poden donar petites variacions.
+En el cas de la distribució exacte de Mann Whitney les diferencies obtingudes son degudes a que la resta pels rangs minims es lleugerament diferent en R (veure ?pwilcox).
+
+Segons les diapositives la regio de rebuig pel cas que hem definit queda com 
+
+$U \leq u^{*}_{0.05}(5,4)$ i 
+$\bar{R_{1}} > \bar{R_{2}}$
+
+Si consultem la taula veurem que $u^{*}_{0.05}(5,4)=2$, com que el nostre estadistic de test val 9, no podem rebutjar la H0
+
+Si utlitzessim les eines del R veuriem que el valor $u^{*}_{0.05}(5,4)$ 
+
+```{r}
+qwilcox(0.05,5,4)
+
+```
+No és equivalent tal i com esperavem del help de l R.
+
+Fixeu-vos que podem obtenir la forma de la distribució;
+
+```{r}
+hist(rwilcox(500,5,4))
+
+```
+El pvalor associat s'ha de calcular respecte una o altra rang depenent del test unilateral que estem fent.
+En aquest cas;
+
+```{r}
+pwilcox(R1,5,4)
+
+```
+
+### PAS 6; comparació resultats R amb els obtinguts a mà
+
+```{r}
+wilcox.test(entrenades, control, exact=TRUE, alternative="less")
+wilcox.test(control, entrenades, exact=TRUE, alternative="great")
+```
+
+Finalment concloem que no hi ha diferencies significatives i per tant no tenim evidencies suficients per rebutjar la hipotesis nula.
+
+
+
+### PAS 7; Altres càlculs. 
+
+En general podem estar interessats en obtenir una IC per les diferencies entre els dos grups. 
+Recordeu que l'IC ens permet obtenir informacio sobre les diferencies poblacionals. 
+El calcul de la mesura de les diferencies poblacionals es especialment relevant per la interpretacio de les dades en el cas de que el test ens hagi donat significatiu (significació estadística versus significació clínica/biológica)
+Cal calcular les diferencies (dada a dada) entre les dades dels dos grups
+
+```{r}
+d<-outer(entrenades, control, "-")
+d
+```
+L'estimació puntual es simplment
+
+```{r}
+median(d)
+```
+L'IC s'obté de les mateixes diferencies. Nomes ens cal saber quines son les posicions de les diferencies que ens marquen aquest IC
+
+S'apliquen les formules de la presentacio, només que si feu servir l'R pels calculs recordeu de fer les correccions adequades.
+
+```{r}
+d<-sort(d) #importantissim endreçar les diferencies||||
+
+pos.inferior<-qwilcox(0.025,5,4)
+pos.superior<-(n1*n2)-pos.inferior +1
+```
+
+IC
+
+```{r}
+c(d[pos.inferior], d[pos.superior])
+```
+
+
+Es pot realitzar el simil entre IC i contrast nomes pel cas bilateral. 
+Recordeu que amb l'R ens dona només el IC  per la mesura només en el cas bilateral
+
+
+```{r}
+wilcox.test(entrenades, control, conf.int=TRUE, exact=TRUE)
+```

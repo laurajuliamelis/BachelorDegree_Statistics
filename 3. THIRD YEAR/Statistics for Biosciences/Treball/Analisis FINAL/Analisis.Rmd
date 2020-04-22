@@ -1,0 +1,438 @@
+---
+title: "Estad??stica per a les Bioci??ncies: Expansi??n de c??lulas beta pancre??ticas in vitro"
+author: "Laura Julia Melis, Victor Navarro Garces y Marta Pi??ol Palau"
+date: "May 25, 2018"
+output:
+  html_document:
+    toc: yes
+    toc_depth: 2
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+# Introducci??n
+Este documento pretende explicar el estudio sobre la expansi??n in vitro de **c??lulas beta** ($\beta$): mostrar qu?? mueve a realizar este estudio, cu??l es la hip??tesis planteada en un principio, qu?? m??todos biotecnol??gicos y estad??sticos se han utilizado y cu??les han sido los resultados finales.
+
+**Informaci??n previa.**
+
+El **p??ncreas** es un ??rgano que, entre muchas otras cosas, est?? formado por islotes de Langerhans. Los islotes pancre??ticos son c??mulos de c??lulas, la mayor??a de las cuales son c??lulas beta que producen la hormona de la **insulina**, secretada para regular la glucemia en sangre. La enfermedad de la **diabetes** se caracteriza por la destrucci??n de c??lulas beta y, por lo tanto, en un defecto en la regulaci??n de la glucemia que causa insulinodependencia. Las donaciones de p??ncreas son escasas por lo que el trasplante de islotes de c??lulas beta se ve limitado. 
+De aqu?? nace el deseo de estudiar c??mo expandir las c??lulas beta obtenidas a partir de islotes de p??ncreas cadav??ricos. No obstante, las c??lulas beta tienen una capacidad de proliferaci??n baja in vivo y los intentos de inducir la expansi??n de las c??lulas beta cultivadas in vitro siempre han dado como resultado la **desdiferenciaci??n celular**: p??rdida del fenotipo de las c??lulas beta y consecuentemente, su funcionalidad biol??gica (producir insulina).
+
+# Objetivos
+Los investigadores han demostrado mediante el rastreo de **linaje celular**[^1] la existencia de c??lulas beta-derivadas supervivientes de la desdiferenciaci??n y la replicaci??n de estas. Tambi??n, **an??lisis epigen??ticos**[^2] de las c??lulas beta-derivadas han indicado que los genes se han mantenido a pesar de no haberse transcrito. 
+
+Se hipotetiza, pues, que la c??lula desdiferenciada ha mantenido su epigenoma y que, por lo tanto, es el epigenoma el responsable de que la c??lula pueda seguir produciendo insulina. Esto significa que, si se consigue rediferenciar las c??lulas beta-derivadas, es decir, si se logra que vuelvan a producir insulina (recuperaci??n del fenotipo)  la expansi??n de c??lulas beta-derivadas podr??a generar suficientes c??lulas como para reponer las c??lulas beta humanas.
+
+[^1]:T??cnica que permite conocer la ascendencia de una c??lula.
+
+[^2]: Estudio de los factores que intervienen en la expresi??n g??nica (modifican la actividad del ADN) sin alterar su secuencia. Estos factores no se corresponden a los elementos cl??sicos de la gen??tica.
+
+# Materiales y m??todos
+## Naturaleza de los datos
+Los islotes de los donantes se disociaron en c??lulas individuales, y las c??lulas beta se marcaron, se expandieron y cultivaron. Algunas c??lulas se mantuvieron en un medio sin s??rum (**SFM**) mientras que otras fueron tratadas con un c??ctel de rediferenciaci??n (**RC**).
+
+Adem??s,para el caso de las c??lulas no tratadas, se aprovech?? la capacidad de los virus para introducirse en c??lulas e incorporar su propio material gen??tico al genoma del organismo infectado. Se utiliz?? un lentivirus (virus de infecci??n lenta) al que se le introdujo un **pl??smido** [^3] con un gen particular expresamente para inhibir el gen SLUG de las c??lulas beta. Este gen codifica una prote??na que reprime la transcripci??n de ciertas secuencias que hacen que la c??lula se desdiferencie.
+
+De esta manera, a partir de las c??lulas expandidas de los islotes donados, se obtuvieron c??lulas re-diferenciadas (RC) y c??lulas no diferenciadas (medio SFM infectadas con el virus). 
+
+[^3]: mol??cula de ADN que se replica y transmite independientemente del ADN cromos??mico.
+
+## Dise??o experimental
+**Objetivo:** determinar si las c??lulas de islotes expandidas y re-diferenciadas consiguen m??s c??lulas beta que segreguen insulina.
+
+**Variable respuesta:** intensidad del color para medir la expresi??n g??nica.
+
+**Factor:** medio en el que se encuentran las c??lulas.
+
+**Individuo objeto de estudio:** las c??lulas beta obtenidas a partir de islotes de p??ncreas cadav??ricos.
+
+En el apartado anterior se han mencionado dos condiciones que se aplicaron a las c??lulas cultivadas, pero se experiment?? tambi??n con c??lulas que no fueron cultivadas ni expandidas, o sea que fueron estudiadas tan pronto como fueron obtenidas. 
+
+As?? pues, la expresi??n g??nica fue estudiada en estos 3 grupos:
+
+* C??lulas de islotes no expandidas (4 donantes).
+* C??lulas de islotes expandidas y no diferenciadas (4 donantes).
+* C??lulas de islotes expandidas y re-diferenciadas (3 donantes).
+
+Lo que significa que se tuvo un dise??o ANOVA de 1 factor a 3 niveles y se utiliz?? un total de 11 microarrays (1 para cada donante).
+
+
+
+## M??todos utilizados en el an??lisis
+### An??lisis qPCR
+El an??lisis qPCR es un m??todo que permite la amplificaci??n espec??fica del ADN y la cuantificaci??n de la expresi??n g??nica de una muestra en tiempo real. Este an??lisis se realiza con un **termociclador**[^4] y un **espectrofluor??metro**[^5], este ??ltimo se encarga de definir la fluorescencia producida en el tubo de amplificaci??n en todo momento, con el fin de combinar la amplificaci??n del DNA con su detecci??n. La presencia del fluor??foro es persistente en la reacci??n y la se??al obtenida al final de cada ciclo de amplificaci??n es representada en una gr??fica frente al n??mero de ciclos, por lo tanto al final se obtiene una curva que representa el intervalo del proceso. 
+
+Se suele basar en la comparaci??n entre un tratamiento y un control a partir de tests que asumen normalidad.
+Para cuantificar los datos, se suele relacionar la se??al obtenida con el contenido de ADN, para ello se utiliza la curva de calibrado, esto se hace cuando todos tienen una misma eficiencia de amplificaci??n. Otra manera de cuantificar los datos es expresar el cambio en los niveles de expresi??n de ARNm.
+
+Los valores de fluorescencia se expresan  como logaritmos para as?? estudiar la fase exponencial de amplificaci??n.
+
+[^4]: Aparato usado en biolog??a molecular que permite realizar los ciclos de temperaturas necesarios para una reacci??n de amplificaci??n de ADN.
+
+[^5]: Dispositivo de laboratorio utilizado para medir los par??metros de la fluorescencia: su intensidad y la distribuci??n de longitudes de onda del espectro de emisi??n despu??s de la excitaci??n por un cierto espectro de luz.
+
+### An??lisis de inmunofluorescencia
+La inmunofluorescencia es una t??cnica com??n de laboratorio basada en el uso de unos anticuerpos espec??ficos los cuales est??n qu??micamente combinados con colorantes fluorescentes. Se usa para evaluar c??lulas en suspensi??n, cultivadas, en tejidos y en microarrays. Existen dos maneras de realizar el an??lisis:
+
+La inmunofluorescencia **directa**consiste en ligar un fluor??foro (componente que hace que una mol??cula sea fluorescente) al anticuerpo de la mol??cula que buscamos. De esta manera, ambos componentes se enlazar??n a la mol??cula, que podr?? ser detectada con microscopio. Se trata de un m??todo r??pido aunque el hecho de que el anticuerpo solo encuentre un n??mero limitado de mol??culas, lo hace poco sensible.
+
+Por otro lado, la **indirecta**, se basa en la misma idea que la directa pero consta de dos anticuerpos: el anticuerpo primario, que se une a la mol??cula objetivo, y el secundario, unido al fluor??foro. Es un proceso m??s complejo y lento, pero m??s flexible y preciso gracias al n??mero de distintos anticuerpos secundarios y las t??cnicas de detecci??n que se pueden usar en el anticuerpo primario.
+
+### Tipos de microarrays utilizados
+Los microarrays utilitzados fueron *Affymetrix GeneChip Human Gene 1.0 STE Arrays*, microarrays de expresi??n de oligonucle??tidos sintetizados in situ (1 color). Este tipo de microarrays tiene las siguientes caracter??sticas:
+
+* Cada chip contiene muestras de un solo tipo.
+* Las sondas se sintetizan directamente sobre el chip.
+* Cada gen est?? representado por un grupo de sondas cortas .
+
+El an??lisis de microarrays se realiz?? en archivos CEL utilizando PartekH Genomics Suite Tm, un software mundialmente utilizado para la visualizaci??n y el an??lisis de datos gen??micos.
+
+Cabe destacar que:
+
+* Los datos se normalizaron con el m??todo multiaverage.
+* La eliminaci??n del efecto Batch fue aplicada para las diferentes muestras.
+* El Clustering, se hizo con Partek Genomics Suite software con Correlaci??n de disimilitud de Pearson.
+
+
+# An??lisis de datos con R
+Se analizar?? una muestra de 11 c??lulas de personas. Estas 11 muestras se han distribuido en 3 grupos .
+
+## 1. Directorios y opciones de trabajo
+```{r, message=FALSE}
+workingDir <-"C:/Users/victor.navarro.garce/Downloads/Analisis/Analisis"
+dataDir <-file.path(workingDir, "DADES2")
+resultsDir <- file.path(workingDir,"resultados")
+setwd(workingDir)
+```
+
+
+**Paquetes**
+```{r, message=FALSE}
+options(width=80)
+options(digits=5)
+source("http://bioconductor.org/biocLite.R")
+
+if (!(require(annaffy))){
+    biocLite("annaffy")
+}
+if (!(require(affy))){
+  biocLite("affy")
+}
+if (!(require(gplots))){
+    biocLite("gplots")
+}
+if (!(require(limma))){
+  biocLite("limma")
+}
+if (!(require(GOstats))){
+    biocLite("GOstats")
+
+}
+if(!(require(org.Mm.eg.db))){
+  biocLite("org.Mm.eg.db")
+}
+if(!(require(Biobase))){
+  biocLite("Biobase")
+}
+if(!(require(genefilter))){
+  biocLite("genefilter")
+}
+
+if(!(require(hugene10stv1))){
+  biocLite("hugene10stv1")
+}
+if(!(require(affyPLM))){
+  biocLite("affyPLM")
+}
+if(!(require(Affybatch))){
+  biocLite("Affybatch")
+}
+```
+ 
+## 2. Lectura de Datos
+```{r}
+sampleInfo <- read.AnnotatedDataFrame(file.path(dataDir,"targets.txt"), 
+    header = TRUE, row.names = 1, sep="\t")
+fileNames <- rownames(pData(sampleInfo))
+rawData <- read.affybatch(filenames=file.path(dataDir,fileNames),
+                          phenoData=sampleInfo)
+```
+
+## 3. Exploraci??n, Control de Calidad y Normalizaci??n.
+
+### 3.1. Exploraci??n de los datos.
+* 3.1.1. Gr??fico de degradaci??n.
+```{r}
+info <- data.frame(grupo=pData(rawData)$grupo)
+sampleNames <- unlist(lapply(strsplit(rownames(pData(rawData)),"\\."), 
+                             function(x)x[1]))
+hist(rawData, main="Signal distribution", col=info$grupo, lty=1:nrow(info))
+legend (x="topright", legend=sampleNames , col=info$grupo, lty=1:nrow(info)) #No queda be el legend
+```
+
+Este gr??fico muestra c??mo ha sido el proceso de hibridaci??n de las muestras. Se puede observar que todas las lineas son paralelas, lo que significa que tienen una calidad parecida.
+
+
+
+* 3.1.2. Cluster jer??rquico y dendograma.
+
+Se realiza para ver si las muestras se agrupan por condiciones experimentales.
+```{r}
+deg<-AffyRNAdeg(rawData, log.it=T)
+summaryAffyRNAdeg(deg) 
+```
+
+```{r}
+clust.euclid.average <- hclust(dist(t(exprs(rawData))),method="average")
+plot(clust.euclid.average, labels=sampleNames, main="Hierarchical clustering of samples",  hang=-1)
+```
+
+Se observa c??mo las muestras se han agrupado, seg??n las siguientes condiciones: no cultivadas (GSM762810 - GSM762813), cultivadas tratadas (GSM762818 - GSM762820) y cultivadas no tratadas (GSM762814-GSM762815).
+
+
+### 3.2. Control de calidad.
+
+* Ajuste PLM.
+
+EL paquete `affyPLM` realiza un control de calidad basado en "probe-level models??? (PLM).
+```{r}
+stopifnot(require(affyPLM))
+Pset <- fitPLM(rawData)
+```
+
+* Gr??fico de expresiones relativas.
+```{r}
+RLE(Pset, main = "Relative Log Expression", names = sampleNames, las = 2, col = info$grupo + 1, cex.axis = 0.6, ylim = c(-5, 5))
+```
+
+* Gr??fico con los errores estandarizados.
+```{r}
+NUSE(Pset, main = "Normalized Unscaled Standard Errors", las = 2, names = sampleNames, las = 2, col = info$grupo + 1, cex.axis = 0.6, ylim = c(0.5, 1.5))
+```
+
+En ambos gr??ficos los datos est??n centrados y son relativamente sim??tricos. Esto sugiere que no se han dado problemas en los microarrays por lo que los datos son de calidad.
+
+
+### 3.3. Normalizaci??n y filtraje.
+
+Se procede a realizar un filtraje no espec??fico (`nsFilter`) que permite eliminar aquellos genes que no consituyen ninguna aportaci??n a la selecci??n de genes diferencialmente expresados, ya sea porque tienen se??ales muy bajas o porque var??an muy poco entre las diferentes condiciones.
+
+El procesado mediante RMA se realiza en tres etapas:
+
+* 3.3.1. Correcci??n de fondo.
+```{r}
+stopifnot(require(affy))
+normalize <- T
+if (normalize) {
+    eset_rma <- rma(rawData)
+    save(eset_rma, file = file.path(dataDir, "normalized.Rda"))
+} else {
+    load(file = file.path(dataDir, "normalized.Rda"))
+}
+```
+
+* 3.3.2 Normalizaci??n.
+
+La normalizaci??n es necesaria para que se puedan comparar los valores de los arrays entre ellos.
+```{r}
+boxplot(eset_rma, main = "RMA", names = sampleNames, cex.axis = 0.7, col = info$grupo + 1, las = 2)
+```
+
+El boxplot de los valores normalizados nos muestra que los valores de los arrays ya est??n en una escala en la que se pueden comparar (obs??rvese c??mo los datos est??n cetrados). 
+
+* 3.3.3 Filtraje.
+```{r}
+ stopifnot(require(genefilter))
+stopifnot(require(hugene10stv1))
+
+ filtered <- nsFilter(eset_rma, require.entrez = TRUE, remove.dupEntrez = TRUE, var.func = IQR, var.cutoff = 0.5, var.filter = TRUE, filterByQuantile = TRUE, feature.exclude = "^AFFX")
+```
+
+Informe de los resultados del filtraje:
+```{r}
+ names(filtered)
+ class(filtered$eset)
+ print(filtered$filter.log)
+ eset_filtered <- filtered$eset
+```
+
+## 4. Selecci??n de genes diferencialmente expresados.
+
+* 4.1. Matriz de dise??o.
+
+Como ya se ha meniconado con anterioridad, el dise??o se ha modelizado como un modelo de un factor con tres niveles:
+
+| Nombre Archivo |  Condiciones |
+|----------------| ------------ |
+| GSM762810.CEL  | No cultivada	|
+| GSM762811.CEL	 | No cultivada |
+| GSM762812.CEL	 | No cultivada |
+| GSM762813.CEL	 | No cultivada |
+| GSM762814.CEL	 | Cultivada, No tratada |
+| GSM762815.CEL	 | Cultivada, Tratada RC |
+| GSM762816.CEL	 | Cultivada, No tratada |
+| GSM762817.CEL	 | Cultivada, No tratada |
+| GSM762818.CEL	 | Cultivada, Tratada RC |
+| GSM762819.CEL	 | Cultivada, No tratada |
+| GSM762820.CEL	 | Cultivada, Tratada RC |
+
+La matriz de dise??o ser??:
+
+```{r}
+require(Biobase)
+if (!exists("eset_rma")) load(file.path(dataDir, "normalized.rda"))
+targets <- pData(eset_rma)
+stopifnot(require(limma))
+
+treat <- paste(targets$islet, targets$treat, sep = ".")
+lev <- factor(treat, levels = unique(treat))
+design <- model.matrix(~0 + lev)
+colnames(design) <- levels(lev)
+rownames(design) <- rownames(targets)
+print(design)
+```
+
+
+* 4.2. Contrastes.
+
+Con el modelo lineal defino a trav??s de la matriz de dise??o formulamos las preguntas de inter??s como contrastes, es decir, como comparaciones entre los par??metros del modelo. Como se tiene un factor a tres niveles, debemos estudiar tres comparaciones dos a dos.
+
+En este caso interesa estudiar:
+
+- Efecto de la expansi??n.
+
+- Efecto de la re-diferenciaci??n (en c??lulas expandidas).
+
+- Efecto de la re-difrenciaci??n i expansi??n.
+
+```{r}
+require(limma)
+cont.matrix <- makeContrasts(
+  Expansion.in.Untreated = (UnculturedIslet.untreated - expandedislet.untreated), 
+  Treated.in.Expansion = (expandedislet.untreated - expandedislet.RCtreatment), 
+  TreatedAndExpansion = (UnculturedIslet.untreated - expandedislet.RCtreatment), levels = design)
+cont.matrix
+```
+
+
+* 4.3. Estimaci??n del modelo y selecci??n de genes.
+
+Usamos el paquete `limma` para estimar el modelo, estimar los contrastes y realizar las pruebas de significaci??n de cada comparaci??n para determinar que genes pueden considerarse diferencialmente expresados.
+
+Este m??todo utilitza modelos de Bayes emp??ricos que combinan la informaci??n de toda la matriz de datos y de cada gen individual para obtener estimaciones de error mejoradas.
+
+El an??lisis proporciona los estad??sticos de test habituales como "Fold???change??? t-moderados o p-valores ajustados que se utilizan para ordenar los genes de mas a menos diferencialmente expresados.
+
+```{r}
+require(limma)
+fit <- lmFit(eset_rma, design) #estimaci??n del modelo
+fit.main <- contrasts.fit(fit, cont.matrix)
+fit.main <- eBayes(fit.main)
+```
+
+Para poder visualizar los resultados usamos un volcano plot que representa en abscisas los cambios de expresi??n del gen en escala logar??tmica y en ordenadas el logaritmo negativo del p-valor.
+
+```{r}
+coefnum = 1
+opt <- par(cex.lab = 0.7)
+volcanoplot(fit.main, coef = coefnum, highlight = 10, names = fit.main$ID, main = paste("Differentially expressed genes", 
+    colnames(cont.matrix)[coefnum], sep = "\n"))
+abline(v = c(-1, 1))
+par(opt)
+```
+
+Los puntos que se encuentran hacia la parte superior de la trama y que est??n muy lejos, ya sea hacia la izquierda o hacia la derecha representan genes que muestran cambios de gran magnitud en su expresion, as?? como una gran significaci??n estad??stica.
+
+## 5. Comparaciones m??ltiples.
+
+
+La funci??n `decideTests` selecciona los genes con un p-valor ajustado inferior a 0.01 y logar??tmo de Fold Change mayor o igual a 2. Este es un buen criterio ya que combina la significaci??n estad??stica y la significaci??pn biol??gica. 
+
+```{r}
+res <- decideTests(fit.main, method = "separate", adjust.method = "fdr", p.value = 0.01, 
+    lfc = 2)
+print(summary(res))
+```
+
+El diagrama de Venn permite visualizar la tabla anterior:
+
+```{r}
+sum.res.rows <- apply(abs(res), 1, sum)
+res.selected <- res[sum.res.rows != 0, ]
+
+vennDiagram(res.selected[, 1:3], main = "Genes in common", cex = 0.9)
+```
+
+## 6. Anotaci??n de resultados.
+
+La Anotaci??n de resultados consiste en a??adir a los indificadores del array otros m??s informativos de distintos aspectos biol??gicos.
+
+El paquete `annaffy` permite de forma muy simple generar una tabla de anotaciones con hiperenlaces a las bases de datos para cada anotaci??n seleccionada.
+
+```{r}
+stopifnot(require(annaffy))
+genesSelected <- rownames(res.selected)
+at <- aafTableAnn(genesSelected, "hugene10stv1")
+```
+
+La instrucci??n `saveHTML` crea una tabla con las anotaciones disponibles para los genes seleccionados en la secci??n de comparaciones m??ltiples.
+
+```{r}
+saveHTML(at, file.path(resultsDir, "anotations.html"), "Annotations for selected genes")
+```
+
+## 7. Visualizaci??n de los perfiles de expresi??n
+
+Tras seleccionar los genes diferencialmente expresados podemos visualizar las expresiones de cada gen agrup??ndolas para destacar los genes que se encuentran up o down regulados simult??neamente constituyendo "perfiles de expresi??n???.
+
+Para la visualizaci??n usamos el mapa de color o Heatmaps.
+
+```{r}
+probeNames <- rownames(res)
+probeNames.selected <- probeNames[sum.res.rows != 0]
+exprs2cluster <- exprs(eset_rma)[probeNames.selected, ]
+color.map <- function(grupo) {
+    switch(grupo, "yellow", "red", "blue")
+}
+grupColors <- unlist(lapply(pData(eset_rma)$grupo, color.map))
+heatmap(exprs2cluster, col = rainbow(100), ColSideColors = grupColors, cexCol = 0.7)
+```
+
+# Discusi??n.
+Una vez realizado el an??lisis de datos se pueden mencionar algunos resultados a modo de conclusi??n del estudio. 
+
+Por una parte,  mediante los gr??ficos de degradaci??n y de expresiones relativas, se ha observado que la distribuci??n global de la intensidad del color presenta valores medios semejantes, aunque los m??ximos y m??nimos difieren bastante. Adem??s, con el gr??fico con los errores estandarizados se ha hecho evidente que la distribuci??n global no es comparable.
+
+As?? pues, ha sido necesaria una correcci??n de la fluorescencia de fondo para eliminar se??ales no espec??ficas as?? como tambi??n la normalizaci??n y el filtraje de los distintos microarrays para eliminar diferencas t??cnicas. Todo ello se ha realizado con el algoritmo Robust Multiarray Average (RMA) y, tras este procesado, se ha podido observar en el correspondiente box-plot que ya era posible comparar los niveles de expresi??n gen??tica entre las distintas muestras.
+
+A partir de aqu??, a trav??s de la matriz de dise??o de un factor a tres niveles, se han realizado todos los contrastes por pares entre los 3 grupos de estudio para conocer los niveles de expresi??n diferencial, es decir, la cantidad de genes significativamente regulados hacia arriba y hacia abajo, con un nive de significaci??n del 1%.
+
+Para el contraste entre c??lulas no cultivadas y expandidas no tratadas, se observa que 392 y 651 genes est??n regulados por negativa y positivamente, respectivamente, en no cultivadas en relaci??n con las expandidas no tratadas, o sea que hay un total de 1043 genes diferencialmente expresados. Tambi??n se han encontrado un total de 112 (46 por abajo y 66 por arriba) genes diferenciados en la comparaci??n entre las c??lulas expandidas tratadas y no tratadas, y 598 (228 por abajo y 370 por arriba) entre las no cultivadas y las expandidas tratadas. Asimismo, con el diagrama de Venn se ha podido ver que ha habido ??nicamente 6 genes con un nivel de expresi??n diferencial significativa en las tres comparaciones; cabe destacar que un gran n??mero de genes han sido diferenciamente expresados tanto en el contraste no cultivadas-expandidas no tratadas y expandidas tratadas-expandidas no tratadas.
+
+Finalmente, en el mapa de color, donde se visualizan los genes (s??lo los diferencialmente expresados) en filas y los microarrays en columnas (no cultivadas en amarillo, tratadas en azul y expandidas no tratadas en rojo), se confirman los hechos mencionados anteriormente.
+
+# Bibliograf??a. 
+
+**Art??culo de la investigaci??n:**
+
+Russ, H., Sintov, E., Anker-Kitai, L., Friedman, O., Lenz, A., Toren, G., Farhy, C., Pasmanik-Chor, M., Oron-Karni, V., Ravassard, P. and Efrat, S. (2011). Insulin-Producing Cells Generated from Dedifferentiated Human Pancreatic Beta Cells Expanded In Vitro. Disponible en: <http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0025566>
+
+
+**An??lisis qPCR:**
+
+Biocompare.com. Quantitative PCR (qPCR) | Biocompare.com.  Disponible en: <https://www.biocompare.com/PCR-Real-Time-PCR/7217-Real-Time-PCR/>
+
+Es.wikipedia.org. (2017). PCR en tiempo real. Disponible en: <https://es.wikipedia.org/wiki/PCR_en_tiempo_real.>
+
+Biolog??a Molecular. Cuantificaci??n de ??cidos Nucleicos. Disponible en: <https://biologiamolecularinteractiva.wordpress.com/about/cuantificacion-de-acidos-nucleicos/.>
+
+
+**An??lisis inmunofluorescencia:**
+
+Eurodiagnostica.com. Immunofluorescence technique. Disponible en: <http://www.eurodiagnostica.com/index.php?headId=3&pageId=3&catId=10.>
+
+
+**An??lisis de datos con R:**
+
+S??nchez, A. (2009). Ejemplo de An??lisis de Datos de Microarrays con R y Bioconductor. [online] Ub.edu. Disponible en: <http://www.ub.edu/stat/docencia/bioinformatica/microarrays/ADM/labs/estrogen/Ejemplo_Estrogen.pdf.>

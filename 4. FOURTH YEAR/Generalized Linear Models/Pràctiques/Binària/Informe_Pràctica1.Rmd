@@ -1,0 +1,622 @@
+---
+title: "Prática Respuesta Binaria"
+author: "Laura Julià, Marta Piñol y Sofía Touceda"
+date: "20 de noviembre de 2018"
+output: 
+  html_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 0. Introducción.
+
+El objetivo de este análisis es identificar cuáles son los factores que pueden anticipar la aparición de una enfermedad coronaria en base a unos datos observacionales recogidos en un hospital.
+
+Se parte de una base de datos (`heart.txt`) que contiene información relacionada con la presencia o absencia de una enfermedad en el corazón así como otras 13 variables que inicialmente se consideran relevantes para anticipar este fenómeno. Así pues, en este informe se realizará un estudio completo y detallado de estos datos. 
+
+Al tratarse de una base de datos donde la respuesta que se quiere estudiar es binaria, el método empleado para encontrar el mejor modelo utilizará una función de enlace logit, esta representa el logaritmo del odd y es la que proporciona resultados más interpretables, ya que se pueden obtener los odds y los odd ratios a través de deshacer las transformaciones.
+
+El modelo tendrá la siguiente forma:
+
+$$log(\frac{\pi_i}{1-\pi_i}) = \beta_0 + \beta_1x_1 + \beta_2x_2 + ...$$
+
+Donde $\pi_i$ representa la proporción de éxitos, en nuestro caso de "sí padecer una enfermedad coronaria".
+
+En primer lugar, se realizará un análisis descriptivo (univariante y bivariante) con el fin de entender mejor cómo son las variables explicativa de las que se disponen. A continuación, y en función de los resultados obtenidos, se realizará el ajuste del modelo tanto manual como automáticamente. Una vez seleccionado el mejor modelo par describir la aparición de una enfermedad coronaria, se procederá a analizar la bondad del ajuste del modelo y estudiar su capacidad predictiva.
+
+Para terminar, se explicará con dos ejemplos cuál es la interpretación de los coeficientes del modelo y se concluirán los resultados del análisis, incluyendo un resumen numérico.
+
+En el presente informe se muestran únicamente los aspectos más relevantes del análisis llevado a cabo. Para más detalles, ver el documento `JuliàPiñolTouceda.Rmd`. En este documento annexado, se incluye todo el código utilizado con las salidas (outputs de todas las funciones, gráficos y resumenes numéricos), así como también explicaciones para cada paso y métodos utilizado.
+
+## Importación de la base de datos
+```{r}
+heart <- read.table("heart.txt", sep=' ',header=TRUE)
+```
+
+La base de datos recoge la información sobre 270 pacientes y 14 variables, las cuales se describen a continuación:
+
+    1. age (numeric): edad.
+    2. sex (factor): género.
+    3. chest_pain: chest pain type (4 values) (factor)
+    4. resting_BP: resting blood pressure (numeric)
+    5. serum_cholest: serum cholestoral in mg/dl (numeric)
+    6. blood_sugar: fasting blood sugar > 120 mg/dl (factor)
+    7. electro: resting electrocardiographic results (values 0,1,2)
+    8. HR: maximum heart rate achieved (numeric)
+    9. exercise: exercise induced angina (factor)
+    10. oldpeak: ST depression induced by exercise relative to rest (numeric)
+    11. ST: the slope of the peak exercise ST segment (factor)
+    12. major_vessels: number of major vessels (0-3) colored by flourosopy (factor)
+    13. thal: 3 = normal; 6 = fixed defect; 7 = reversable defect (factor) 
+    14. disease: Absence (1) or presence (2) of heart disease (variable respuesta)
+
+```{r, include=FALSE}
+library(car)
+library(MASS)
+##install.packages("AER")
+library(AER)
+library(effects)
+library(lmtest)
+library(FactoMineR)
+#install.packages("rms")
+#library(rms)
+#install.packages("fmsb")
+library(fmsb)
+#install.packages("ROCR")
+library(ROCR)
+#install.packages("AUC")
+library(AUC)
+library(Hmisc)
+```
+
+
+
+# 1. Análisis descriptivo.
+
+## 1.1. Descriptiva univariante de las variables predictoras.
+
+```{r, include=FALSE}
+# Transform numeric to factor
+heart$sex <- factor(heart$sex)
+heart$chest_pain <- factor(heart$chest_pain)
+heart$blood_sugar <- factor(heart$blood_sugar)
+heart$electro <- factor(heart$electro)
+heart$exercise <- factor(heart$exercise)
+heart$ST <- factor(heart$ST)
+heart$major_vessels <- factor(heart$major_vessels)
+heart$thal <- factor(heart$thal)
+heart$disease <- factor(heart$disease)
+```
+
+A continuación se procede a realizar un análisis descriptivo para cada una de las variabes de la base de datos por separado. En primer lugar se realizará un resumen numérico. Luego, se hará un histograma para cada una de las variables numéricas y un diagrama circular para analizar las categóricas.
+
+**1.1.1. Resumen numérico**
+
+```{r}
+summary(heart)
+```
+
+
+**1.1.2. Representaciones gráficas** [^nota1]
+
+[^nota1]:En el annexo (documento `JuliàPiñolTouceda.Rmd`) se analizan todas las variables por separado y se incluyen box-plots en las variables numéricas y tablas de frecuencias en las variables categóricas. 
+
+- __Histograma para las variables numéricas.__
+
+```{r echo=FALSE}
+par(mfrow=c(2,3), oma=c(0,8,0,0))
+hist(heart$age, ylab = 'Frecuencia', xlab = 'age', main = 'Histograma de age',
+     col = 'lightblue3')
+hist(heart$resting_BP, ylab = 'Frecuencia', xlab = 'resting_BP',
+     main = 'Histograma de resting_BP', col = 'lightblue3')
+hist(heart$serum_cholest, ylab = 'Frecuencia', xlab = 'serum_cholest', 
+     main = 'Histograma de serum_cholest', col = 'lightblue3')
+hist(heart$HR, ylab = 'Frecuencia', xlab = 'HR', main = 'Histograma de HR',
+     col = 'lightblue3')
+hist(heart$oldpeak, ylab = 'Frecuencia', xlab = 'oldpeak',
+     main ='Histograma de oldpeak', col = 'lightblue3')
+```
+
+Se puede observar que las edades más frecuentes (*age*) son las que se encuentran entre los 50 y los 60 años, mientras que las menos frecuentes van desde los 0 a los 40  y de los 70 a los 80 años. 
+
+El valor medio de la presión de la sangre en reposo (*resting_BP*) está alrededor de 130. Cabe mencionar también que hay bastantes valores alejados de la media, sobretodo superiormente.
+
+Los niveles séricos de colesterol (*serum_cholest*) en los pacientes es de media aproximadamente igual a 250. La mayoría de los pacientes tienen un nivel sérico alrededor de 200-300 mg/dL.
+
+La media de *HR* está alrededor de 150, sin embargo el valor máximo está alrededor de 200 y el mínimo, de 70. Estos valores alejados de la media hacen que la variabilidad sea alta.
+
+La variable *oldpeak* indica si a los pacientes les han tenido que inducir depresion ST a través del ejercicio en relación con el descanso. Los valores tienen una media igual a 1.05, su valor máximo es de 6.2 estando este muy alejado de la media y del tercer cuartil. Con ambos gráficos se observa cómo la variable oldpeak tiene una distribución asimétrica positiva, es decir, hay muchos valores enre el 0 i el 3 y muy pocos del 2 del 6.
+
+```{r, include=FALSE}
+table_sex <- table(heart$sex)
+table_chpain <- table(heart$chest_pain)
+table_blsugar <- table(heart$blood_sugar)
+table_electro <- table(heart$electro)
+table_exercise <- table(heart$exercise)
+table_ST <- table(heart$ST)
+table_mjvessels<- table(heart$major_vessels)
+table_thal <- table(heart$thal)
+table_disease <- table(heart$disease)
+```
+
+
+- __Pie chart para las variables categóricas.__
+
+```{r echo=FALSE}
+par(mfrow=c(3,3))
+pie(table_sex, labels = paste(c('0 -', '1 -'), round(table_sex/270,2)*100, '%'),
+    main = 'Diagrama de sex',col=c('lightblue3','lightblue1'))
+pie(table_chpain, labels = paste(c('Tipo I -', 'Tipo II -', 'Tipo III -', 'Tipo IV -'),
+    round(table_chpain/270,2)*100, '%'), main = 'Diagrama de chest_pain',
+    col=c('lavenderblush','lightcyan','lightblue1','lightblue3'))
+pie(table_blsugar, labels = paste(c('0 -', '1 -'), round(table_blsugar/270,2)*100,'%'), 
+    main = 'Diagrama de blood_sugar',col=c('lightblue3','lightblue1'))
+pie(table_electro, labels = paste(c('0 -', '1 -', '2 -'), round(table_electro/270,4)*100, '%'), 
+    main = 'Diagrama de electro',col=c('lightblue3','lavenderblush','lightblue1'))
+pie(table_exercise, labels = paste(c('0 -', '1 -'), round(table_exercise/270,2)*100, '%'), 
+    main = 'Diagrama de exercise',col=c('lightblue3','lightblue1'))
+pie(table_ST, labels = paste(c('1 -', '2 -', '3 -'), round(table_ST/270,2)*100, '%'), 
+    main = 'Diagrama de ST',col=c('lightblue3','lightblue1','lavenderblush'))
+pie(table_mjvessels, labels = paste(c('0 -', '1 -', '2 -'), round(table_mjvessels/270,2)*100, '%'), 
+    main = 'Diagrama de major_vessels',col=c('lightblue3','lightblue1','lavenderblush','lightcyan'))
+pie(table_thal, labels = paste(c('normal', 'fixed defect', 'reversable defect'), 
+    round(table_thal/270,2)*100, '%'), main = 'Diagrama de thal',
+    col=c('lightblue3','lavenderblush','lightblue1','lightcyan'))
+pie(table_disease, labels = paste(c('Absence', 'Presence'), round(table_disease/270,2)*100, '%'),
+    main = 'Diagrama circular de table_disease',col=c('lightblue3','lightblue1'))
+```
+
+La mayoría de los pacientes son del sexo 1 (68%) y que el 32% son del sexo 2.
+
+Se puede ver también que un dolor en el pecho (*chest_pain*) de tipo IV es lo más frecuente, con un 48% de los casos, seguido de dolor en el pecho de tipo III, con un 29%. Menos frecuente es el dolor tipo II, con un 16% de los pacientes, y finalmente, el del tipo I, con un 7%.
+
+Al rededor de 40 pacientes tienen el nivel de azúcar en la sangre (*blood_sugar*) en ayunas mayor a 120 mg/dL, lo que representa un 15%, por lo que el 85% restante lo tienen inferior a 120.
+
+El 48.52% de los pacientes tienen el nivel 0 en los resultados electrocardiográficos (*electro*) y el 50.74% a nivel 2. Menos del 1% de los pacientes tienen los resultados electrocardiográficos a nivel 1.
+
+A la mayoría de pacientes (67%) el ejercicio no le indujo la angina (*exercice*), mientas que al 33% de los pacientes sí.
+
+En cuanto a la variable *ST*, se puede ver que la opción 1 y 2 son las más abundantes, suponiendo entre las dos a casi el 94% de las respuestas.
+
+En el caso de *major_vessels*, vemos que lo más común es que ningún vaso haya sido coloreado por fluoroscopia, suponiendo casi un 60% de las observaciones totales. Mientras que lo menos común es que los 3 vasos lo hayan sido, suponiendo sólo un 7% de las observaciones totales.
+
+El 56% de los pacientes tienen un *thal* normal, el 39% un defecto reversible mientras que tan solo el 5% muestra un defecto fijo.
+
+El 56% de los pacientes estudiados no sufren esta enfermedad coronaria (*disease*) frente a un 44% que sí la sufren.
+
+## 1.2. Descriptiva bivariante entre las predictoras y la respuesta.[^nota2]
+
+[^nota2]: En el annexo se incluyen plots y tablas detalladas para todas las combinaciones de las variables predictoras con la variable respuesta *disease*.
+```{r, echo=TRUE, results='hide'}
+heart$disease <- as.factor(heart$disease)
+summary(heart$disease)
+levels(heart$disease) <- c("No padece", "Si padece")
+catdes(heart,14) #package FactoMineR
+```
+
+La primeras 3 variables categóricas más vinculadas a disease son thal, seguida de chest_pain y major_vessels. Miramos ahora las dos subpoblaciones correspondientes a los pacientes que no padecen enfermedades de corazón y los que sí. 
+
+La categoría 3 de la variable 'thal' así como la categoría 7 de 'major_vessels' están sobre representadas (v-test >0) entre las personas que no padecen enfermedades de corazón, en cambio están subrepresentadas en aquellas personas que sí las padecen. En cambio, las categorías 4 y 7 de las variables 'chest_pain' y 'thal' respectivamente están sobre representadas en las personas que sí las padecen mientras que están subrepresentadas en las que no. 
+
+Para el subgrupo de personas que sí padecen enfermedades de corazón:
+
+  - 70,54% de los individuos que poseen 'chest_pain=4' poseen enfermedades de corazón.
+  - 75,83% de los individuos que poseen enfermedades de corazón poseen 'chest_pain=4' 
+  - 47,7% de toda la población posee 'chest_pain=4'
+  - 75,96% de los individuos que poseen 'thal=7' poseen enfermedades de corazón.
+  - 65,833% de los individuos que poseen enfermedades de corazón poseen 'thal=7' 
+  - 38,52% de toda la población posee 'thal=7'
+  
+Para el caso de las variables continuas vemos que hay 4 que están significativamente relacionadas con el hecho de padecer o no enfermedades de corazón, estas variables son : oldpeak, age, resting_BP, HR
+ 
+
+# 2. Depuración de datos.
+
+La variable disease estaba categorizada como '1'{no padece} y '2'{si padece}, por lo que para la descriptiva hemos cambiado los niveles a los que aparecen entre corchetes. Para los siguientes puntos hemos creado una nueva variable "resp" que toma los valores '0' y '1'. 
+
+En primer lugar, agrupamos los 3 primeros niveles de chest_pain en un mismo nivel, que en este caso es 0. Por otro lado, dejamos el nivel 4 que es el único que aparece muy vinculado con el hecho de padecer este tipo de enfermedad. 
+
+```{r}
+heart$chest_pain4[heart$chest_pain == 4] <- '4'
+heart$chest_pain4[heart$chest_pain != 4] <- '0'
+heart$chest_pain4 <- as.factor(heart$chest_pain4)
+summary(heart$chest_pain4)
+```
+
+
+# 3. Ajuste manual del modelo de respuesta binaria.
+
+El criterio de selección del mejor modelo será el que tenga un BIC menor, ya que el objetivo de la construcción de este modelo es explicativo: lo que se desea es identificar los factores que puedan anticipar la aparición de una enfermedad coronaria. 
+
+```{r, include=FALSE}
+levels(heart$disease) <- c(0,1)
+heart$resp <- as.numeric(as.character(heart$disease)) # Numeric response
+
+m0 <- glm(resp~1,data=heart[,c(1:13,15:16)],family=binomial(link="logit")) # modelo nulo
+m1.1 <-  glm(resp ~ age,data=heart[,c(1:13,15:16)],family=binomial(link="logit"))  # Relación lineal
+m1.2 <- glm(resp ~ poly(age,2,raw=TRUE),data=heart[,c(1:13,15:16)],family=binomial(link="logit"))  # Relación cuadrática
+
+heart$c.age <- cut(heart$age,breaks=c(28,48,61,77))
+
+m1.c <- glm(resp ~ c.age,data=heart[,c(1:13,15:17)],family=binomial(link="logit"))
+m2 <-  glm(resp ~ age + thal,data=heart[,c(1:13,15:17)],family=binomial(link="logit")) 
+m3 <-  glm(resp ~ age  +thal+ chest_pain4,data=heart[,c(1:13,15:17)],family=binomial(link="logit")) 
+m4 <-  glm(resp ~ age  + thal +  chest_pain4+major_vessels,data=heart[,c(1:13,15:17)],family=binomial(link="logit")) 
+m4.1 <-  glm(resp ~ thal + chest_pain4 + major_vessels, data=heart[,c(1:13,15:17)], family=binomial(link="logit")) 
+
+heart$thal3[heart$thal != 7] <- '3'
+heart$thal3[heart$thal == 7] <- '7'
+heart$thal3<-as.factor(heart$thal3)
+
+m4.2 <-  glm(resp ~ thal3 + chest_pain4 + major_vessels, data=heart[,c(1:13,15:18)], family=binomial(link="logit")) 
+m5.1 <- glm(resp ~ thal3 + chest_pain4 + major_vessels + HR,data=heart[,c(1:13,15:18)], family=binomial(link="logit")) 
+summary(m5.1)
+m5.2 <- glm(resp ~ thal3 + chest_pain4 + major_vessels + poly(HR,2,raw=TRUE), data=heart[,c(1:13,15:18)], family=binomial(link="logit")) 
+m6.1 <- glm(resp ~ thal3 + chest_pain4 + major_vessels + HR + oldpeak, data=heart[,c(1:13,15:18)], family=binomial(link="logit")) 
+summary(m6.1)
+m6.2 <- glm(resp ~ thal3 + chest_pain4 + major_vessels + HR + poly(oldpeak,2,raw=TRUE), data=heart[,c(1:13,15:18)], family=binomial(link="logit")) 
+m7 <- glm(resp ~ thal3 + chest_pain4 + major_vessels + HR + oldpeak + exercise, data=heart[,c(1:13,15:18)], family=binomial(link="logit")) 
+m8 <- glm(resp ~ thal3 + chest_pain4 + major_vessels + HR + oldpeak + ST, data=heart[,c(1:13,15:18)], family=binomial(link="logit"))
+
+```
+
+- En primer lugar construimos el modelo nulo, sin variables explicativas. 
+
+          m0: resp ~ 1
+
+Este modelo es el más simple que se puede considerar y estima la misma respuesta para todas las observaciones, asignando como estimación común la proporción muestral de éxitos. Su devianza es la devianza máxima.
+
+- A continucación, a pesar de que en el análisis descriptivo anterior vemos que "age" no es la variable que más vinculada está con "disease", consideramos oportuno empezar añadiendola al modelo, ya que resulta normal que la edad influya, en muchos casos, en el hecho de padecer o no este tipo de enfermedad. Por lo tanto, se introduce esta variable en el modelo lineal y cuadráticamente:
+
+          m1.1: resp ~ age
+          m1.2: resp ~ poly(age, 2, raw = TRUE)
+
+Se ha confirmado que la variable "age" es significativa, pero al considerar añadir su forma cuadrática en el modelo se ha perdido un grado de libertad y la devianza residual ha disminuido; a pesar de esto, el p.valor es superior a 0.05. Por todo esto rechazamos la opción de añadirla. 
+
+- También se ha transformado la variable *age* a categórica (*c.age*), creando diferentes grupos de edad, y se ha creado un nuevo modelo.
+
+          m1.c: resp ~ c.age
+
+Nos hemos quedado con el modelo con un BIC menor de entre los 3, que es el m1.1.
+
+- Ahora se ha considerando la variable "thal", ya que es la primera según el criterio de introducción al modelo que ya contiene la variable edad (el orden de vinculación de las variables con la variable "disease"). 
+
+          m2: resp ~ age + thal
+    
+Confirmamos que el coeficiente que acompaña la variable *thal* es muy significativa.
+
+- A continuación se añade al modelo la variable *chest_pain*.
+
+          m3: resp ~ age  +thal+ chest_pain4
+Como el BIC del modelo ha seguido disminuyendo respecto al modelo elegido anteriormente, se confirma que es necesario incluirla en el modelo.   
+
+- La siguiente variable ha incluir es *major_vessels* y como el BIC ha disminuido, la dejaremos en el modelo.
+
+          m4: resp ~ age  + thal +  chest_pain4 + major_vessels
+
+- Como se ha visto que tanto el coeficiente que acompanya a la variable *age* como el que acompanya a la variable *thal6* han dejado de ser significativos. El coeficiente menos significativo es el de *age*, por lo tanto, procederemos eliminando esta variable del modelo.
+         
+          m4.1:resp ~ thal + chest_pain4 + major_vessels
+          
+- El hecho de haber eliminado la variable *age* no hace que la variable *thal6* vuelva a ser relevante en el modelo, por lo tanto, también eliminamos esta. Para hacerlo, agrupamos la variable thal de forma que los niveles 3 y 6 quedarán agrupados en  mismo nivel (esta nueva variable recibe el nombre de *thal3*).
+
+          m4.2: resp ~ thal3 + chest_pain4 + major_vessels
+
+Al comparar este modelo (m4.2) con el que anteriormente elegimos como el mejor (m3) observamos que el BIC ha disminuido y por eso, seleccionamos este como el mejor modelo hasta el momento. 
+
+- Pasamos a introducir en el modelo la variable *HR*, al tratarse de una variable numerica consideraremos además de su relación lineal su relación cuadrática, y, en caso de que sea oportuno la cúbica.
+
+          m5.1: resp ~ thal3 + chest_pain4 + major_vessels + HR
+          m5.2: resp ~ thal3 + chest_pain4 + major_vessels + poly(HR,2,raw=TRUE)
+
+Con la anova se ha podido ver cómo la forma cuadrática empeora el modelo en comparación con la relación lineal. Por lo tanto, se compara el modelo actual (m4) con el que incluye la variable *HR* (m5.1) y al observar que el BIC baja, consideraremos el nuevo modelo como el mejor.
+
+- Como hemos hecho al introducir la variable anterior, al tratarse *oldpeak* de una variable numerica consideraremos además de su relación lineal, su relación cuadrática, y, en caso de que sea oportuno, la cúbica.
+
+          m6.1: resp ~ thal3 + chest_pain4 + major_vessels + HR + oldpeak
+          m6.2: resp ~ thal3 + chest_pain4 + major_vessels + HR + poly(oldpeak,2,raw=TRUE)
+
+La forma cuadrática empeora el modelo en comparación con la relación lineal por lo que se compara el modelo m6.1 con el anterior y al ver que el BIC ha disminuido (además de que se ha perdido un grado de libertad y la devianza residual ha disminuido en 12.583) elegimos m6.1 como el mejor modelo.
+
+- La siguiente variable que vamos a considerar introducir en el modelo es "exercise".
+
+          m7: resp ~ thal3 + chest_pain4 + major_vessels + HR + oldpeak + exercise
+
+El BIC aumenta y el coeficiente de esta nueva variable no sale significativo. A la vez, también el coeficiente de HR deja de ser significativo. Por lo tanto, continuamos con el modelo m6.1.
+
+- Finalmente, añadimos la variable *ST*.
+
+          m8: resp ~ thal3 + chest_pain4 + major_vessels + HR + oldpeak + ST
+
+Al introducir esta variable vuelve a pasarnos lo que con la anterior, por lo tanto, seguimos escogiendo el modelo m6.1.
+
+Tabla resumen final:
+
+```{r echo=FALSE}
+df<-(rbind(
+modeloNulo=cbind(AIC=  m0$aic, BIC =BIC(m0), DEVIANZA = m0$deviance, DF = m0$df.residual),
+modelo1.1=cbind(AIC=  m1.1$aic, BIC =BIC(m1.1), DEVIANZA = m1.1$deviance, DF = m1.1$df.residual),
+modelo1.2=cbind(AIC=  m1.2$aic, BIC =BIC(m1.2), DEVIANZA = m1.2$deviance, DF = m1.2$df.residual),
+modelo1.c=cbind(AIC=  m1.c$aic, BIC =BIC(m1.c), DEVIANZA = m1.c$deviance, DF = m1.c$df.residual),
+modelo2=cbind(AIC=  m2$aic, BIC =BIC(m2), DEVIANZA = m2$deviance, DF = m2$df.residual),
+modelo3=cbind(AIC=  m3$aic, BIC =BIC(m3), DEVIANZA = m3$deviance, DF = m3$df.residual),
+modelo4=cbind(AIC=  m4$aic, BIC =BIC(m4), DEVIANZA = m4$deviance, DF = m4$df.residual),
+modelo4.1=cbind(AIC=  m4.1$aic, BIC =BIC(m4.1), DEVIANZA = m4.1$deviance, DF = m4.1$df.residual),
+modelo4.2=cbind(AIC=  m4.2$aic, BIC =BIC(m4.2), DEVIANZA = m4.2$deviance, DF = m4.2$df.residual),
+modelo5.1=cbind(AIC=  m5.1$aic, BIC =BIC(m5.1), DEVIANZA = m5.1$deviance, DF = m5.1$df.residual),
+modelo5.2=cbind(AIC=  m5.2$aic, BIC =BIC(m5.2), DEVIANZA = m5.2$deviance, DF = m5.2$df.residual),
+modelo6.1=cbind(AIC=  m6.1$aic, BIC =BIC(m6.1), DEVIANZA = m6.1$deviance, DF = m6.1$df.residual),
+modelo6.2=cbind(AIC=  m6.2$aic, BIC =BIC(m6.2), DEVIANZA = m6.2$deviance, DF = m6.2$df.residual),
+modelo7=cbind(AIC=  m7$aic, BIC =BIC(m7), DEVIANZA = m7$deviance, DF = m7$df.residual),
+modelo8=cbind(AIC=  m8$aic, BIC =BIC(m8), DEVIANZA = m8$deviance, DF = m8$df.residual)))
+rownames(df) <- c('modeloNulo','modelo1.1','modelo1.2','modelo1.c','modelo2','modelo3',
+                  'modelo4','modelo4.1','modelo4.2','modelo5.1','modelo5.2','modelo6.1',
+                  'modelo6.2','modelo7','modelo8')
+df
+```
+
+Por lo tanto, el mejor modelo resultante es: **resp ~ thal3 + chest_pain4 + major_vessels + HR + oldpeak**.
+
+# 4. Ajuste automático del modelo.
+
+Para el ajuste automático del modelo se ha utilizado el mecanismo Stepwise [^nota3] con el criterio BIC ya que, como se ha mencionado anteriormente, el objetivo de la contrucción del modelo es explicativo y no predictivo. 
+
+[^nota3]: Se mostrará únicamente la última iteración realizada con la función `step()`, ya que se corresponde con el modelo considerado como el mejor.
+
+```{r}
+summary(mstep <- step(glm(resp~.,heart[,c(1,2,4:13,15,16)],family=binomial(link="logit")),
+                      direction="both",k=log(nrow(heart)), trace = 0))
+BIC(mstep)
+```
+
+Se parte del modelo completo y, a partir de entonces, este mecanismo considera la posibilidad tanto de sacar variables fuera del modelo (-) como la de reintroducir variables que se hayan sacado en pasos anteriores (+). El  mejor modelo obtenido es aquel en el que el mecanismo indica que la mejor opción es no hacer ningún cambio (< none >). 
+
+El modelo ajustado resultante se ha obtenido con 5 interaciones y es: **resp ~ oldpeak + major_vessels + thal + chest_pain4**.
+
+
+# 5. Elección del modelo.
+
+Tabla comparativa de los principales indicadores para cada uno de los modelos obtenidos:
+
+```{r, echo=FALSE}
+df<-(rbind(
+modelo1=cbind(AIC=  m6.1$aic, BIC =BIC(m6.1), DEVIANZA = m6.1$deviance, DF = m6.1$df.residual),
+modelo2=cbind(AIC=  mstep$aic, BIC =BIC(mstep), DEVIANZA = mstep$deviance, DF = mstep$df.residual)))
+rownames(df) <- c('modelo1','modelo2')
+df
+```
+
+En el modelo 1, que corresponde al modelo obtenido en el apartado 3, se ha obtenido un AIC y un BIC ligeramente inferior por lo que elegimos este modelo como el mejor. 
+
+Se observa que la devianza es mejor en el segundo modelo, esto se debe a que el modelo 1 tiene una variable más que el modelo 2, que es la variable *HR*. A pesar de esto, vemos que los grados de libertad coinciden en ambos, esto se debe a que en el modelo 1 se han agrupado categorías en la variable "thal".
+
+Así pues, no tenemos en cuenta la devianza como criterio ya que el modelo 2 es más simple. 
+
+
+**Interacciones**
+
+Se procede a evaluar las posibles interacciones de primer orden para incluir aquellas que sean relevantes en el modelo. Cabe mencionar que no se tendrán en cuenta las interacciones entre covariables.
+
+En el modelo elegido hay 3 factores (thal3, chest_pain4 y major_vessels) y 2 covariables (HR y oldpeak) por lo que las combinaciones a hacer serán: 
+
+- thal3 vs. chest_pain4
+- thal3 vs. major_vessels
+- chest_pain4 vs. major_vessels
+- thal3 vs. HR
+- thal3 vs. oldpeak
+- chest_pain4 vs. HR
+- chest_pain4 vs. oldpeak
+- major_vessels vs. HR
+- major_vessels vs. oldpeak
+
+```{r, include=FALSE}
+heart2 <- heart[,-c(3,13,17)]
+```
+
+```{r}
+summary(mint <- step(glm(disease~ (thal3 + chest_pain4 + major_vessels + HR + oldpeak) + thal3:chest_pain4 + thal3:major_vessels + chest_pain4:major_vessels + thal3:HR + thal3:oldpeak + chest_pain4:HR + chest_pain4:oldpeak + major_vessels:HR , heart2, family=binomial(link="logit")), direction="both", k=log(nrow(heart2)), trace = 0))
+```
+
+En el primer paso se indica que se deben eliminar todas las interacciones del modelo, ya que éstas no son relevantes. A cada paso elimina una interacción hasta que no queda ninguna, como último paso elimina también la variable de *HR*. 
+
+Por lo tanto, el modelo obtenido es: **resp ~ thal3 + chest_pain4 + major_vessels + oldpeak**.
+ 
+Cuyo AIC, BIC, Devianza y grados de libertad se muestran en la siguiente tabla resumen:
+
+```{r echo=FALSE}
+cbind(AIC=  mint$aic, BIC =BIC(mint), DEVIANZA = mint$deviance, DF = mint$df.residual,ITERACIONES = mint$iter)
+```
+
+Como hemos visto en la explicación anterior, este modelo incluye una variable menos que el modelo que hasta ahora habíamos escogido como el mejor (m6.1). Comparamos ambos modelos para saber cual de ellos es mejor:
+
+```{r echo=FALSE}
+df1<-(rbind(
+modelo1=cbind(AIC=  m6.1$aic, BIC =BIC(m6.1), DEVIANZA = m6.1$deviance, DF = m6.1$df.residual),
+modelo3=cbind(AIC=  mint$aic, BIC =BIC(mint), DEVIANZA = mint$deviance, DF =mint$df.residual)))
+rownames(df1) <- c('modelo1','modelo3')
+df1
+```
+
+En vista de estos resultados, como el objetivo de la construcción de este modelo es explicativo, escogemos el modelo 3 como el mejor modelo ya que tiene un BIC ligeramente inferior al modelo 1. Este modelo tiene también un grado de libertad más y una devianza mayor en 5.1050 unidades respecto al modelo anterior. 
+
+
+
+# 6. Bondad de ajuste del modelo.
+
+En este apartado se desea conocer si el modelo que se ha planteado es adecuado (válido) para explicar el comportamiento de la variable respuesta del presente análisis (varible disease).
+
+## 6.1. Medidas Estadísticas.
+
+Al tratarse de datos desagregados, el modelo será bueno si los estadísticos de la Devianza y Pearson son similares a los grados de libertad del modelo. Valores grandes indicarán una falta de ajuste del modelo.
+
+**1. Estadístico de Pearson Generalizado**
+
+$$X^2=\sum_{i,j}{\frac{(O_{ij}-E_{ij})^2}{E_{ij}}}$$
+
+```{r}
+rbind(
+"Estadistico de Pearson" = sum(resid(mint,'pearson')^2), # Estadistico X^2
+"Grados de libertad" = mint$df.residual) # Grados de libertad
+```
+
+El valor del estadístico de Pearson se aproxima al número de grados de libertad, por lo tanto, se puede deducir que el ajuste del modelo es bueno.
+
+**2. Devianza**
+
+$$D=2 \cdot \sum{\big[y_i \cdot log(\frac{y_i}{m_i\hat{\pi}_i})  +  (m_i - y_i) \cdot log(\frac{m_i - y_i}{m_i - m_i\hat{\pi}_i})  \big]}$$
+
+```{r}
+rbind(
+"Estadistico de la devianza" = mint$deviance , # Estadistici D_m, tambn se puede calcular como: sum(resid(mstep,'deviance')^2) 
+"Grados de libertad" = mint$df.residual) # Grados de libertad
+```
+
+En este caso, el valor del estadístico de la devianza es bastante inferior al número de grados de libertad. Por lo que podemos decir que el ajuste es bastante bueno.
+
+
+
+
+## 6.2. Representaciones gráficas.
+
+```{r, include=FALSE}
+#install.packages("gbm")
+library(gbm)
+#install.packages("PresenceAbsence")
+library(PresenceAbsence)
+```
+
+
+**Calibration plot**
+```{r, echo= FALSE}
+# Predicted
+p <- predict(mint,type="response")
+q <- quantile(p,seq(0,1,0.05))[-c(1,2)]
+x <- as.numeric(rowMeans(cbind(q[-1],q[-19])))
+pr.cat <- cut(p,br=q,include.lowest = TRUE)
+
+# Observed with CI
+Y <- matrix(ncol=3,nrow=nlevels(pr.cat))
+
+plot(NA,xlim=0:1,ylim=0:1,xlab='Predicted',ylab='Observed')
+abline(0,1,lty=2)
+
+for(i in 1:nlevels(pr.cat)){
+  e <- sum(heart2$resp[pr.cat==levels(pr.cat)[i]])
+  n <- sum(pr.cat==levels(pr.cat)[i])
+  bt <- binom.test(e,n)
+  Y[i,] <- as.numeric(c(bt$estimate,bt$conf.int))
+  points(x[i],Y[i,1],pch=15,cex=1.1)
+  segments(x[i],Y[i,2],x[i],Y[i,3],lwd=2)
+}
+```
+
+Hemos dividido los datos en 18 cuantiles. Al estar las barras de los intervalos de confianzo tocando la bisectriz, damos por valido nuestro modelo, ya que en la mayor parte de los casos el modeo se ajusta bien a los datos. 
+
+**Marginal plot**
+```{r warning=FALSE, echo=FALSE}
+marginalModelPlots(mint) 
+```
+
+Vemos en ambos gráficos que la linea de ajuste para los datos es practicamente igual que la linea del modelo, lo que significa que el modelo representa muy bien lo que dicen los datos. 
+
+**Residual plot**
+```{r, echo=FALSE}
+residualPlots(mint, layout=c(2,3))
+```
+
+Para validar el modelo, los boxplot que vemos en los gráficos de las variables categóricas deben tener la misma altura respecto la mediana (cajas alineadas).Nuestro modelo cumple bastante bien esta condición, ya que vemos que a pesar de que hay ciertas diferencias, están bastante alineadas. 
+
+En cuanto a las variables numéricas, la linea verde del gráfico debe estar recta horizontalmente para poder validar el modelo. Vemos que para la variable oldpeak esta condición se cumple casi del todo, mientras que en el predictor lineal se observa un pequeño salto. 
+
+**All effects**
+```{r, echo=FALSE}
+plot(allEffects(mint))
+```
+
+A partir de estos gráficos, sacamos la conclusión de que, por lo general, la predicción para la mayor parte de los individuos que tienen thal=7, chest_pain=4 y major_vessels=3 es padecer enfermedades coronarias. 
+
+De la misma manera predecimos que gran parte de los individuos que tienen thal$\neq$7, chest_pain$\neq$4 y major_vessels=0  no padecerán dicha enfermedad.
+Sin embargo, vemos que la predicción para las categorías intermedias de la variable major_vessels se encuentra en el centro. No se detecanta por ningún nivel de la variable respuesta.
+
+Vemos que la variable oldpeak crece a la vez que el valor de la predicción. Los valores pequeños de oldpeak tienden a respuesta tipo 0 (no padecer la enfermedad), mientras que los grandes tienden al tipo 1 (sí padece la enfermedad).
+
+
+# 7. Evaluación de la capacidad predictiva del modelo.
+
+```{r, include=FALSE}
+heartpredict <- prediction(predict(mint,type="response"),heart2$resp)
+performance(heartpredict,"auc",fpr.stop=0.05)
+```
+
+```{r}
+par(mfrow=c(1,2))
+plot(performance(heartpredict,"err"))
+plot(performance(heartpredict,"tpr","fpr"))
+abline(0,1,lty=2)
+performance(heartpredict,"auc")
+```
+
+El area bajo la curva de ROC es muy grande, ya que supera el 90%, lo que implica que la capacidad predictiva de nuestro modelo es muy buena. 
+
+
+# 8. Interpretación.
+
+Los odd ratios pueden compararse entre sí para saber qué variables tienen más influencia o está asociada de manera más fuerte.
+
+**Coeficiente de una variable numérica (oldpeak):**
+
+El coeficiente de un predictor continuo es el cambio estimado en el logaritmo natural de las probabilidades para el evento de referencia por cada incremento de una unidad en el predictor. 
+
+- En la escala del log-odds (escala del predictor lineal): el log-odds aumenta 0.7825 unidades por cada unidad adicional en el valor de "oldpeak".
+
+- En la escala del odds: els odds de padecer la enfermedad coronaria aumenta un 2.186933 por cada unidad adicional en el valor de "oldpeak". Por lo tanto, un aumento del nivel de "oldpeak" aumentaria los odds en 2.186933 de que sí padezca la enfermedad.
+
+
+**Coeficiente de una variable categórica (chest_pain4):**
+
+Para predictores categóricos el coeficiente es el cambio estimado en el logaritmo natural de las probabilidades cuando se cambia del nivel de referencia al nivel del coeficiente.
+
+- En la escala del log-odds (escala del predictor lineal):
+El log-odds aumenta 2.0509 unidades en el grupo de los que tienen dolor en el pecho tipo 4 respecto el log-odds del grupo de referencia que tienen dolor en el pecho tipo 1, 2 y 3 (ceteris paribus).
+
+- En la escala del odds: 
+En el grupo de los que tienen dolor en el pecho tipo 4 el factor de aumento es exp(2.0509) = 7.774895 veces respecto a la categoría base de tener dolor en el pecho tipo 1, 2 y 3 (ceteris paribus).
+
+Cuanto más alejado está el odds de 1, más fuerte es la relación entre la variable independendiente y la dependiente. Por lo tanto, vemos que la variable "chest_pain" está muy relacionada con el hecho de padecer una enfermedad coronaria.  
+
+
+
+
+# 9. Resumen y conclusiones finales.
+
+**- Modelo final completo:**
+
+```{r}
+summary(mint)
+```
+Por lo tanto, nuestro modelo final contiene los siguientes predictores; thal3, chest_pain4, major_vessels y oldpeak. 
+
+Veremos en la siguiente tabla resumen los indicadores del modelo que hemos considerado relevantes. 
+
+**- Tabla resumen:**
+
+```{r}
+
+cbind(AIC=  mint$aic, BIC =BIC(mint), DevianzaResidual = mint$deviance, Pseudo_R2 =NagelkerkeR2(mint)$R2, AUC= 0.914, DF = mint$df.residual)
+
+```
+
+
+
+**- Conclusiones.**
+
+Por lo tanto, en vista a los resultados obtenidos en el análisis, podemos concluir que los  factores que caracterizan el hecho de que una persona padezca o no una enfermedad coronaria son los siguientes; los pacientes han mostrado tener dolor de pecho de tipo 4, un thal de defecto reversible y el numero de vasos mayores coloreados por fluoroscopia se caracteriza por ser 3. 
+
+De la misma forma, también el hecho de que las personas no padezcan ésta enfermedad está caracterizado por los mismos factores pero en los niveles contrarios, es decir, estas personas no padecen dolores de pecho de tipo 4 pero si pueden padecer de los demás tipos, su thal suele ser de tipo normal o de tipo defecto fijo y por último el número de vasos mayores coloreados por fluoroscopia se caracteriza por ser 0. 
+
+Además también vemos como las personas que padecen enfermedades coronareas tienen un nivel alto de depresión ST inducida por el ejercicio relativo al descanso, mientras que las personas que no las padecen suelen tener un nivel del mismo bajo. 
+
+Por ese motivo, se aconseja a los médicos indagar en estos factores que como hemos visto podrían servir de gran ayuda para diagnosticar si una persona padece una enfermedad de corazón. 

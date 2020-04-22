@@ -1,0 +1,94 @@
+---
+title: "Exercici 2.5. EuroVegas"
+author: "Laura Julià"
+date: "21/10/2017"
+output: html_document
+---
+
+
+
+Sigui el nostre interès conèixer la proporció de ciutadans que donarien suport a l'EuroVegas i sigui $y$ = 'nombre de ciutadans del Baix Llobregat que donarien suport a l'EuroVegas', el model estadístic del problema és: 
+
+$M=\{p(y|{\theta})= Binomial( n, {\theta}),   {\theta} {\in} (0,1)\}$.
+
+```{r}
+n <- 100
+y <- 26
+```
+
+## Apartat a
+
+#### Dibuixa en un mateix gràfic les dues distribucions a priori.
+
+Com es tracta d'una Binomial, $y|{\theta} {\sim} Binomial(n. {\theta})$, la distribució a priori serà ${\theta} {\sim} Beta(a,b) = \frac{{\Gamma}(a+b)}{{\Gamma}(a){\Gamma}(b)}$.
+
+En el cas de l'Anna, que pensa que la mitjana a priori és 0.2 i la variància 0.08^2^, es pot modelitzar la seva creença mitjançant una Beta(5, 20) ja que $E({\theta}) = \frac{a}{a+b}=0.2$ i \(Var(\theta) = \frac{ab}{(a+b)^2(a+b+1)} = 0.006\)
+
+Pel que fa al cas del Sam, que no te coneixement previ, es defineix una Beta(1,1).
+```{r}
+a1 <- 5
+b1 <- 20
+a2 <- 1
+b2 <- 1
+plot(function(x)dbeta(x, a1 , b1 ), xlim=c(0,1), ylab="", xlab = "", col= 2)
+plot(function(x)dbeta(x,  a2, b2), xlim=c(0,1), ylab="", xlab = "", col= 3, add= T)  
+legend("topright", legend = c("Anna", "Sam"), col= c(2,3), lty = 1, cex = 0.8) 
+title('Distribucions a priori')
+```
+
+
+
+## Apartat b
+
+#### Dibuixa en un mateix gràfic les dues distribucions a posteriori.
+
+Com es diu a l'enunciat, *tots dos estudiants prenen plegats una mostra de n=100 residents al Baix Llobregat dels quals y=26 diuen donar soport a l’EuroVegas*. Així doncs, les distribucions a posteriori sobre la proporció són ara:
+
+La de l'Anna: $Beta(5 + 26, 20 + 74) = Beta(31, 94)$.
+
+La del Sam: $Beta(1 + 26, 1 + 74) = Beta(27,75)$.
+
+```{r}
+a1b <- a1 + y
+b1b <- b1 + (n - y)
+a2b <- a2 + y
+b2b <- b2 + (n - y)
+
+plot(function(x)dbeta(x, a1b , b1b ), xlim=c(0,1), ylab="", xlab = "", col= 2)
+plot(function(x)dbeta(x,  a2b , b2b), xlim=c(0,1), ylab="", xlab = "", col= 3, add = T)  
+legend("topright", legend = c("Anna", "Sam"), col= c(2,3), lty = 1, cex = 0.8) 
+title('Distribucions a posteriori')
+```
+
+
+
+## Apartat c
+
+#### Repeteix a i b suposant que les dades ara fossin: n=1000 i y=260.
+
+Les distribucions a priori  (${\pi}({\theta})$)  seran les mateixes ja que aquestes es fan en funció dels coneixements previs que es tenen sobre el paràmetre i, per tant, els valors de les dades de la mostra no tenen cap efecte en elles. 
+
+            *Distribucions a priori dibuixades en l'apartat a.
+
+Quant a les distribucions a posteriori, aquestes quedaran:
+
+La de l'Anna: $Beta(5 + 260, 20 + 740) = Beta(265, 760)$.
+
+La del Sam: $Beta(1 + 260, 1 + 740) = Beta(261,741)$.
+
+```{r}
+yc<- y*10
+nc <- n*10
+a1c <- 5 + yc
+b1c <- 20 + (nc - yc)
+a2c <- 1 + yc
+b2c <- 1 + (nc - yc)
+
+plot(function(x)dbeta(x, a1c , b1c ), xlim=c(0,1), ylab="", xlab = "", col= 2)
+plot(function(x)dbeta(x,  a2c , b2c), xlim=c(0,1), ylab="", xlab = "", col= 3, add=T) 
+legend("topright", legend = c("A posteriori Anna", "A posteriori Sam"), col= c(2,3), lty = 1, cex = 0.8)
+title('Distribucions a posteriori (2)')
+```
+
+
+S'oberva com, al ser major el tamany de la mostra, els valors d'**a** i **b** de les distribucions a posteriori de l'Anna i el Sam s'assemblen molt més que abans (quan la mostra era 10 vegades més petita). Així, veiem al gràfic com ambdues distribucions son molt similars.

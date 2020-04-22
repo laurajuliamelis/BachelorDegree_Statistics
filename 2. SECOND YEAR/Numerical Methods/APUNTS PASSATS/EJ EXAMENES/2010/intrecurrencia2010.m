@@ -1,0 +1,1 @@
+%%estudia la recurrenciaf=@(x)((x.^20)*sin(pi*x))    format longIa=0.006680224568;I(2)=1/pi-((2*(2-1))/pi^2)*(2/pi);for i=4:2:20    I(i)= 1/pi-((i*(i-1))/pi^2)*I(i-2);    er=abs(Ia-I(i));    [I(i),er]'end

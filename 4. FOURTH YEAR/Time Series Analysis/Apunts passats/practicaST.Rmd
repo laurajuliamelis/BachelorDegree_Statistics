@@ -1,0 +1,253 @@
+---
+title: "ST"
+output: html_document
+---
+
+IDENTIFICACIÓ
+```{r}
+dades <- read.csv2("dades.csv", header=FALSE, comment.char="#")
+dades_pred=dades[170:178,]
+d_pred = dades_pred[,-c(1)]
+serieP=dades[-c(1,170:178),-c(1)]
+serie=dades[-c(1),-c(1)]
+serie = ts(serie, start=2002, frequency = 12 )
+par(mfrow=c(1,1))
+plot.ts(serie, col=4, main="  Sèrie temporal del IPC,
+    hotels,cafès i restuarants,nacional
+        ")
+
+ new.serie= window(serie, start=2002, end=c(2016,9))
+ new.time=time(new.serie)
+ par(mfrow=c(1,1))
+ plot(new.serie, main="  Sèrie temporal del IPC,
+    hotels,cafès i restuarants,nacional
+        ")
+ abline(reg=lm(new.serie~new.time), col="green")
+
+hist(serie) # no estacionaria
+
+# Los cambios en la media determinan una tendencia a crecer o decrecer a largo plazo, por lo que la serie no oscila alrededor de un valor constante.
+
+# ho hem d'arreglar
+
+
+boxplot(serie~cycle(serie))
+cycle(serie)
+
+d = decompose(serie)
+plot(d)
+# La tendència es calcula amb una mitjana mòbil, l'efecte estacional es calcula amb el promig dels valors de cada unitat de temps per tots el períodes i després centrant el reultat. Finalment, els residus s'obtenen restant a la sèrie observada les dos components anteriors. 
+
+tend = d$trend
+seas = d$seasonal
+ts.plot(cbind(tend, tend+seas),lty=1:2) # per superposar tendència i component estacional
+
+
+```
+
+
+
+JARQUE-BERA
+
+```{r}
+#install.packages("fBasics")
+library(fBasics)
+
+jarqueberaTest(serie) #no normalitat
+
+par(mfrow=c(2,1))
+acf(serie, ylim=c(-1,1), lag=180)
+pacf(serie,ylim=c(-1,1), lag=180)
+
+acf(serie, ylim=c(-1,1), lag=12)
+pacf(serie,ylim=c(-1,1), lag=12)
+
+
+```
+
+
+Diferència regular per eliminar la tendència
+
+```{r}
+dserie= diff(serie)
+par(mfrow=c(1,1))
+plot(dserie)
+plot(decompose(dserie))
+
+d1 = decompose(dserie)
+tend1 = d1$trend
+seas1 = d1$seasonal
+ts.plot(cbind(tend1, tend1+seas1),lty=1:2) # ja no tenim tendència
+
+ new.serie= window(dserie, start=c(2002,2), end=c(2016,9))
+ new.time=time(new.serie)
+ par(mfrow=c(1,1))
+ plot(new.serie)
+ abline(reg=lm(new.serie~new.time))
+
+
+# (0,1,0) part regular
+
+par(mfrow=c(2,1))
+acf(dserie, ylim=c(-1,1), lag=180)
+pacf(dserie, ylim=c(-1,1), lag=180)
+
+acf(dserie, ylim=c(-1,1), lag=48)
+pacf(dserie, ylim=c(-1,1), lag=48)
+
+```
+
+Diferència estacional
+
+```{r}
+dseriE= diff(dserie,12)
+par(mfrow=c(1,1))
+plot(dseriE)
+
+par(mfrow=c(2,1))
+acf(dseriE, ylim=c(-1,1), lag=180)
+pacf(dseriE, ylim=c(-1,1), lag=180)
+
+acf(dseriE, ylim=c(-1,1), lag=24)
+pacf(dseriE, ylim=c(-1,1), lag=24)
+
+```
+
+
+
+# ESTIMACIÓ
+
+```{r}
+model1 =arima(serie, order=c(1,1,1), seasonal=list(order=c(0,0,2)))
+model1
+
+model2 =arima(serie, order=c(1,1,1), seasonal=list(order=c(0,0,1)))
+model2
+
+model3 =arima(serie, order=c(0,1,0), seasonal=list(order=c(0,0,1)))
+model3
+
+
+
+
+AIC(model1,model2, model3)
+
+model = model1
+```
+
+VALIDACIÓ
+significació (assimptòtica) coeficients- valor-p
+```{r}
+pnorm(c(abs(model$coef)/sqrt(diag(model$var.coef))), mean=0, sd=1,lower.tail = F)
+
+# Test d'aleatorietat i normalitat
+
+Box.test(model$residuals)
+shapiro.test(model$residuals)
+jarqueberaTest(model$residuals) # residus no normals
+
+# Proves de incorrelació
+
+# per decidir si una sèrie es soroll blanc:
+
+#Ljung-Box
+# H0: correlacions son independe, Ha: correlacions no son indepes
+
+# Hipotesis de la prova
+# H0: soroll blanc, Ha: epsilon_t no son soroll blanc
+tsdiag(model)
+Box.test(model$residuals,type="Ljung-Box")
+
+
+
+par(mfrow=c(2,1))
+acf(model$residuals,ylim=c(-1,1),lag=180)
+pacf(model$residuals,ylim=c(-1,1),lag=180)
+
+acf(model$residuals,ylim=c(-1,1),lag=12)
+pacf(model$residuals,ylim=c(-1,1),lag=12)
+
+# és evident que els residus no són soroll blanc. En la gràfic de la fac mostral, es pot apreciar com algunes autocorrelacions es surten de les bandas de Bartlett. A més, en la gràfica del panel superior mostra periodes d'increment i després decreixement, q pot prendres com evidencia de autoccorrelació.
+
+res=model$residuals
+par(mfrow=c(2,2))
+plot.ts(res)
+abline(h=0, lty=2, col="2")
+qqnorm(res)
+qqline(res, col="2")
+acf(res, 30)
+hist(res, prob=T, col="6")
+lines(density(res), col="4")
+
+###prueba de estacionariedad de Dickey-Fuller para los residuales del modelo seleccionado
+# H0: son estacionarios HHa: no son estacionarios
+#install.packages("tseries")
+library(tseries)
+adf.test(res)
+# Prova d'aleatorietat de Box-Pierce
+Box.test(res)
+
+```
+
+PREDICCIÓ
+# predicció ex-post
+
+```{r}
+serie2 =ts(serie[1:168], start=2002, frequency = 12)
+m = arima (serie2 , order= c(1,1,1), seasonal = list (order = c(0,0,2)))
+m
+
+serie2f = predict (m, n.ahead = 9)
+par(mfrow=c(1,1))
+ts.plot(serie, serie2f$pred, col=1:2)
+```
+
+# Avaluació capacitat predictiva
+
+```{r}
+errors = serie[169:177]-serie2f$pred
+ts.plot(errors, col=2)
+eqm=sum(errors*errors)/9
+reqm = eqm^.5
+eam=sum(abs(errors))/9
+epam=(sum(abs(errors)/abs(serie[169:177]))/9)*100
+
+eqm
+reqm
+eam
+epam
+```
+
+# Predicció ex-ante
+
+```{r}
+serief = predict(model, n.ahead = (9+12))
+serief
+inf = serief$pred + 2*serief$se
+sup = serief$pred - 2*serief$se
+
+minx=min(serie,inf)
+maxx=max(serie,sup)
+
+ts.plot(serie, serief$pred, col=c(4,2))
+lines(inf, col="black", lty="dashed") 
+lines(sup, col="black", lty="dashed")
+```
+
+
+```{r}
+# Validació Càlcul periodogrames 
+# Discret: sèrie periòdica
+# Discret-Continu: sèrie aperiòdica
+# Continu: sèrie estocàstica
+
+#install.packages("TSA")
+library(TSA)
+
+# El PERIODOGRAMA transforma la serie temporal, de su dominio natural, que es el tiempo, al dominio de las frecuencias (a los valores de la serie se le aplican transformadas de Fourier). Si no hay picos destacables en el periodograma no hay estacionalidad y cada pico destacable corresponde a una frecuencia cuya inversa es el periodo estacional o cíclico. En consecuencia, el periodograma es un instrumento que identifica la longitud del período estacional y en su caso la del ciclo.
+par(mfrow=c(1,1))
+periodogram(serie)
+periodogram(dserie)
+periodogram(model$residuals, xlim=c(0,0.5))
+
+```

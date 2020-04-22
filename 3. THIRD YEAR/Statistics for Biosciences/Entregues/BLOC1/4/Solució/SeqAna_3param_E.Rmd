@@ -1,0 +1,58 @@
+---
+title: '`r paste("Análisis de secuencias:", params$nombre.fichero)`'
+author: "Esteban Vegas"
+output: html_document
+date: '`r format(Sys.Date(),"%e de %B, %Y")`'
+params:
+  ruta.in: "Fasta files"
+  ruta.out: "Fasta files_out"
+  nombre.fichero: "gi32141095_N_0.fa"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,comment ="")
+options(width=80)
+```
+
+
+```{r libraries,include=FALSE}
+# poso el paquet com a comentari, ja que sinó no puc executar el render
+
+## try http:// if https:// URLs are not supported
+#source("https://bioconductor.org/biocLite.R")
+#biocLite("Biostrings")
+if(!require('knitr',quietly = T)){install.packages('knitr')} 
+require('knitr', quietly = T)
+
+if(!require('Biostrings',quietly = T)){
+  source('https://bioconductor.org/biocLite.R')
+  biocLite('Biostrings', ask=FALSE)}
+require('Biostrings', quietly = T)
+
+```
+
+Este es el primer análisis dinámico de una secuencia.
+
+El fichero de entrada es cualquier secuencia con formato fasta con un tamaño máximo de la secuencia de una linea. Por tanto, el fichero fasta ocupa siempre dos lineas.
+
+La secuencia leida es:
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+mydata.Fasta <- readDNAStringSet(filepath=file.path(params$ruta.in,params$nombre.fichero))
+frec.bases <- alphabetFrequency(mydata.Fasta , baseOnly=TRUE, as.prob=FALSE)
+
+cat(">", names(mydata.Fasta),"\n",toString(mydata.Fasta),"\n", sep="")
+
+```
+
+
+La longitud de la secuencia es de `r sum(frec.bases)` bases. Estan repartidas como:
+
+- Adeninas (A): `r as.numeric(frec.bases[1,"A"])`
+
+- Citosinas (C): `r as.numeric(frec.bases[1,"C"])`
+
+- Guaninas (G): `r as.numeric(letterFrequency(mydata.Fasta , "G", as.prob=FALSE))`
+
+- Timinas (T): `r as.numeric(letterFrequency(mydata.Fasta , "T", as.prob=FALSE))`
+
+- Otras: `r as.numeric(frec.bases[1,"other"])`

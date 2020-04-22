@@ -1,0 +1,9 @@
+titol durada any_estrena
+peli1 120 2012
+peli2 100 2010
+peli3 90 2010 
+peli4 75 2009
+peli5 135 2011
+peli6 135 2009
+peli7 104 2012
+peli8 78 2012

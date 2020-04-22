@@ -1,0 +1,1225 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.0 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{apa/global//global/global}
+    \entry{Epitools}{manual}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,uniquepart=base,hash=c550378adaa0f3d7d67358e66be6467b}{%
+           family={Aragon},
+           familyi={A\bibinitperiod},
+           given={Tomas\bibnamedelima J.},
+           giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{c550378adaa0f3d7d67358e66be6467b}
+      \strng{fullhash}{c550378adaa0f3d7d67358e66be6467b}
+      \strng{bibnamehash}{c550378adaa0f3d7d67358e66be6467b}
+      \strng{authorbibnamehash}{c550378adaa0f3d7d67358e66be6467b}
+      \strng{authornamehash}{c550378adaa0f3d7d67358e66be6467b}
+      \strng{authorfullhash}{c550378adaa0f3d7d67358e66be6467b}
+      \field{sortinit}{A}
+      \field{sortinithash}{d77c7cdd82ff690d4c3ef13216f92f0b}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{R package version 0.5-10}
+      \field{title}{epitools: Epidemiology Tools}
+      \field{year}{2017}
+      \verb{urlraw}
+      \verb https://CRAN.R-project.org/package=epitools
+      \endverb
+      \verb{url}
+      \verb https://CRAN.R-project.org/package=epitools
+      \endverb
+    \endentry
+    \entry{cuest2}{article}{}
+      \name{author}{7}{}{%
+        {{uniquename=0,uniquepart=base,hash=e1bfd3faef255d15f466f1aebaceb572}{%
+           family={Baca-Garcia},
+           familyi={B\bibinithyphendelim G\bibinitperiod},
+           given={Enrique},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a9e1e2108094fe07cab4047df0acd641}{%
+           family={Parra},
+           familyi={P\bibinitperiod},
+           given={Claudia\bibnamedelima P},
+           giveni={C\bibinitperiod\bibinitdelim P\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=cf8cf62fd25e309ede51d0ac6c3c6158}{%
+           family={Perez-Rodriguez},
+           familyi={P\bibinithyphendelim R\bibinitperiod},
+           given={M\bibnamedelima Mercedes},
+           giveni={M\bibinitperiod\bibinitdelim M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=427de3b4ed310520f7f5843335c2a0e2}{%
+           family={Sastre},
+           familyi={S\bibinitperiod},
+           given={Carmen\bibnamedelima Diaz},
+           giveni={C\bibinitperiod\bibinitdelim D\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=8123320cdae311942c9e5f90173796df}{%
+           family={Torres},
+           familyi={T\bibinitperiod},
+           given={Raquel\bibnamedelima Reyes},
+           giveni={R\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=0165de8d9ae38695fc06a59641a81e2e}{%
+           family={Saiz-Ruiz},
+           familyi={S\bibinithyphendelim R\bibinitperiod},
+           given={Jeronimo},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a4ed0e4d38d255eabc69fd81075fcf94}{%
+           family={Leon},
+           familyi={L\bibinitperiod},
+           given={Jose},
+           giveni={J\bibinitperiod},
+           givenun=0,
+           prefix={de},
+           prefixi={d\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley Online Library}%
+      }
+      \strng{namehash}{de501066dcf2b8ce8872390b398e6dd3}
+      \strng{fullhash}{30ce4279740c72215c6fd484b55de01c}
+      \strng{bibnamehash}{30ce4279740c72215c6fd484b55de01c}
+      \strng{authorbibnamehash}{30ce4279740c72215c6fd484b55de01c}
+      \strng{authornamehash}{de501066dcf2b8ce8872390b398e6dd3}
+      \strng{authorfullhash}{30ce4279740c72215c6fd484b55de01c}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Stress and Health: Journal of the International Society for the Investigation of Stress}
+      \field{number}{3}
+      \field{title}{Psychosocial stressors may be strongly associated with suicide attempts}
+      \field{volume}{23}
+      \field{year}{2007}
+      \field{pages}{191\bibrangedash 198}
+      \range{pages}{8}
+    \endentry
+    \entry{DatosEjemplo}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=7be6113f928390c027900d2fd72117f1}{%
+           family={Barros},
+           familyi={B\bibinitperiod},
+           given={Alu{í}sio\bibnamedelima JD},
+           giveni={A\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=8fac0ef6b05a56b0dab421ddc742e5af}{%
+           family={Hirakata},
+           familyi={H\bibinitperiod},
+           given={V{â}nia\bibnamedelima N.},
+           giveni={V\bibinitperiod\bibinitdelim N\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ccf0f26b980dc60b70688729745e679a}
+      \strng{fullhash}{ccf0f26b980dc60b70688729745e679a}
+      \strng{bibnamehash}{ccf0f26b980dc60b70688729745e679a}
+      \strng{authorbibnamehash}{ccf0f26b980dc60b70688729745e679a}
+      \strng{authornamehash}{ccf0f26b980dc60b70688729745e679a}
+      \strng{authorfullhash}{ccf0f26b980dc60b70688729745e679a}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{BMC Medical Research Methodology}
+      \field{month}{10}
+      \field{title}{Alternatives for logistic regression in cross-sectional studies: an empirical comparison of models that directly estimate the prevalence ratio}
+      \field{volume}{3}
+      \field{year}{2003}
+      \field{pages}{21}
+      \range{pages}{1}
+    \endentry
+    \entry{cuest3}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,uniquepart=base,hash=79932aa2ef1154092a9a3c125e439ce6}{%
+           family={Bell{ó}n},
+           familyi={B\bibinitperiod},
+           given={JA},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=c36d45debd06ff0127d26799599fbf74}{%
+           family={Delgado},
+           familyi={D\bibinitperiod},
+           given={A},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=0b5bd50db0f83ff8c526f4ca5f232074}{%
+           family={De\bibnamedelima Dios\bibnamedelima Luna},
+           familyi={D\bibinitperiod\bibinitdelim D\bibinitperiod\bibinitdelim L\bibinitperiod},
+           given={J},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=65d4f67528e2b021317d0bb54a63da53}{%
+           family={Lardelli},
+           familyi={L\bibinitperiod},
+           given={P},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {PUBLICACIONES PROFESIONALES INTERNACIONALES}%
+      }
+      \strng{namehash}{71b9f794ca0ccdcbbf3a00486c3f756a}
+      \strng{fullhash}{eec6ff14eef4735cdef7cf9cbd89f319}
+      \strng{bibnamehash}{eec6ff14eef4735cdef7cf9cbd89f319}
+      \strng{authorbibnamehash}{eec6ff14eef4735cdef7cf9cbd89f319}
+      \strng{authornamehash}{71b9f794ca0ccdcbbf3a00486c3f756a}
+      \strng{authorfullhash}{eec6ff14eef4735cdef7cf9cbd89f319}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Atenci{ó}n primaria}
+      \field{title}{Validez y fiabilidad del cuestionario de apoyo social funcional Duke-UNC-11}
+      \field{volume}{18}
+      \field{year}{1996}
+      \field{pages}{153\bibrangedash 163}
+      \range{pages}{11}
+    \endentry
+    \entry{logbinom1}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=4438b10e6acc21d667630a0a6ad20c68}{%
+           family={Blizzard},
+           familyi={B\bibinitperiod},
+           given={L},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=1,uniquepart=given,hash=3ae65c7141d147f8fc95af121d77f23d}{%
+           family={Hosmer},
+           familyi={H\bibinitperiod},
+           given={David},
+           giveni={D\bibinitperiod},
+           givenun=1}}%
+      }
+      \strng{namehash}{b15b98ec33072158b64a497218b1d08a}
+      \strng{fullhash}{b15b98ec33072158b64a497218b1d08a}
+      \strng{bibnamehash}{b15b98ec33072158b64a497218b1d08a}
+      \strng{authorbibnamehash}{b15b98ec33072158b64a497218b1d08a}
+      \strng{authornamehash}{b15b98ec33072158b64a497218b1d08a}
+      \strng{authorfullhash}{b15b98ec33072158b64a497218b1d08a}
+      \field{sortinit}{B}
+      \field{sortinithash}{276475738cc058478c1677046f857703}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Biometrical journal. Biometrische Zeitschrift}
+      \field{title}{Parameter Estimates and Goodness-of-Fit in Log Binomial Regression}
+      \field{volume}{48}
+      \field{year}{2006}
+      \field{pages}{5\bibrangedash 22}
+      \range{pages}{18}
+    \endentry
+    \entry{COPY}{inproceedings}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,uniquepart=base,hash=6b7d0d0b0dea817985134c3496f03ed4}{%
+           family={Deddens},
+           familyi={D\bibinitperiod},
+           given={James\bibnamedelima A.},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{6b7d0d0b0dea817985134c3496f03ed4}
+      \strng{fullhash}{6b7d0d0b0dea817985134c3496f03ed4}
+      \strng{bibnamehash}{6b7d0d0b0dea817985134c3496f03ed4}
+      \strng{authorbibnamehash}{6b7d0d0b0dea817985134c3496f03ed4}
+      \strng{authornamehash}{6b7d0d0b0dea817985134c3496f03ed4}
+      \strng{authorfullhash}{6b7d0d0b0dea817985134c3496f03ed4}
+      \field{sortinit}{D}
+      \field{sortinithash}{2ef1bd9a78cc71eb74d7231c635177b8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Estimation of prevalence ratios when PROC GENMOD does not converge}
+      \field{year}{2002}
+    \endentry
+    \entry{logbinR}{manual}{}
+      \name{author}{1}{}{%
+        {{uniquename=1,uniquepart=given,hash=d8b34736aef223020312de81378e150b}{%
+           family={Donoghoe},
+           familyi={D\bibinitperiod},
+           given={Mark\bibnamedelima W.},
+           giveni={M\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=1}}%
+      }
+      \strng{namehash}{d8b34736aef223020312de81378e150b}
+      \strng{fullhash}{d8b34736aef223020312de81378e150b}
+      \strng{bibnamehash}{d8b34736aef223020312de81378e150b}
+      \strng{authorbibnamehash}{d8b34736aef223020312de81378e150b}
+      \strng{authornamehash}{d8b34736aef223020312de81378e150b}
+      \strng{authorfullhash}{d8b34736aef223020312de81378e150b}
+      \field{sortinit}{D}
+      \field{sortinithash}{2ef1bd9a78cc71eb74d7231c635177b8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{R package version 2.0.4}
+      \field{title}{logbin: Relative Risk Regression Using the Log-Binomial Model}
+      \field{year}{2018}
+      \verb{urlraw}
+      \verb https://CRAN.R-project.org/package=logbin
+      \endverb
+      \verb{url}
+      \verb https://CRAN.R-project.org/package=logbin
+      \endverb
+    \endentry
+    \entry{logbinom2}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=1,uniquepart=given,hash=e2baeef98840f643ba9004ef9e5a7908}{%
+           family={Donoghoe},
+           familyi={D\bibinitperiod},
+           given={Mark},
+           giveni={M\bibinitperiod},
+           givenun=1}}%
+        {{uniquename=0,uniquepart=base,hash=c2eb5724bea45b95da6379e28136277e}{%
+           family={Marschner},
+           familyi={M\bibinitperiod},
+           given={Ian},
+           giveni={I\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{bfb58580314eca200eed95488e11a72d}
+      \strng{fullhash}{bfb58580314eca200eed95488e11a72d}
+      \strng{bibnamehash}{bfb58580314eca200eed95488e11a72d}
+      \strng{authorbibnamehash}{bfb58580314eca200eed95488e11a72d}
+      \strng{authornamehash}{bfb58580314eca200eed95488e11a72d}
+      \strng{authorfullhash}{bfb58580314eca200eed95488e11a72d}
+      \field{sortinit}{D}
+      \field{sortinithash}{2ef1bd9a78cc71eb74d7231c635177b8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1548-7660}
+      \field{journaltitle}{Journal of Statistical Software, Articles}
+      \field{number}{9}
+      \field{title}{logbin: An R Package for Relative Risk Regression Using the Log-Binomial Model}
+      \field{volume}{86}
+      \field{year}{2018}
+      \field{pages}{1\bibrangedash 22}
+      \range{pages}{22}
+    \endentry
+    \entry{otrosestudios2}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,uniquepart=base,hash=f1595e65cb9986fa9b9d8ddfd705c142}{%
+           family={Dudley},
+           familyi={D\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=bdb12814ca78a27744e6bf8d5225f3f7}{%
+           family={Roy},
+           familyi={R\bibinitperiod},
+           given={Kay},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=5c34c7aa60fc54bb2b59e6ee00dc1727}{%
+           family={Kelk},
+           familyi={K\bibinitperiod},
+           given={Norman},
+           giveni={N\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=b58181d9b3cd89f9b99803f7375ff8f6}{%
+           family={Bernard},
+           familyi={B\bibinitperiod},
+           given={Diana},
+           giveni={D\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Taylor \& Francis}%
+      }
+      \strng{namehash}{fb5a32d99b416f2b0cf73df9e3aa8d4d}
+      \strng{fullhash}{29d1b18e744e533b6b9bb9bba542d2c4}
+      \strng{bibnamehash}{29d1b18e744e533b6b9bb9bba542d2c4}
+      \strng{authorbibnamehash}{29d1b18e744e533b6b9bb9bba542d2c4}
+      \strng{authornamehash}{fb5a32d99b416f2b0cf73df9e3aa8d4d}
+      \strng{authorfullhash}{29d1b18e744e533b6b9bb9bba542d2c4}
+      \field{sortinit}{D}
+      \field{sortinithash}{2ef1bd9a78cc71eb74d7231c635177b8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of Reproductive and Infant Psychology}
+      \field{number}{3}
+      \field{title}{Psychological correlates of depression in fathers and mothers in the first postnatal year}
+      \field{volume}{19}
+      \field{year}{2001}
+      \field{pages}{187\bibrangedash 202}
+      \range{pages}{16}
+    \endentry
+    \entry{cuest1}{manual}{}
+      \name{author}{2}{}{%
+        {{uniquename=1,uniquepart=given,hash=79c9eba9850443ece289b2d7c1000997}{%
+           family={Eysenk},
+           familyi={E\bibinitperiod},
+           given={H\bibnamedelima J},
+           giveni={H\bibinitperiod\bibinitdelim J\bibinitperiod},
+           givenun=1}}%
+        {{uniquename=1,uniquepart=given,hash=af35b3729b5811072fdea87829aec95f}{%
+           family={Eysenk},
+           familyi={E\bibinitperiod},
+           given={S\bibnamedelima B\bibnamedelima G},
+           giveni={S\bibinitperiod\bibinitdelim B\bibinitperiod\bibinitdelim G\bibinitperiod},
+           givenun=1}}%
+      }
+      \strng{namehash}{44db755ea58ba21471e74a56a1abdd04}
+      \strng{fullhash}{44db755ea58ba21471e74a56a1abdd04}
+      \strng{bibnamehash}{44db755ea58ba21471e74a56a1abdd04}
+      \strng{authorbibnamehash}{44db755ea58ba21471e74a56a1abdd04}
+      \strng{authornamehash}{44db755ea58ba21471e74a56a1abdd04}
+      \strng{authorfullhash}{44db755ea58ba21471e74a56a1abdd04}
+      \field{sortinit}{E}
+      \field{sortinithash}{f615fb9c6fba11c6f962fb3fd599810e}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Cuestionario revisado de personalidad de Eysenck: versiones completa (EPQ-R) y abreviada (EPQ-RS)}
+      \field{year}{2001}
+    \endentry
+    \entry{cuest4}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=0,uniquepart=base,hash=bf6f0743e75ee295903eb512379a499f}{%
+           family={Garcia-Esteve},
+           familyi={G\bibinithyphendelim E\bibinitperiod},
+           given={Llu{ı}̈sa},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=33a1ec382c80fb4d97cf8b375489871e}{%
+           family={Ascaso},
+           familyi={A\bibinitperiod},
+           given={Carlos},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=f37e64e5440226c27578ff48279718ee}{%
+           family={Ojuel},
+           familyi={O\bibinitperiod},
+           given={Julia},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=8d9d23336c2fbf91e2f3f4797898f115}{%
+           family={Navarro},
+           familyi={N\bibinitperiod},
+           given={Puri},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Elsevier}%
+      }
+      \strng{namehash}{70e5edff6ba0243cff3e45ca275c50f5}
+      \strng{fullhash}{7e5105b9353ad36c379cf37a02f4270a}
+      \strng{bibnamehash}{7e5105b9353ad36c379cf37a02f4270a}
+      \strng{authorbibnamehash}{7e5105b9353ad36c379cf37a02f4270a}
+      \strng{authornamehash}{70e5edff6ba0243cff3e45ca275c50f5}
+      \strng{authorfullhash}{7e5105b9353ad36c379cf37a02f4270a}
+      \field{sortinit}{G}
+      \field{sortinithash}{5e8d2bf9d38de41b1528bd307546008f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Journal of affective disorders}
+      \field{number}{1}
+      \field{title}{Validation of the Edinburgh postnatal depression scale (EPDS) in Spanish mothers}
+      \field{volume}{75}
+      \field{year}{2003}
+      \field{pages}{71\bibrangedash 76}
+      \range{pages}{6}
+    \endentry
+    \entry{otrosestudios3}{misc}{}
+      \name{author}{5}{}{%
+        {{uniquename=0,uniquepart=base,hash=a90f65396c0bd4e21381d81318e1a871}{%
+           family={Gunderson},
+           familyi={G\bibinitperiod},
+           given={JG},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=2e6101e845e677213b098f4cfbb59d60}{%
+           family={Triebwasser},
+           familyi={T\bibinitperiod},
+           given={J},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=3d7a18768a50bf9925fda2562feeaccd}{%
+           family={Phillips},
+           familyi={P\bibinitperiod},
+           given={KA},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=473f46acf5e4e4d99ec653a06c3e0065}{%
+           family={Sullivan},
+           familyi={S\bibinitperiod},
+           given={CN},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=096872e34458ae56f49cc4c5854e8326}{%
+           family={Cloninger},
+           familyi={C\bibinitperiod},
+           given={CR},
+           giveni={C\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {American Psychiatric Press Washington, DC:}%
+      }
+      \strng{namehash}{44ab966e92616089d78b929a49ce3b5b}
+      \strng{fullhash}{ac9c2faf6eb3a7047fc005bac6b33b22}
+      \strng{bibnamehash}{ac9c2faf6eb3a7047fc005bac6b33b22}
+      \strng{authorbibnamehash}{ac9c2faf6eb3a7047fc005bac6b33b22}
+      \strng{authornamehash}{44ab966e92616089d78b929a49ce3b5b}
+      \strng{authorfullhash}{ac9c2faf6eb3a7047fc005bac6b33b22}
+      \field{sortinit}{G}
+      \field{sortinithash}{5e8d2bf9d38de41b1528bd307546008f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Personality and psychopathology}
+      \field{year}{1999}
+    \endentry
+    \entry{rms}{manual}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,uniquepart=base,hash=4b505a35a79c3e526645c69858d71f5f}{%
+           family={Harrell},
+           familyi={H\bibinitperiod},
+           given={Frank\bibnamedelima E},
+           giveni={F\bibinitperiod\bibinitdelim E\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{4b505a35a79c3e526645c69858d71f5f}
+      \strng{fullhash}{4b505a35a79c3e526645c69858d71f5f}
+      \strng{bibnamehash}{4b505a35a79c3e526645c69858d71f5f}
+      \strng{authorbibnamehash}{4b505a35a79c3e526645c69858d71f5f}
+      \strng{authornamehash}{4b505a35a79c3e526645c69858d71f5f}
+      \strng{authorfullhash}{4b505a35a79c3e526645c69858d71f5f}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{R package version 5.1-3}
+      \field{title}{Regression Modeling Strategies}
+      \field{year}{2019}
+      \verb{urlraw}
+      \verb http://biostat.mc.vanderbilt.edu/rms
+      \endverb
+      \verb{url}
+      \verb http://biostat.mc.vanderbilt.edu/rms
+      \endverb
+    \endentry
+    \entry{separation}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=977d90c9d1dbbd26118646b8ff04c073}{%
+           family={Heinze},
+           familyi={H\bibinitperiod},
+           given={Georg},
+           giveni={G\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a73c3c49e6541af0065596d0edbae4de}{%
+           family={Schemper},
+           familyi={S\bibinitperiod},
+           given={Michael},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{ced2d8efcf8c04f721630896d80e6c15}
+      \strng{fullhash}{ced2d8efcf8c04f721630896d80e6c15}
+      \strng{bibnamehash}{ced2d8efcf8c04f721630896d80e6c15}
+      \strng{authorbibnamehash}{ced2d8efcf8c04f721630896d80e6c15}
+      \strng{authornamehash}{ced2d8efcf8c04f721630896d80e6c15}
+      \strng{authorfullhash}{ced2d8efcf8c04f721630896d80e6c15}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Statistics in Medicine}
+      \field{number}{16}
+      \field{title}{A solution to the problem of separation in logistic regression}
+      \field{volume}{21}
+      \field{year}{2002}
+      \field{pages}{2409\bibrangedash 2419}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1002/sim.1047
+      \endverb
+      \keyw{bias reduction,case-control studies,infinite estimates,monotone likelihood,penalized likelihood,profile likelihood}
+    \endentry
+    \entry{Hernandez}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,uniquepart=base,hash=a70acca8af1d33fb7a35aa0116aaef25}{%
+           family={Hernández-Avila},
+           familyi={H\bibinithyphendelim A\bibinitperiod},
+           given={Mauricio},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=e2f577f1f1e64797365784fd4926c5f7}{%
+           family={Garrido-Latorre},
+           familyi={G\bibinithyphendelim L\bibinitperiod},
+           given={Francisco},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=b64647d9142c409301258588a6cde990}{%
+           family={López-Moreno},
+           familyi={L\bibinithyphendelim M\bibinitperiod},
+           given={Sergio},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{01178304e205ab2b630380a993621b20}
+      \strng{fullhash}{6667554a731bd34fd7651affa4d9b78c}
+      \strng{bibnamehash}{6667554a731bd34fd7651affa4d9b78c}
+      \strng{authorbibnamehash}{6667554a731bd34fd7651affa4d9b78c}
+      \strng{authornamehash}{01178304e205ab2b630380a993621b20}
+      \strng{authorfullhash}{6667554a731bd34fd7651affa4d9b78c}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{1606-7916}
+      \field{journaltitle}{Salud Pública de México}
+      \field{title}{Diseño de estudios epidemiológicos}
+      \field{volume}{42}
+      \field{year}{2000}
+      \field{pages}{144\bibrangedash 154}
+      \range{pages}{11}
+    \endentry
+    \entry{limitacioneshosmer}{article}{}
+      \name{author}{4}{}{%
+        {{uniquename=2,uniquepart=given,hash=f6ff57edb113a35e2f03e720fe370520}{%
+           family={Hosmer},
+           familyi={H\bibinitperiod},
+           given={D.\bibnamedelimi W.},
+           giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=2}}%
+        {{uniquename=0,uniquepart=base,hash=081bdfa25bebe93906b29618164bfa0b}{%
+           family={Hosmer},
+           familyi={H\bibinitperiod},
+           given={T.},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=5c3807734d53df4032a22cbe739b364b}{%
+           family={Le\bibnamedelima Cessie},
+           familyi={L\bibinitperiod\bibinitdelim C\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=b74e399f79f93a67ec4e2dd129ca1e63}{%
+           family={Lemeshow},
+           familyi={L\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{c3bf51f51736368b179c3ad75464c324}
+      \strng{fullhash}{447ce1a86c72bf7470b6f619a2250dfe}
+      \strng{bibnamehash}{447ce1a86c72bf7470b6f619a2250dfe}
+      \strng{authorbibnamehash}{447ce1a86c72bf7470b6f619a2250dfe}
+      \strng{authornamehash}{c3bf51f51736368b179c3ad75464c324}
+      \strng{authorfullhash}{447ce1a86c72bf7470b6f619a2250dfe}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Statistics in Medicine}
+      \field{number}{9}
+      \field{title}{A Comparison of Goodness-of-fit Tests for the Logistic Regression Model}
+      \field{volume}{16}
+      \field{year}{1997}
+      \field{pages}{965\bibrangedash 980}
+      \range{pages}{16}
+      \verb{doi}
+      \verb 10.1002/(SICI)1097-0258(19970515)16:9<965::AID-SIM509>3.0.CO;2-O
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/abs/10.1002/%28SICI%291097-0258%2819970515%2916%3A9%3C965%3A%3AAID-SIM509%3E3.0.CO%3B2-O
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/abs/10.1002/%28SICI%291097-0258%2819970515%2916%3A9%3C965%3A%3AAID-SIM509%3E3.0.CO%3B2-O
+      \endverb
+    \endentry
+    \entry{hosmer}{book}{}
+      \name{author}{2}{}{%
+        {{uniquename=2,uniquepart=given,hash=c5d69e28c3787fb088bba39b98f2e16e}{%
+           family={Hosmer},
+           familyi={H\bibinitperiod},
+           given={David\bibnamedelima W.},
+           giveni={D\bibinitperiod\bibinitdelim W\bibinitperiod},
+           givenun=2}}%
+        {{uniquename=0,uniquepart=base,hash=8cc8d044dfc89abe88de140d014c99fd}{%
+           family={Lemeshow},
+           familyi={L\bibinitperiod},
+           given={Stanley},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {John Wiley \& Sons}%
+      }
+      \strng{namehash}{ef53117b7e2eeaa37a913f507d513199}
+      \strng{fullhash}{ef53117b7e2eeaa37a913f507d513199}
+      \strng{bibnamehash}{ef53117b7e2eeaa37a913f507d513199}
+      \strng{authorbibnamehash}{ef53117b7e2eeaa37a913f507d513199}
+      \strng{authornamehash}{ef53117b7e2eeaa37a913f507d513199}
+      \strng{authorfullhash}{ef53117b7e2eeaa37a913f507d513199}
+      \field{sortinit}{H}
+      \field{sortinithash}{5f15a7bc777ad49ff15aa4d2831b1681}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{Second}
+      \field{title}{Applied logistic regression}
+      \field{year}{2000}
+    \endentry
+    \entry{tfm2}{thesis}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,uniquepart=base,hash=f5481c850d4816f0aa2e1ac9931add0b}{%
+           family={Iglesias\bibnamedelima Cabo},
+           familyi={I\bibinitperiod\bibinitdelim C\bibinitperiod},
+           given={Tania},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {Universidad de Granada}%
+      }
+      \list{location}{1}{%
+        {Granada}%
+      }
+      \strng{namehash}{f5481c850d4816f0aa2e1ac9931add0b}
+      \strng{fullhash}{f5481c850d4816f0aa2e1ac9931add0b}
+      \strng{bibnamehash}{f5481c850d4816f0aa2e1ac9931add0b}
+      \strng{authorbibnamehash}{f5481c850d4816f0aa2e1ac9931add0b}
+      \strng{authornamehash}{f5481c850d4816f0aa2e1ac9931add0b}
+      \strng{authorfullhash}{f5481c850d4816f0aa2e1ac9931add0b}
+      \field{sortinit}{I}
+      \field{sortinithash}{320bc8fe8101b9376f9f21cd507de0e8}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Métodos de Bondad de Ajuste en Regresión Logística}
+      \field{type}{Trabajo Final de Máster}
+      \field{year}{2013}
+    \endentry
+    \entry{safebinary}{manual}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,uniquepart=base,hash=5350e6e96aa51659359f893adb1734cb}{%
+           family={Konis},
+           familyi={K\bibinitperiod},
+           given={Kjell},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5350e6e96aa51659359f893adb1734cb}
+      \strng{fullhash}{5350e6e96aa51659359f893adb1734cb}
+      \strng{bibnamehash}{5350e6e96aa51659359f893adb1734cb}
+      \strng{authorbibnamehash}{5350e6e96aa51659359f893adb1734cb}
+      \strng{authornamehash}{5350e6e96aa51659359f893adb1734cb}
+      \strng{authorfullhash}{5350e6e96aa51659359f893adb1734cb}
+      \field{sortinit}{K}
+      \field{sortinithash}{9fd838a31ba64d981e8f44562bd33f89}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{R package version 0.1-3}
+      \field{title}{safeBinaryRegression: Safe Binary Regression}
+      \field{year}{2019}
+      \verb{urlraw}
+      \verb https://CRAN.R-project.org/package=safeBinaryRegression
+      \endverb
+      \verb{url}
+      \verb https://CRAN.R-project.org/package=safeBinaryRegression
+      \endverb
+    \endentry
+    \entry{Medica}{misc}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,uniquepart=base,hash=10f31d9d87fa14c46b724ee0311d8176}{%
+           family={Langohr},
+           familyi={L\bibinitperiod},
+           given={Klaus},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{10f31d9d87fa14c46b724ee0311d8176}
+      \strng{fullhash}{10f31d9d87fa14c46b724ee0311d8176}
+      \strng{bibnamehash}{10f31d9d87fa14c46b724ee0311d8176}
+      \strng{authorbibnamehash}{10f31d9d87fa14c46b724ee0311d8176}
+      \strng{authornamehash}{10f31d9d87fa14c46b724ee0311d8176}
+      \strng{authorfullhash}{10f31d9d87fa14c46b724ee0311d8176}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Apuntes de la asignatura de Estadística Médica del Grado en Estadística UB-UPC}
+      \field{year}{2018}
+    \endentry
+    \entry{bondad}{article}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=5c3807734d53df4032a22cbe739b364b}{%
+           family={Le\bibnamedelima Cessie},
+           familyi={L\bibinitperiod\bibinitdelim C\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=6eaaa8becc21f4f593aa468005936524}{%
+           family={Houwelingen},
+           familyi={H\bibinitperiod},
+           given={J.\bibnamedelimi C.},
+           giveni={J\bibinitperiod\bibinitdelim C\bibinitperiod},
+           givenun=0,
+           prefix={van},
+           prefixi={v\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {[Wiley, International Biometric Society]}%
+      }
+      \strng{namehash}{ae964d219f2e429516b5d94366494a70}
+      \strng{fullhash}{ae964d219f2e429516b5d94366494a70}
+      \strng{bibnamehash}{ae964d219f2e429516b5d94366494a70}
+      \strng{authorbibnamehash}{ae964d219f2e429516b5d94366494a70}
+      \strng{authornamehash}{ae964d219f2e429516b5d94366494a70}
+      \strng{authorfullhash}{ae964d219f2e429516b5d94366494a70}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{issn}{0006341X, 15410420}
+      \field{journaltitle}{Biometrics}
+      \field{number}{4}
+      \field{title}{A Goodness-of-Fit Test for Binary Regression Models, Based on Smoothing Methods}
+      \field{volume}{47}
+      \field{year}{1991}
+      \field{pages}{1267\bibrangedash 1282}
+      \range{pages}{16}
+      \verb{urlraw}
+      \verb http://www.jstor.org/stable/2532385
+      \endverb
+      \verb{url}
+      \verb http://www.jstor.org/stable/2532385
+      \endverb
+    \endentry
+    \entry{hoslemtest}{manual}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,uniquepart=base,hash=509b6e6ed4a40adc5a7641a727897de4}{%
+           family={Lele},
+           familyi={L\bibinitperiod},
+           given={Subhash\bibnamedelima R.},
+           giveni={S\bibinitperiod\bibinitdelim R\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=09c58d9417e4bc9b81f9e8ff61b5e170}{%
+           family={Keim},
+           familyi={K\bibinitperiod},
+           given={Jonah\bibnamedelima L.},
+           giveni={J\bibinitperiod\bibinitdelim L\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=5756dfebc27a490bc057197094be7bb4}{%
+           family={Solymos},
+           familyi={S\bibinitperiod},
+           given={Peter},
+           giveni={P\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{01244507c0b756ca7e98cc2100544a24}
+      \strng{fullhash}{fedaf24e8731d5efa88a71a9f7393a95}
+      \strng{bibnamehash}{fedaf24e8731d5efa88a71a9f7393a95}
+      \strng{authorbibnamehash}{fedaf24e8731d5efa88a71a9f7393a95}
+      \strng{authornamehash}{01244507c0b756ca7e98cc2100544a24}
+      \strng{authorfullhash}{fedaf24e8731d5efa88a71a9f7393a95}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{note}{R package version 0.3-4}
+      \field{title}{ResourceSelection: Resource Selection (Probability) Functions for Use-Availability Data}
+      \field{year}{2019}
+      \verb{urlraw}
+      \verb https://CRAN.R-project.org/package=ResourceSelection
+      \endverb
+      \verb{url}
+      \verb https://CRAN.R-project.org/package=ResourceSelection
+      \endverb
+    \endentry
+    \entry{COPY2}{article}{}
+      \name{author}{3}{}{%
+        {{uniquename=0,uniquepart=base,hash=39da11a80e8c1b93bfa2c743dff2893e}{%
+           family={Lumley},
+           familyi={L\bibinitperiod},
+           given={Thomas},
+           giveni={T\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a846b96d3925082569f69ebc19e38cb0}{%
+           family={Kronmal},
+           familyi={K\bibinitperiod},
+           given={Richard},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a702a0d01b66f89a8e8aaeeb9acb8583}{%
+           family={Ma},
+           familyi={M\bibinitperiod},
+           given={Shuangge},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{5c2dd58534bd599ee9b1317ce2d81008}
+      \strng{fullhash}{ba069d1e55c25a57d22cb83ffafab9a6}
+      \strng{bibnamehash}{ba069d1e55c25a57d22cb83ffafab9a6}
+      \strng{authorbibnamehash}{ba069d1e55c25a57d22cb83ffafab9a6}
+      \strng{authornamehash}{5c2dd58534bd599ee9b1317ce2d81008}
+      \strng{authorfullhash}{ba069d1e55c25a57d22cb83ffafab9a6}
+      \field{sortinit}{L}
+      \field{sortinithash}{2c7981aaabc885868aba60f0c09ee20f}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{UW Biostatistics Working Paper Series}
+      \field{month}{01}
+      \field{title}{Relative Risk Regression in Medical Research: Models, Contrasts, Estimators, and Algorithms}
+      \field{volume}{293}
+      \field{year}{2006}
+    \endentry
+    \entry{Estudioppal}{article}{}
+      \name{author}{20}{}{%
+        {{uniquename=0,uniquepart=base,hash=db0a0d239107796f8af73735abe385c6}{%
+           family={Martín-Santos},
+           familyi={M\bibinithyphendelim S\bibinitperiod},
+           given={R},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a36169826ee554991014c49b4c557ba5}{%
+           family={Gelabert},
+           familyi={G\bibinitperiod},
+           given={Estel},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=b43d8c12a34fe2075bb9806fa4334722}{%
+           family={Subirá},
+           familyi={S\bibinitperiod},
+           given={Susana},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=476ca15aaadbf2ad2546c31c13319c92}{%
+           family={Gutierrez-Zotes},
+           familyi={G\bibinithyphendelim Z\bibinitperiod},
+           given={Alfonso},
+           giveni={A\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=db0c47b14931b5798cae21c8223b99a8}{%
+           family={Langohr},
+           familyi={L\bibinitperiod},
+           given={K},
+           giveni={K\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=4385ee5933280606fe32a3120eea06a8}{%
+           family={Jover},
+           familyi={J\bibinitperiod},
+           given={Manuel},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=9add527f0fdfe83d288c0b288a7024bf}{%
+           family={Torrens},
+           familyi={T\bibinitperiod},
+           given={Marta},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=c68337e8d80e8eb596c623f0e923ce41}{%
+           family={Guillamat},
+           familyi={G\bibinitperiod},
+           given={Roser},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=7d7f5d8d00f9db8593a22eb31f765665}{%
+           family={Mayoral},
+           familyi={M\bibinitperiod},
+           given={Fermín},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=32b9a486129769fdb4890d096ee2193b}{%
+           family={Canellas},
+           familyi={C\bibinitperiod},
+           given={F},
+           giveni={F\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=b8eccdc9cd2aa750f632056e5273aa71}{%
+           family={L\bibnamedelima Iborra},
+           familyi={L\bibinitperiod\bibinitdelim I\bibinitperiod},
+           given={J},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=e4f79073ecff12f677ee69f1ec836104}{%
+           family={Gratacòs},
+           familyi={G\bibinitperiod},
+           given={Monica},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=844d895313f4d5ed65eae89b4ab58e63}{%
+           family={Costas},
+           familyi={C\bibinitperiod},
+           given={Javier},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=b9cd715ff299506044dd6f0829e87326}{%
+           family={Ben\bibnamedelima Hirsch-Gornemann},
+           familyi={B\bibinitperiod\bibinitdelim H\bibinithyphendelim G\bibinitperiod},
+           given={Miriam},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=2c959e3829e60eb0c0b866f7a17cf004}{%
+           family={Navinés},
+           familyi={N\bibinitperiod},
+           given={R},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=ef2f6e0f00d1c61aebde139b1bf35c75}{%
+           family={Guitart},
+           familyi={G\bibinitperiod},
+           given={M},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=b3b3c2854dfb7b5ab19df00026814eae}{%
+           family={Roca},
+           familyi={R\bibinitperiod},
+           given={Miquel},
+           giveni={M\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=1647590ff3b697a84a9e8c668007b710}{%
+           family={DE\bibnamedelima Frutos},
+           familyi={D\bibinitperiod\bibinitdelim F\bibinitperiod},
+           given={R},
+           giveni={R\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=a67c5f04b67ce4b9ec12a8bbd878a047}{%
+           family={Vilella},
+           familyi={V\bibinitperiod},
+           given={Elisabet},
+           giveni={E\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=cc137d7d8af415e2640a4667ad04132f}{%
+           family={Sanjuan},
+           familyi={S\bibinitperiod},
+           given={Julio},
+           giveni={J\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{b3b51f5d6549dc339bef66494fa72f9f}
+      \strng{fullhash}{610d11c9f8c437b69d59551686fd4c44}
+      \strng{bibnamehash}{8936f567414800d5b24afee76f0cbd72}
+      \strng{authorbibnamehash}{8936f567414800d5b24afee76f0cbd72}
+      \strng{authornamehash}{b3b51f5d6549dc339bef66494fa72f9f}
+      \strng{authorfullhash}{610d11c9f8c437b69d59551686fd4c44}
+      \field{sortinit}{M}
+      \field{sortinithash}{cfd219b90152c06204fab207bc6c7cab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Psychological medicine}
+      \field{title}{Research Letter: Is neuroticism a risk factor for postpartum depression?}
+      \field{volume}{42}
+      \field{year}{2012}
+      \field{pages}{1559\bibrangedash 65}
+      \range{pages}{7}
+      \verb{doi}
+      \verb 10.1017/S0033291712000712
+      \endverb
+    \endentry
+    \entry{Silvia}{thesis}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,uniquepart=base,hash=ad7dcb13115a8ad575608ed494b0b5d2}{%
+           family={Pérez\bibnamedelima Fernández},
+           familyi={P\bibinitperiod\bibinitdelim F\bibinitperiod},
+           given={Silvia},
+           giveni={S\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{institution}{1}{%
+        {Universitat Politècnica de Catalunya}%
+      }
+      \list{location}{1}{%
+        {Barcelona}%
+      }
+      \strng{namehash}{ad7dcb13115a8ad575608ed494b0b5d2}
+      \strng{fullhash}{ad7dcb13115a8ad575608ed494b0b5d2}
+      \strng{bibnamehash}{ad7dcb13115a8ad575608ed494b0b5d2}
+      \strng{authorbibnamehash}{ad7dcb13115a8ad575608ed494b0b5d2}
+      \strng{authornamehash}{ad7dcb13115a8ad575608ed494b0b5d2}
+      \strng{authorfullhash}{ad7dcb13115a8ad575608ed494b0b5d2}
+      \field{sortinit}{P}
+      \field{sortinithash}{8d51b3d5b78d75b54308d706b9bbe285}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{month}{6}
+      \field{title}{Estimación del riesgo relativo mediante el modelo log-binomial}
+      \field{type}{Trabajo Final de Máster}
+      \field{year}{2016}
+    \endentry
+    \entry{otrosestudios1}{article}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,uniquepart=base,hash=ea340340f0aea27e945d489e69995419}{%
+           family={Pitt},
+           familyi={P\bibinitperiod},
+           given={Brice},
+           giveni={B\bibinitperiod},
+           givenun=0}}%
+      }
+      \list{publisher}{1}{%
+        {Cambridge University Press}%
+      }
+      \strng{namehash}{ea340340f0aea27e945d489e69995419}
+      \strng{fullhash}{ea340340f0aea27e945d489e69995419}
+      \strng{bibnamehash}{ea340340f0aea27e945d489e69995419}
+      \strng{authorbibnamehash}{ea340340f0aea27e945d489e69995419}
+      \strng{authornamehash}{ea340340f0aea27e945d489e69995419}
+      \strng{authorfullhash}{ea340340f0aea27e945d489e69995419}
+      \field{sortinit}{P}
+      \field{sortinithash}{8d51b3d5b78d75b54308d706b9bbe285}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{British Journal of Psychiatry}
+      \field{number}{516}
+      \field{title}{“Atypical” Depression Following Childbirth}
+      \field{volume}{114}
+      \field{year}{1968}
+      \field{pages}{1325\bibrangedash 1335}
+      \range{pages}{11}
+      \verb{doi}
+      \verb 10.1192/bjp.114.516.1325
+      \endverb
+    \endentry
+    \entry{R}{manual}{}
+      \name{author}{1}{}{%
+        {{uniquename=0,uniquepart=base,hash=dcdebb6b35bff7c0568bf8c50ef8626d}{%
+           family={{R Core Team}},
+           familyi={R\bibinitperiod}}}%
+      }
+      \list{location}{1}{%
+        {Vienna, Austria}%
+      }
+      \list{organization}{1}{%
+        {R Foundation for Statistical Computing}%
+      }
+      \strng{namehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{fullhash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{bibnamehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authorbibnamehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authornamehash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \strng{authorfullhash}{dcdebb6b35bff7c0568bf8c50ef8626d}
+      \field{sortinit}{R}
+      \field{sortinithash}{da6b42bd3ab22fee61abed031ee405f7}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{R: A Language and Environment for Statistical Computing}
+      \field{year}{2019}
+    \endentry
+    \entry{Mlgz}{misc}{}
+      \name{author}{2}{}{%
+        {{uniquename=0,uniquepart=base,hash=7a1554648349f91911dd767c01d0e9cf}{%
+           family={Sánchez},
+           familyi={S\bibinitperiod},
+           given={Josep\bibnamedelima Anton},
+           giveni={J\bibinitperiod\bibinitdelim A\bibinitperiod},
+           givenun=0}}%
+        {{uniquename=0,uniquepart=base,hash=740d5c13ff65482424f4ae33d4138bce}{%
+           family={Montero},
+           familyi={M\bibinitperiod},
+           given={Lídia},
+           giveni={L\bibinitperiod},
+           givenun=0}}%
+      }
+      \strng{namehash}{7002e2b224c9d970e32494c8842cacd0}
+      \strng{fullhash}{7002e2b224c9d970e32494c8842cacd0}
+      \strng{bibnamehash}{7002e2b224c9d970e32494c8842cacd0}
+      \strng{authorbibnamehash}{7002e2b224c9d970e32494c8842cacd0}
+      \strng{authornamehash}{7002e2b224c9d970e32494c8842cacd0}
+      \strng{authorfullhash}{7002e2b224c9d970e32494c8842cacd0}
+      \field{sortinit}{S}
+      \field{sortinithash}{322b1d5276f2f6c1bccdcd15920dbee6}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{year}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{title}{Apuntes de la asignatura de Modelos Lineales Generalizados del Grado en Estadística UB-UPC}
+      \field{year}{2018}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

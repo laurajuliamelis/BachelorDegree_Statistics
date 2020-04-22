@@ -1,0 +1,11 @@
+Pais	Continent	2012	2011	2010	2009	2008	2007	2006	2005
+Russia	Europa	187	265	238	275	332	246	363	441
+Xina	Asia	83	89	107	141	126	242	281	622
+Etiopia	Africa	68	78	106	140	156	141	120	107
+Ucraina	Europa	10	5	4	10	11	45	27	67
+Colombia	America	17	32	25	20	27	41	24	29
+Kazakhstan	Asia	0	9	23	33	42	34	24	32
+Haiti	America	0	0	0	3	12	29	29	17
+Nepal	Asia	0	1	6	0	25	24	61	29
+Marroc	Africa	34	29	34	13	4	17	9	8
+R_D_Congo	Africa	0	0	0	0	3	17	15	4

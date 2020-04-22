@@ -1,0 +1,1 @@
+%%ejercicio 10 <- minimos cuadraticosA=[1 1 1 0 -1; 1 0 1 -1 1; 1 1 0 2 -1; 0 2 1 0 1]b=[2; 3; 4; 2; 1]x=A\b

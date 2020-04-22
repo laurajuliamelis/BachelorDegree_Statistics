@@ -1,0 +1,1 @@
+%% exercici 1 examen 2012 t=2;k=3;l=1;X=((t+0.1)*(k+0.2)^2)/sqrt(l+0.1)Y=((t-0.1)*(k-0.2)^2)/sqrt(l-0.1)ea=abs(X-Y)er=ea/Y

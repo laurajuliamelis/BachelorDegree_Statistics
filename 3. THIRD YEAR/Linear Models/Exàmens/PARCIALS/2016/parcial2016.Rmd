@@ -1,0 +1,189 @@
+---
+title: "PARCIAL MODELS LINEALS 2016"
+author: "Marta Piñol"
+date: "8 de noviembre de 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Problema 1
+ 
+**a) Quina condicio ha de verificar una funcio parametrica per a que sigui estimable en aquest model?**
+
+```{r}
+x <- c(2,1,3,
+       2,1,3,
+       1,-1,0,
+       1,0,1,
+       1,1,2,
+       1,1,2)
+x <- matrix(m, ncol=3, byrow=T)
+
+qr(x)$rank
+```
+
+Tenim 3 paràmetres i el rank de la matriu de disseny és 2, llavors per trobar les funcions paramètriques estimables cal resoldre el seguent sistema d'equacions:
+
+$(a_1, a_2, a_3) = \lambda_1(1,-1,0)+ \lambda_2(1,0,1)$
+
+Per tant, la condició que ha de verificar una funció paramètrica per a que sigui estimable en aquest model és:
+$a_1 =  - a_2 + a_3$
+
+**b) Indiqueu si les funcions parametriques seguents son estimables i calculeu l'estimador MQ quan sigui
+possible:**
+
+i) $\alpha + \gamma$ és f.p.e perque verifica la condició anterior.
+
+2) $\gamma$ no és f.p.e perque no verifica la condició anterior.
+
+```{r}
+x <- c(2,1,3,
+       2,1,3,
+       1,-1,0,
+       1,0,1,
+       1,1,2,
+       1,1,2)
+x <- matrix(x, ncol=3, byrow=T) #matriu de disseny
+
+y <- c(10.98, 11.03, 0.95, 4.03, 6.94, 7.02) #vector de respostes
+
+library(MASS)
+
+xtx <- t(x)%*%x
+xtxi <- ginv(xtx)
+betas <- xtxi %*% t(x) %*% y 
+```
+
+La estimació de la f.p.e és:
+```{r}
+betas[1] + betas[3]
+```
+
+**c) Calculeu l'estimacio de la covariancia entre els estimadors lineals optims de ...i la variancia de l'estimador lineal optim de ...**
+
+
+```{r}
+# cov(alpha+gamma, beta+gamma)
+a <- c(1, 0, 1)
+b <- c(0, 1, 1)
+e <- y - x %*% betas
+mse <- sum(e^2)/(6-2)
+cov <- mse * t(a) %*% xtxi %*% b
+cov
+```
+```{r}
+# var(alpha+gamma)
+a <- c(1, 0, 1)
+var <- mse * t(a) %*% xtxi %*% a
+var
+```
+
+
+**d) Calculeu un interval de confiança al 95% per a ...**
+
+```{r}
+# interval de confiança al 95% per alpha+gamma
+se = sqrt(var)
+(betas[1]+betas[3]) + c(-1,1) * (qt(p = 0.975, df = 6-2) * se)
+```
+
+**e)**
+
+```{r}
+#L'interval de confiança atrapa al 4, per tant, acceptem l'ho o sino o calculem:
+t <- ((betas[1]+betas[3])-4)/se
+```
+
+```{r}
+A <- c(1,0,1,
+       0,1,1)
+A<-matrix(A,nrow=2,byrow=T)
+#Càlcul f-Fisher o contrast de models
+
+#alpha=4-gamma
+#beta=3-gamma
+#substituim en el model
+```
+
+
+## Problema 2
+
+**a)**
+```{r}
+summary(Data)
+pairs(Data)
+cor(Data)[1,-1] > 0.3 #máxima correlació Acerage
+```
+
+**b)**
+```{r}
+qqnorm(Data$Longnose)
+qqline(Data$Longnose)
+
+install.packages("moments")
+agostino.test
+
+hist(Data$Longnose)
+curve(density(Data$Longnose))
+```
+**C)**
+```{r}
+coef(model)
+summary(model)
+#R^2 (coeficient de determinació) mesura d'ajust
+#test F que apareix a la última linia del summary
+```
+
+**d)**
+
+```{r}
+
+# atipic vol dir molt gran tant com la part postivia com la negativa
+# amb el boxplot del residus també es podria veure
+```
+
+**e)**
+```{r}
+
+confint(,level=0.98)
+
+#no es tan facil calcular l'interval de confiança de sigma^2 -> buscar en els apunts (es basa en la ji-cuadrado)
+ #beta0 és el intercept -> valor del model en el origne de coordenades, quan les vars regressores valen 0 el num de peixos d'aquesta especie es beta0
+
+ #betatemp per cada increment d'un grau de termperatura quants peixos tindria mes (increment per unitat de temperatura)
+
+ #sigma^2 és la variabilitat del error en aquest model
+
+#UNITats
+  #beta0: num de peixos
+  #betatemp: (unitat de y=peix) / (unitat de x=temperatura) = num peixos / graus
+```
+
+**f)**
+```{r}
+#si mirem l'inerval de conf al 95% i veiem que el 3 cau a dintre acceptem l'h0.
+#altra manera: t-student
+
+#Contrast de dos models: g0 i g
+g0 <- lm(Longnose ~ Acerage + ... + Temp + I(D02 + D03), data=)
+g #és el general
+anova(g0,g)
+```
+
+**g)**
+```{r}
+#mitjana de  totes les vars regresores, augmentar en 1 la temperatura i fer la prediccio d'aquest valor
+predict()
+#modificar l'interval de confi perquè sigui al 90%
+#hi ha dos tipus de prediccio la mitjana i la concreta
+```
+
+**h)**
+```{r}
+#bucle de mil operacions on fem sample de les dades lognose
+#copiar el codi del farway i canviar la base dades
+```
+

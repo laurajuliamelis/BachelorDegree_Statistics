@@ -1,0 +1,1362 @@
+---
+title: "SCRIPT"
+author: "GRUP BOOKING"
+date: "5/10/2018"
+output: html_document
+---
+
+
+
+
+
+
+
+
+
+
+
+#PREPROCESSING
+
+
+
+
+
+
+
+
+
+
+
+
+```{r}
+#####################################################################################
+#####                                                                           #####   
+#####  PRIMERA SESSIÓ DE PRÀCTIQUES:                                            #####  
+#####	 INTRODUCCIÓ AL PAQUET R, RECOLLIDA DE DADES I DEPURACIÓ                  #####
+#####                                                                           #####             
+#####################################################################################
+
+
+
+##### 1. IMPORTAR LES DADES
+
+### 1.1. Canviar el directori del arxiu 
+
+
+
+### 1.2. Llegir les dades des de R
+
+dd <- read.csv2("Booking_data.csv",sep=",")
+dd$X <- NULL
+
+### 2. CONÈIXER LA BASE DE DADES
+# 2.1. Dimensions, estructura i columnes
+
+View(dd) ### Veure la base de dades
+class(dd) ### Classe
+dim(dd) ### Dimensió
+nrow(dd) ### Nombre de files
+ncol(dd) ### Nombre de columnes
+colnames(dd) ### Nom de les columnes
+rownames(dd) ### Nom de les files
+str(dd) ### Conèixer l’estructura de la base de dades
+
+rownames(dd) <- dd$id
+dd <- dd[,-c(1,22,23,24,25)]  #Treiem la columna id , Negative_Review, Review total negative word counts i lo mateix en positiu
+
+
+
+#2.2. Descripció de les variables
+##https://www-eio.upc.edu/~karina/datamining/refmaterial/Dades/CREDSCO/credscoInfo.pdf
+
+### 3. PRIMER CONTROL: MÀXIMS, MÍNIMS, ..... (ERRORS I VALORS ANÒMALS)
+#3.1. Fer un resum
+summary(dd)
+
+# Respondre les tres preguntes: 
+# 1) Quina és la variable resposta?
+# 2) Quines variables són categòriques i quines són continues?
+# 3) Hi han missings?
+
+#3.2. Variable resposta 
+summary(dd$Review_Positivity_Rate)
+hist(dd$Review_Positivity_Rate) #Caldrà transformar-la a numèrica
+
+#3.3. Missings (DE MOMENT NO SÉ QUE S'HA DE FER AQUI)
+#hist(dd$Ingresos,main=paste("Boxplot of", colnames(dd)[10]))
+#boxplot(dd$Ingresos, main=paste("Boxplot of", colnames(dd)[10]))
+#mean(dd$Ingresos)
+#sd(dd$Ingresos)
+#cv<-sd(dd$Ingresos)/mean(dd$Ingresos) ### Coefficient de variació
+#cv
+
+### 4. CATEGORITZAR
+#4.1. Identificar les variables categòriques
+class(dd[,1])
+sapply(dd, class)
+
+#4.2. Declarar com a factor
+dd$Hotel_lat<-as.numeric(as.character(dd$Hotel_lat))
+dd$Hotel_lng<-as.numeric(as.character(dd$Hotel_lng))
+dd$Businesses_100m<-as.numeric(dd$Businesses_100m)
+dd$Businesses_1km<-as.numeric(dd$Businesses_1km)
+dd$Businesses_5km<-as.numeric(dd$Businesses_5km)
+dd$Stay_Duration<-as.numeric(as.character(dd$Stay_Duration))
+dd$Is_Hotel_Holiday <- as.factor(dd$Is_Hotel_Holiday)
+dd$Is_Reviewer_Holiday <- as.factor(dd$Is_Reviewer_Holiday)
+dd$Total_Number_of_Reviews<-as.numeric(dd$Total_Number_of_Reviews)
+dd$Review_Is_Positive <- as.factor(dd$Review_Is_Positive)
+dd$Review_Positivity_Rate<-as.numeric(as.character(dd$Review_Positivity_Rate))
+dd$Average_Score <- as.numeric(as.character(dd$Average_Score))
+dd$Reviewer_Score<- as.numeric(as.character(dd$Reviewer_Score))
+dd$Total_Number_of_Reviews_Reviewer_Has_Given<-as.numeric(as.character(dd$Total_Number_of_Reviews_Reviewer_Has_Given))
+dd$Additional_Number_of_Scoring<-as.numeric(as.character(dd$Additional_Number_of_Scoring))
+dd$Submitted_from_Mobile <- as.factor(dd$Submitted_from_Mobile)
+
+
+#Detalls (a la variable Days_Since_Review cal treure-li "day" , i Review_Date cal passar-la a data )
+
+dd$Days_Since_Review <- gsub("[^0-9]", "", dd$Days_Since_Review)
+dd$Days_Since_Review <- as.numeric(dd$Days_Since_Review)
+
+dd$Review_Date<- paste(substr(dd$Review_Date, 1, 5-1), "/", substr(dd$Review_Date, 5, nchar(dd$Review_Date)), sep = "")
+dd$Review_Date <- paste(substr(dd$Review_Date, 1, 8-1), "/", substr(dd$Review_Date, 8, nchar(dd$Review_Date)), sep = "")
+dd$Review_Date[which(dd$Review_Date ==  "NA/NA/")] <- NA
+mode(dd$Review_Date)
+
+dd$Review_Date <- as.Date(dd$Review_Date, "%Y/%m/%d")
+
+### 5. MODALITATS (LEVELS)
+
+#5.1. Revisar les modalitats (Binàries)
+
+levels(dd$Is_Hotel_Holiday) 
+levels(dd$Is_Reviewer_Holiday) 
+levels(dd$Submitted_from_Mobile)
+levels(dd$Review_Is_Positive)
+
+
+#5.1. Revisar les modealitats (Politòmiques)
+
+levels(dd$Hotel_Country)
+    summary(dd$Hotel_Country)
+    barplot(table(dd$Hotel_Country))
+    pie(table(dd$Hotel_Country))
+levels(dd$Hotel_City)
+    summary(dd$Hotel_City)
+    barplot(table(dd$Hotel_City))
+    pie(table(dd$Hotel_City))
+levels(dd$Guest_Type)
+    summary(dd$Guest_Type)
+    barplot(table(dd$Guest_Type))
+    pie(table(dd$Guest_Type))
+levels(dd$Trip_Type)
+    summary(dd$Trip_Type)
+    barplot(table(dd$Trip_Type))
+    pie(table(dd$Trip_Type))
+levels(dd$Room_Type_Level)
+    summary(dd$Room_Type_Level)
+    barplot(table(dd$Room_Type_Level))
+    pie(table(dd$Room_Type_Level))
+
+
+#5.2. REDEFINIR LES MODALITATS
+#5.2. Redefinir les modalitats (Binàries)
+
+levels(dd$Is_Hotel_Holiday) <- c("No","Yes")
+levels(dd$Is_Reviewer_Holiday) <- c("No","Yes")
+levels(dd$Submitted_from_Mobile) <- c("No","Yes")
+levels(dd$Review_Is_Positive) <- c("No","Yes")
+
+#5.2. Redefinir les modalitats (Politòmiques)
+
+### ROOM_TYPE_LEVEL
+attach(dd)
+dd$Room_Type_Level <- as.factor(as.character(Room_Type_Level))
+table(dd$Room_Type_Level)
+dd$Room_Type_Level<- factor(Room_Type_Level, ordered=TRUE,  levels= c("Ambassadors","Art","Business","Business Class","City","Classic","Deluxe","Duplex","Executive","Family","Luxury","NULL","Premium","Privilege","Standard","Studio","Suite","Superior"))
+newvalues <- c("Deluxe","Deluxe","Business","Business","Classic","Classic","Deluxe","Duplex","Deluxe","Family","Deluxe","Other","Deluxe","Deluxe","Standard","Classic","Deluxe","Deluxe")
+dd$Room_Type_Level <- newvalues[ match(dd$Room_Type_Level,
+                                    c("Ambassadors","Art","Business","Business Class","City","Classic","Deluxe","Duplex","Executive","Family","Luxury","NULL","Premium","Privilege","Standard","Studio","Suite","Superior"))]
+table(dd$Room_Type_Level)
+class(dd$Room_Type_Level)
+dd$Room_Type_Level <- as.factor(dd$Room_Type_Level)
+
+summary(dd$Room_Type_Level)
+pie(table(dd$Room_Type_Level))
+barplot(table(dd$Room_Type_Level),las=3,cex.names = 0.7)
+
+### HOTEL_CITY
+table(dd$Hotel_City) 
+dd$Hotel_City<- factor(dd$Hotel_City, ordered=TRUE,  levels= c("Amsterdam","Amsterdam Zuidoost","Barcelona","Boulogne Billancourt","Donauinsel","El Prat de Llobregat","Fitzrovia","London","Milan","Paddington","Paris","Paris 06","Paris 12","Vienna","Vincennes","Woodford Green"))
+newvalues2 <- c("Amsterdam","Amsterdam","Barcelona","Boulogne Billancourt","Vienna","Barcelona","London","London","Milan","London","Paris","Paris","Paris","Vienna","Vincennes","London")
+dd$Hotel_City <- newvalues2[ match(dd$Hotel_City,
+                                c("Amsterdam","Amsterdam Zuidoost","Barcelona","Boulogne Billancourt","Donauinsel","El Prat de Llobregat","Fitzrovia","London","Milan","Paddington","Paris","Paris 06","Paris 12","Vienna","Vincennes","Woodford Green"))]
+table(dd$Hotel_City)
+class(dd$Hotel_City)
+dd$Hotel_City <- as.factor(dd$Hotel_City)
+
+summary(dd$Hotel_City)
+pie(table(dd$Hotel_City))
+barplot(table(dd$Hotel_City),las=3,cex.names = 0.7)
+
+#TRIP_TYPE
+table(dd$Trip_Type)
+dd$Trip_Type<- factor(dd$Trip_Type, ordered=TRUE,  levels= c("Business trip","Couple","Family with older children","Family with young children","Leisure trip","NULL","Solo traveler"))
+newvalues3 <- c("Business trip","Couple","Family","Family","Leisure trip","Others","Solo traveler")
+dd$Trip_Type <- newvalues3[ match(dd$Trip_Type,
+                               c("Business trip","Couple","Family with older children","Family with young children","Leisure trip","NULL","Solo traveler"))]
+table(dd$Trip_Type)
+class(dd$Trip_Type)
+dd$Trip_Type <- as.factor(dd$Trip_Type)
+
+summary(dd$Trip_Type)
+pie(table(dd$Trip_Type))
+barplot(table(dd$Trip_Type),las=3,cex.names = 0.7)
+
+
+###GUEST_TYPE
+
+table(dd$Guest_Type)
+dd$Guest_Type<- factor(dd$Guest_Type, ordered=TRUE,  levels= c("Couple","Family with older children","Family with young children","Group","Solo traveler","Travelers with friends","With a pet"))
+newvalues3 <- c("Couple","Family","Family","Group","Solo traveler","Group","With a pet")
+dd$Guest_Type <- newvalues3[ match(dd$Guest_Type,
+                                  c("Couple","Family with older children","Family with young children","Group","Solo traveler","Travelers with friends","With a pet"))]
+table(dd$Guest_Type)
+class(dd$Guest_Type)
+dd$Guest_Type <- as.factor(dd$Guest_Type)
+
+summary(dd$Guest_Type)
+pie(table(dd$Guest_Type))
+barplot(table(dd$Guest_Type),las=3,cex.names = 0.7)
+
+
+###HOTEL_COUNTRY
+
+table(dd$Hotel_Country)
+dd$Hotel_Country<- factor(dd$Hotel_Country, ordered=TRUE,  levels= c("AT","ES","FR","GB","IT","NL"))
+newvalues3 <- c("Austria","España","Francia","Gran Bretaña","Italia","Holanda")
+dd$Hotel_Country <- newvalues3[ match(dd$Hotel_Country,
+                                   c("AT","ES","FR","GB","IT","NL"))]
+table(dd$Hotel_Country)
+class(dd$Hotel_Country)
+dd$Hotel_Country <- as.factor(dd$Hotel_Country)
+
+summary(dd$Hotel_Country)
+pie(table(dd$Hotel_Country))
+barplot(table(dd$Hotel_Country),las=3,cex.names = 0.7)
+
+
+
+## IMPUTACIÓ Missings variables numèriques
+
+require(class)
+
+#OBTENIM LES VARIABLES NUMÈRIQUES
+
+num <- c()
+for(i in 1:length(sapply(dd,class))){
+  if(sapply(dd,class)[i] == "numeric"){
+    num <- c(num,sapply(dd,class)[i])
+  }
+}
+class(num)
+
+#MIREM QUINES TENEN MISSINGS
+
+Només tenen missings Hotel_lat i Hotel_lng
+
+
+## indexos per a les variables que necessiten imputació
+
+uncompleteVars<-c(4:5)  #Variables numèriques amb missings
+
+fullVariables <- c(6,7,8,12,14,17,19,21,22,23,24) #Variables numèriques sense missings
+aux<-dd[,fullVariables]
+dim(aux)
+names(aux)
+
+for (k in uncompleteVars){
+  aux1 <- aux[!is.na(dd[,k]),]
+  dim(aux1) 
+  aux2 <- aux[is.na(dd[,k]),]
+  dim(aux2)
+  
+  RefValues<- dd[!is.na(dd[,k]),k]
+  #Find nns for aux2
+  knn.values = knn(aux1,aux2,RefValues)   
+  
+  #CARE: neither aux1 nor aux2 can contain NAs
+  
+  
+  #CARE: knn.ing is generated as a factor. 
+  #Be sure to retrieve the correct values
+  
+  dd[is.na(dd[,k]),k] = as.numeric(as.character(knn.values))
+  fullVariables<-c(fullVariables, k)
+  aux<-dd[,fullVariables]
+}
+
+dim(dd)
+summary(dd)
+
+### FALTA PER FER LA DESCRIPTIVA UNIVARIANT DE LES VARIABLES ARA QUE JA ESTAN PREPROCESSADES
+
+###NUMERIQUES####
+varNum<-c(4,5,6,7,8,12,14,17,19,21,22,23,24)
+
+par(ask=TRUE)
+for(k in varNum){hist(dd[,k], main=paste("Histogram of", names(dd)[k]))}
+par(ask=FALSE)
+
+summary(dd[,varNum])
+
+###CATEGORIQUES####
+
+varCat<-c(1,2,3,9,10,11,13,15,16,18,20,25)
+
+par(ask=TRUE)
+for(k in varCat){barplot(table(dd[,k]), main=paste("Barplot of", names(dd[k])))}
+par(ask=FALSE)
+
+```
+
+
+ARA JA TENIM LA BASE DE DADES PREPROCESSADA, ANEM A FER ACP, CLUSTER I PROFILING
+
+
+
+
+
+
+
+
+
+#ACP DE LES VARIABLES NUMERIQUES 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r, results='hide', warning=F, comment = "", message=FALSE}
+require(factoextra)
+num <- which(sapply(dd, class) == "numeric"| sapply(dd, class) == "integer")
+
+dcon <- dd[, num]
+
+res.pca <- prcomp(dcon, scale = TRUE)
+class(res.pca)
+attributes(res.pca)
+print(res.pca)
+```
+
+###PERCENTATGE DE LA INERCIA TOTAL REPRESENTAT EN SUBESPAIS
+
+```{r, fig.cap="Percentatge de variància capturat a cada dimensió", warning=F, comment = "", message=FALSE, fig.height=3.5, fig.width=4.5}
+
+res.pca$sdev
+inerProj<- res.pca$sdev^2 
+inerProj
+totalIner<- sum(inerProj)
+totalIner
+pinerEix<- 100*inerProj/totalIner
+pinerEix
+barplot(pinerEix)
+```
+
+###PERCENTATGE D'INERCIA TOTAL ACUMULAT
+
+```{r}
+barplot(100*cumsum(res.pca$sdev[1:dim(dcon)[2]]^2)/dim(dcon)[2])
+percInerAccum<-100*cumsum(res.pca$sdev[1:dim(dcon)[2]]^2)/dim(dcon)[2]
+percInerAccum
+```
+Veiem com a la octava dimensió acumulem un 80% de la inercia total.
+
+```{r}
+nd = 8
+
+Psi = res.pca$x[,1:nd]
+iden = row.names(dcon)
+etiq = names(dcon)
+ze = rep(0,length(etiq)) 
+```
+
+
+###GRÀFIC D'INDIVIDUS
+
+```{r}
+eje1<-1
+eje2<-2
+
+plot(Psi[,eje1],Psi[,eje2])
+text(Psi[,eje1],Psi[,eje2],labels=iden, cex=0.5)
+axis(side=1, pos= 0, labels = F, col="cyan")
+axis(side=3, pos= 0, labels = F, col="cyan")
+axis(side=2, pos= 0, labels = F, col="cyan")
+axis(side=4, pos= 0, labels = F, col="cyan")
+
+#library(rgl)
+#plot3d(Psi[,1],Psi[,2],Psi[,3])
+```
+
+
+###PROJECCIÓ DE LES VARIABLES
+
+```{r}
+Phi = cor(dcon,Psi)
+
+#select your axis
+
+X<-Phi[,eje1]
+Y<-Phi[,eje2]
+
+plot(Psi[,eje1],Psi[,eje2],type="n")
+axis(side=1, pos= 0, labels = F)
+axis(side=3, pos= 0, labels = F)
+axis(side=2, pos= 0, labels = F)
+axis(side=4, pos= 0, labels = F)
+arrows(ze, ze, X, Y, length = 0.07,col="blue")
+text(X,Y,labels=etiq,col="darkblue", cex=0.7)
+```
+
+
+```{r}
+#ZOOMS
+
+plot(Psi[,eje1],Psi[,eje2],type="n",xlim=c(min(X,0),max(X,0)))
+axis(side=1, pos= 0, labels = F)
+axis(side=3, pos= 0, labels = F)
+axis(side=2, pos= 0, labels = F)
+axis(side=4, pos= 0, labels = F)
+arrows(ze, ze, X, Y, length = 0.07,col="blue")
+text(X,Y,labels=etiq,col="darkblue", cex=0.7)
+```
+
+```{r}
+#ARA AGAFEM COM A VARIABLE QUALITATIVA "HOTEL COUNTRY" PER REPRESENTAR LES SEVES CATEGORIES SOBRE EL PRIMER PLA FACTORIAL
+
+k<-2 #HOTEL COUNTRY
+varcat<-dd[,k]
+fdic1 = tapply(Psi[,eje1],varcat,mean)
+fdic2 = tapply(Psi[,eje2],varcat,mean) 
+
+plot(Psi[,eje1],Psi[,eje2],type="n")
+axis(side=1, pos= 0, labels = F, col="cyan")
+axis(side=3, pos= 0, labels = F, col="cyan")
+axis(side=2, pos= 0, labels = F, col="cyan")
+axis(side=4, pos= 0, labels = F, col="cyan")
+points(fdic1,fdic2,pch=16,col="blue", labels=levels(varcat))
+text(fdic1,fdic2,labels=levels(varcat),col="blue", cex=0.7)
+
+
+```
+
+```{r}
+#ARA TOTES LES MODALITATS DE TOTES LES VARIABLES CATEGORIQUES
+
+#Les dividirem en dos grups, perque si les fem totes juntes, es saturarà
+
+dcat1 <- c(1,2,3,9,10,11)
+dcat2 <- c(15,16,18,20,25)
+
+colors1 <- rainbow(length(dcat1))
+colors2 <- rainbow(length(dcat2))
+```
+
+```{r}
+
+###DCAT1
+plot(Psi[,eje1],Psi[,eje2],type="n")
+axis(side=1, pos= 0, labels = F, col="cyan")
+axis(side=3, pos= 0, labels = F, col="cyan")
+axis(side=2, pos= 0, labels = F, col="cyan")
+axis(side=4, pos= 0, labels = F, col="cyan")
+
+c <- 1
+for(k in dcat1){
+  seguentColor <- colors1[c]
+  fdic1 = tapply(Psi[,eje1],dd[,k],mean)
+  fdic2 = tapply(Psi[,eje2],dd[,k],mean)
+  
+  text(fdic1,fdic2,labels=levels(dd[,k]),col=seguentColor,cex=0.6)
+  c <- c+1
+}
+legend("bottomleft",names(dd)[dcat1],pch=1,col=colors1,cex=0.6)
+
+```
+
+```{r}
+###DCAT2
+plot(Psi[,eje1],Psi[,eje2],type="n")
+axis(side=1, pos= 0, labels = F, col="cyan")
+axis(side=3, pos= 0, labels = F, col="cyan")
+axis(side=2, pos= 0, labels = F, col="cyan")
+axis(side=4, pos= 0, labels = F, col="cyan")
+
+c <- 1
+for(k in dcat2){
+  seguentColor <- colors2[c]
+  fdic1 = tapply(Psi[,eje1],dd[,k],mean)
+  fdic2 = tapply(Psi[,eje2],dd[,k],mean)
+  
+  text(fdic1,fdic2,labels=levels(dd[,k]),col=seguentColor,cex=0.6)
+  c <- c+1
+}
+legend("bottomleft",names(dd)[dcat2],pch=1,col=colors2,cex=0.6)
+```
+
+```{r}
+#DETERMINE ZOOM LEVEL
+
+fm = round(max(abs(Psi[,1]))) 
+
+X <- fm*Phi[,eje1]
+Y <- fm*Phi[,eje2]
+
+
+#represent numerical variables in background
+plot(Psi[,eje1],Psi[,eje2],type="n",xlim=c(-5,4), ylim=c(-5,4))
+#plot(X,Y,type="none",xlim=c(min(X,0),max(X,0)))
+axis(side=1, pos= 0, labels = F, col="cyan")
+axis(side=3, pos= 0, labels = F, col="cyan")
+axis(side=2, pos= 0, labels = F, col="cyan")
+axis(side=4, pos= 0, labels = F, col="cyan")
+
+#add projections of numerical variables in background
+arrows(ze, ze, X, Y, length = 0.07,col="lightgray")
+text(X,Y,labels=etiq,col="gray", cex=0.7)
+
+#add centroids
+c<-1
+for(k in dcat1){
+  seguentColor<-colors1[c]
+  
+  fdic1 = tapply(Psi[,eje1],dd[,k],mean)
+  fdic2 = tapply(Psi[,eje2],dd[,k],mean) 
+  
+  #points(fdic1,fdic2,pch=16,col=seguentColor, labels=levels(dd[,k]))
+  text(fdic1,fdic2,labels=levels(dd[,k]),col=seguentColor, cex=0.6)
+  c<-c+1
+}
+legend("bottomleft",names(dd)[dcat1],pch=1,col=colors1, cex=0.6)
+```
+
+
+
+
+
+
+
+
+
+#CLUSTERING
+
+
+En l'àmbit de la ciència de dades, es sol treballar amb bases de dades molt grans que tenen un nombre d'observacions molt elevat. Sovint, aquestes observacions són semblants entre sí, de manera que és possible organitzar aquesta gran quantitat de dades en un nombre reduït de *grups* o *clústers*, els quals es componen d'observacions similars. Les diferents tècniques de clustering es fan servir per agrupar dades/observacions en diferents segments de manera que les dades dins de cadascun d'aquests segments són similars, però significativament diferents entre segments. Determinar què vol dir "similars" o "diferents" és la part essencial del *cluster analysis* i està estretament relacionat amb la estadística. 
+
+Existeixen diferents tipus de mètodes o tècniques de clústering (particions, jeràrquics etc...) que es basen en diferents metodologies i es serveixen de coneixements teòrics provinents de diferents camps d'estudi. En línia amb els objectius perseguits en aquest projecte, el clústering que es duu a terme en aquest capítol és un *clústering jeràrquic*.
+
+S'empra el mètode de Ward, que consisteix en fer servir la pèrdua d'informació que es produeix al integrar els diferents individus en els clústers. Aquesta pèrdua es pot mesurar a través de la suma total dels quadrats de les desviacions de cada individu respecte la mitjana del clúster, de manera que s'aniran agrupant aquells individus que menys incrementin aquesta magnitud al juntar-se.
+
+A més, es pretén que totes les variables intervinguin en el procés de creació dels conglomerats. En aquest sentit, proposem fer servir la distància de Gower, per a conjunts de dades mixtes. És a dir, farem servir aquesta distància quan tinguem un conjunt de registres/individus sobre els quals haguem observat tant variables quantitatives com qualitatives, com és el cas.
+
+Es defineix la distància de Gower com $d_{ij}^{2} = 1 -s_{ij}$, on:
+
+\begin{eqnarray*}
+s_{ij} = \frac{\sum_{h = 1}^{p_{1}} (1-|x_{ih}-x_{jh}| / G_{h})+a+\alpha}{p_{1}+(p_{2}-d)+p_{3}} \quad
+\textit{és el coeficient de similitud de Gower}
+\end{eqnarray*}
+
+* $p_{1}$ és el nombre de variables quantitatives contínues,
+* $p_{2}$ és el nombre de variables binàries,
+* $p_{3}$ és el nombre de variables qualitatives (no binàries),
+* $a$ és el nombre de coincidències (1, 1) en les variables binàries,
+* $d$ és el nombre de coincidències (0, 0) en les variables binàries,
+* $\alpha$ és el nombre de coincidències de les variables qualitatives (no binàries) i
+* $G_{h}$ és el rang (o recorregut) de la h-èssima variable quantitativa.
+
+Tanmateix, hem considerat excloure del procés de clústering la variable identificadora del registre i les dues variables textuals amb les ressenyes dels clients, ja que la realització d'aquestes variables és única per a cada observació i rebran un tractament diferent. Addicionalment hem considerat oportú no incloure la variable *Hotel_Name*, ja que també és una característica única per a cada establiment i no té massa sentit pensar en agrupacions en funció d'aquesta variable.
+
+Calculem la matriu de discrepàncies fent servir la distància de gower i, amb el mètode de Ward realitzem el procés de clústering. Podem representar el resultat amb un dendograma *(Figure 25)*.
+
+
+```{r}
+require(cluster)
+attach(dd)
+
+actives<- seq(2,25)
+actives <- actives[-c(12)]
+dissimMatrix <- daisy(dd[,actives], metric = "gower", stand=TRUE)
+
+distMatrix<-dissimMatrix^2
+h1 <- hclust(distMatrix,method="ward.D") 
+```
+
+```{r}
+plot(h1, xlab = "observació", ylab = "Distàncies", main = "Dendrograma-WARD", sub = "")
+rect.hclust(h1, k = 5, border="red")
+
+nc = 5
+c5 <- cutree(h1,nc)
+```
+
+En aquest cas, hem considerat oportú realitzar una partició en 5 clústers un cop observat el dendograma. No existeix un procediment formal únic establert per a decidir el nombre de particions, és més comú fer servir tècniques heurístiques com per exemple tallar per aquell salt on guanyem menys inèrcia entre grups de manera que l'esforç d'una partició adicional no compensi la variabilitat que aconseguim explicar amb aquest tall extra. En aquest treball, proposem un mètode heurístic alternatiu anomenat Elbow Method *(Figure 26)* que es basa en el mateix principi de la suma de quadrats intra clústers. Ens interessarà tenir una suma de quadrats intra clústers petita ja que això voldrà dir que els individus dins d'un mateix conglomerat seran molt similars, però a la vegada realitzar particions només fins al punt que el benefici marginal d'un grup més en superi el cost.
+
+```{r, fig.cap="Elbow Method", warning=F, comment = "", message=FALSE, fig.height=2.5, fig.width=3.5, fig.align="center"}
+subset_colclasses <- function(DF, colclasses="numeric") {
+  DF[,sapply(DF, function(vec, test) class(vec) %in% test, test=colclasses)]
+}
+k.max <- 15
+dcon <- subset_colclasses(dd, "numeric")
+dcon2 <- subset_colclasses(dd, "integer")
+dcon <-cbind(dcon, dcon2)
+rm(dcon2)
+wss <- sapply(1:k.max, 
+              function(k){kmeans(dcon, k, nstart=50,iter.max = 15 )$tot.withinss})
+par(cex = 0.6)
+plot(1:k.max, wss,
+     type="b", pch = 19, frame = FALSE, 
+     xlab="Number of clusters K",
+     ylab="Total within-clusters sum of squares", 
+     main = "Elbow method - Total within-clusters sum of squares")
+```
+
+El Elbow method fa servir només variables numèriques ja que calcula sumes de quadrats. Podría passar que el resultat no es correspongués amb el nostre dendograma, on hem fet servir totes les variables. Tanmateix, veiem com una partició en 5 clústers sembla força raonable en tots dos casos i el mètode de Elbow pot servir per a reforçar la nostra creença prèvia. Ara bé, caldrà analitzar la qualitat de la nostra partició i comparar-la amb d'altres. Per exemple, si prenem una hipotètica partició de 4 i una altra de 6 tenim que:
+
+```{r, warning=F, comment = "", message=FALSE}
+c6 <- cutree(h1,6)
+c4 <- cutree(h1,4)
+
+#class sizes 
+table(c5)
+
+#comparing with other partitions (la millor és 5)
+table(c5, c6)
+table(c5,c4)
+```
+
+Observant la distribució dels clústers, veiem que els grups 1, 3 i 4 són semblants en mida i més abundants que els grups 2 i 5. A priori, sembla raonable seleccionar aquesta partició. Ara bé, podem comparar el percentatge de variabilitat entre grups explicada respecte el total per a les particions immediatament anterior i posterior (k = 4 i k = 6). Fent-ho obtenim:
+
+```{r, warning=F, comment = "", message=FALSE, results = 'hide'}
+set.seed(12736)
+k4 <- kmeans(dcon,4)
+k5 <- kmeans(dcon,5)
+k6 <- kmeans(dcon,6)
+Wss4 <-  sum(k4$withinss)
+Wss5 <-  sum(k5$withinss)
+Wss6 <-  sum(k6$withinss)
+
+## Prenem la partició de k = 5 (c5)
+cdg4 <- aggregate(as.data.frame(dcon),list(c4),mean)
+cdg5 <- aggregate(as.data.frame(dcon),list(c5),mean)
+cdg6 <- aggregate(as.data.frame(dcon),list(c6),mean)
+Bss4 <- sum(rowSums(cdg4^2)*as.numeric(table(c4)))
+Bss5 <- sum(rowSums(cdg5^2)*as.numeric(table(c5)))
+Bss6 <- sum(rowSums(cdg6^2)*as.numeric(table(c6)))
+
+Ib4 <- 100*Bss4/(Bss4+Wss4)
+Ib5 <- 100*Bss5/(Bss5+Wss5)
+Ib6 <- 100*Bss6/(Bss6+Wss6)
+print(c(Ib4, Ib5, Ib6))
+```
+
+* **90,60636** amb 4 conglomerats.
+* **94.35629** amb 5 conglomerats.
+* **95.25633** amb 6 conglomerats.
+
+Observem com el guany obtingut en passar de 5 conglomerats a 6 és mínim, així doncs, ens quedem amb la opció escollida anteriorment de 5 clústers.
+
+
+
+
+
+
+
+#PROFILING
+
+Un cop realitzat el procés de clustering, convé pensar en tenir una comprensió més àmplia de com són les unitats d'estudi dins de cada conglomerat. Per a aquest propòsit fem servir les variables de la nostra base de dades que han participat en el clustering per a elaborar panells de classes i estadístiques descriptives per grups $\footnote{Deixarem fora Hotel_Name.}$. En última instància, l'objectiu és crear un "perfil" per a cada clúster que representi els atributs d'aquest en relació a les variables mencionades.        
+
+Les eines descriptives que hem fet servir per a la caracterització dels clústers són:
+     
+* Snake plots, diagrames de barres o taules de contingència per a les variables qualitatives.
+* Boxplots i diagrames de barres per a les variables numèriques.
+
+A més, per cada variable analitzada, fem servir un seguit de contrastos, tant paramètrics com no paramètrics, per a testar la hipòtesis de diferències significatives entre clústers.
+
+```{r, warning=F, comment = "", message=FALSE, results = 'hide'}
+ValorTestXnum <- function(Xnum,P){
+        #freq dis of fac
+        nk <- as.vector(table(P)); 
+        n <- sum(nk); 
+        #mitjanes x grups
+        xk <- tapply(Xnum,P,mean);
+        #valors test
+        txk <- (xk-mean(Xnum))/(sd(Xnum)*sqrt((n-nk)/(n*nk))); 
+        #p-values
+        pxk <- pt(txk,n-1,lower.tail=F);
+        for(c in 1:length(levels(as.factor(P)))){if (pxk[c]>0.5){pxk[c]<-1-pxk[c]}}
+        return (pxk)
+}
+
+ValorTestXquali <- function(P,Xquali){
+        taula <- table(P,Xquali);
+        n <- sum(taula); 
+        pk <- apply(taula,1,sum)/n;
+        pj <- apply(taula,2,sum)/n;
+        pf <- taula/(n*pk);
+        pjm <- matrix(data=pj,nrow=dim(pf)[1],ncol=dim(pf)[2]);      
+        dpf <- pf - pjm; 
+        dvt <- sqrt(((1-pk)/(n*pk))%*%t(pj*(1-pj))); 
+        zkj <- dpf/dvt; 
+        pzkj <- pnorm(zkj,lower.tail=F);
+        for(c in 1:length(levels(as.factor(P)))){for (s in 1:length(levels(Xquali))){if (pzkj[c,s]> 0.5){pzkj[c,s]<-1- pzkj[c,s]}}}
+        return (list(rowpf=pf,vtest=zkj,pval=pzkj))
+}
+
+K<-dim(dd)[2]
+par(ask=TRUE)
+
+P<-c5
+nc<-length(levels(as.factor(P)))
+pvalk <- matrix(data=0,nrow=nc,ncol=K, dimnames=list(levels(P),names(dd)))
+nameP<-"Cluster"
+n<-dim(dd)[1]
+```
+
+Les primeres variables de la base de dades *Hotel_Country, Hotel_City, Hotel_lat, Hotel_lng* fan referència a l'àmbit geogràfic i és llògic pensar que la caracterització dels clústers anirà en la mateixa línia en tots quatre casos.
+
+```{r, fig.cap="Profiling variable Hotel_Country", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7}
+require(colorspace)
+k <- 2
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.5,0))
+marg <-table(dd[,k])/n
+paleta<-rainbow_hcl(length(levels(dd[,k])))
+table<-table(P,dd[,k])
+#   print("Cross-table")
+#   print(table)
+rowperc<-prop.table(table,1)
+colperc<-prop.table(table,2)
+marg <- table(as.factor(P))/n
+marg <- table(as.factor(P))/n
+
+plot(marg,type="n",ylim=c(0,1))
+for(c in 1:length(levels(dd[,k]))){lines(rowperc[,c],col=paleta[c]) }
+legend("topleft", levels(dd[,k]), col=paleta, lty=2, cex=0.6, ncol = 3)
+title("Hotel_Country per cluster (%)", xlab = "cluster", line = 1,  ylab = "%")
+
+barplot(table(dd[,k], as.factor(P)), beside=T,col=paleta, ylim = c(0, 1500))
+legend("topleft",levels(as.factor(dd[,k])),pch=1,cex=0.6, col=paleta, ncol = 2)
+title("Hotel_Country per cluster (nre. d'hotels)", ylab = "# hotels", xlab = "cluster", line = 1)
+```
+
+Si construim el snake plot i el diagrama de barres de la variable *Hotel_Country* estratificant per clúster *(Figure 27)*, observem com el clúster 1 és el més divers pel que fa al país on es troba l'hotel en qüestió. En aquest conglomerat hi trobem hotels d'Àustria, Itàlia i Països Baixos en proporcions força semblants. Ara bé, la resta de clústers té una forta caracterització pel que fa al país de l'hotel:
+
+* *Clúster 2*: Predominen hotels d'Espanya.
+* *Clúster 3*: Predominen hotels del Regne Unit.
+* *Clúster 4*: Predominen hotels del Regne Unit amb lleugera presència d'hotels d'altre països.
+* *Clúster 5*: Predominen hotels de França.
+
+D'altra banda si en comptes de considerar la variable *Hotel_Country* fem exactament el mateix per a la ciutat de l'hotel *(Figure 28)* observem com existeix una correspondència en la relació entre països i ciutats:
+
+* Al clúster 1 hi trobem hotels de Ámsterdam, Vienna i Milà.
+* Al clúster 2 hi trobem hotels de Barcelona.
+* Als clústers 3 i 4 trobem majoritàriament hotels de Londres. 
+* Al clúster 5 predominen els hotels situats a París.
+
+```{r, fig.cap="Profiling variable Hotel_City", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7}
+require(colorspace)
+k <- 3
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.5,0))
+marg <-table(dd[,k])/n
+paleta<-rainbow_hcl(length(levels(dd[,k])))
+table<-table(P,dd[,k])
+#   print("Cross-table")
+#   print(table)
+rowperc<-prop.table(table,1)
+colperc<-prop.table(table,2)
+marg <- table(as.factor(P))/n
+marg <- table(as.factor(P))/n
+
+plot(marg,type="n",ylim=c(0,1))
+for(c in 1:length(levels(dd[,k]))){lines(rowperc[,c],col=paleta[c]) }
+legend("topleft", levels(dd[,k]), col=paleta, lty=2, cex=0.6, ncol = 3)
+title("Hotel_City per cluster (%)", xlab = "cluster", line = 1,  ylab = "%")
+
+barplot(table(dd[,k], as.factor(P)), beside=T,col=paleta, ylim = c(0, 1800))
+legend("topleft",levels(as.factor(dd[,k])),pch=1,cex=0.6, col=paleta, ncol = 2)
+title("Hotel_City per cluster (nre. d'hotels)", ylab = "# hotels", xlab = "cluster", line = 1)
+```
+
+Per últim, podem realitzar un test $\chi^{2}$ per a validar estadísticament que les diferències entre aquestes variables són significatives entre clústers:
+
+```{r, warning=F, comment = "", message=FALSE}
+k  <- 2
+print("Test Chi quadrat Hotel_Country:")
+print(chisq.test(dd[,k], as.factor(P)))
+
+k  <- 3
+print("Test Chi quadrat Hotel_City:")
+print(chisq.test(dd[,k], as.factor(P)))
+```
+
+Tots dos contrastos són significatius.
+
+Per a facilitar la comprensió dels resultats descrits anteriorment, podem pensar en fer servir les variables latitud i longitud per a realitzar una geolocalització de les dades i visualitzar els clústers en un mapa. Als següents gràfics representem al mapa la localització dels hotels, estratificant per clústers, els quals distingim amb colors, i on la mida dels cercles fa referència al nombre total de ressenyes que tenen els hotels *(Figure 29)*.
+
+$\vspace{1mm}$
+
+```{r, fig.cap="Geolocalització", warning=F, comment = "", message=FALSE, fig.height = 4, fig.width=6}
+require(ggmap)
+map <- get_map("France", zoom = 5, language = "Spanish")
+cluster <- c5
+variablePoints <- ggmap(map) + geom_point(aes(x = dd$Hotel_lng, y = dd$Hotel_lat, color = cluster, size = Total_Number_of_Reviews), data = dd, alpha = .5) + geom_text(aes(label = lat), size = 0.6) + theme(axis.title = element_text(size=10))
+updatedMap <- variablePoints + scale_size_area(name = "Total number of reviews")
+updatedMap
+```
+
+
+Si seguim amb la resta de variables de la base de dades, les següents tres fan referència al nombre de negocis a la rodona considerant diferents distàncies. L'objectiu cercat amb aquestes variables és fer una distinció entre hotels urbans i hotels més allunyats del centre de les ciutats. Com que les variables *Business_100m, Business_1km i Business_5Km* tenen connotacions semblants, hem considerat representar-les juntes mitjançant un plotMeans *(Figure 30)*.
+
+```{r, fig.cap="Profiling Nre. Negocis a 100m, 1km i 5km a la rodona", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7.5}
+require("Rcmdr")
+par(mfrow = c(1, 3), cex.main = 0.8, cex.axis = 0.7, cex.lab = 0.6, mgp=c(3,2,0))
+plotMeans(dd$Businesses_100m, as.factor(c5), error.bars="se",connect=TRUE, 
+        main = "Plot Means of Businesses_100m", ylab = "mitjana Businesses_100m",
+        xlab = "cluster")
+plotMeans(dd$Businesses_1km, as.factor(c5), error.bars="se",connect=TRUE, 
+        main = "Plot Means of Businesses_1km", ylab = "mitjana Businesses_1km",
+        xlab = "cluster")
+plotMeans(dd$Businesses_5km, as.factor(c5), error.bars="se",connect=TRUE, 
+        main = "Plot Means of Businesses_5km", ylab = "mitjana Businesses_5km",
+        xlab = "cluster")
+```
+
+Observem com els hotels que trobem als clústers 2 i 5 tendeixen a ser més urbans, en especial els del clúster 5 ja que destaquen en tots els llindars. Els hotels inclosos al clúster 2 destaquen, encara que en menor mesura que els del 5, quan la distància és inferior a 1 km a la rodona (pot ser degut a que Barcelona és menys extensa que les altres ciutats). En contrapartida, els hotels del clúster 1 semblen ser els menys urbans ja que ocupen posicions baixes en tots tres llindars, i es troben força allunyats de la mitjana. Les dues primeres variables comparteixen moltes característiques i és l'ultima *(Businesses_5km)* on més evidents es fan les diferències.
+
+Proposem la realització d'una ANOVA i un test de Kruskall-Wallis per a testar si existeixen diferències globals entre clusters. A part, calculem la significació de cada clúster amb la funció *ValorTestXnum*. En aquest sentit, p-valors molt extrems per a un clúster voldrà dir que aquest està molt allunyat de la mitjana.
+
+```{r, warning=F, comment = "", message=FALSE}
+k <- 4
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Businesses_100m:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Businesses_100m:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print(c("p-values ValorsTest Businesses_100m:", pvalk[,k]))
+
+k <- 5
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Businesses_1km:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Businesses_1km:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print(c("p-values ValorsTest Businesses_1km:", pvalk[,k]))
+
+k <- 6
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Businesses_5km:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Businesses_5km:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print(c("p-values ValorsTest Businesses_5km:", pvalk[,k]))
+```
+
+Si ens fixem en els p-valors tots tres contrastos són significatius. Tanmateix, cal mencionar que la significació va augmentant a mesura que augmentem el llindar de km a la rodona. És a dir, com més àmplia és la zona que considerem, més evidents es fan les diferències entre els grups. Per aquest motiu, a l'hora d'elaborar els perfils, donem més pes als resultats obtinguts per a la variable *Businesses_5km*, ja que ens permet detectar millor les diferències entre hotels més o menys allunyats del centre de les ciutats.       
+
+\vspace{1mm}
+
+A continuació ens fixem en el tipus d'habitació. Construïm un snake plot i un diagrama de barres per a comparar les modalitats dins de cada clúster *(Figure 31)*
+
+```{r, fig.cap="Profiling variable Room_Type_Level", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7}
+require(colorspace)
+k <- 9
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.5,0))
+marg <-table(dd[,k])/n
+paleta<-rainbow_hcl(length(levels(dd[,k])))
+table<-table(P,dd[,k])
+#   print("Cross-table")
+#   print(table)
+rowperc<-prop.table(table,1)
+colperc<-prop.table(table,2)
+marg <- table(as.factor(P))/n
+marg <- table(as.factor(P))/n
+
+plot(marg,type="n",ylim=c(0,1))
+for(c in 1:length(levels(dd[,k]))){lines(rowperc[,c],col=paleta[c]) }
+legend("topleft", levels(dd[,k]), col=paleta, lty=2, cex=0.6, ncol = 2)
+title("Room_Type_Level per cluster (%)", xlab = "cluster", line = 1, ylab = "%")
+
+barplot(table(dd[,k], as.factor(P)), beside=T,col=paleta, ylim = c(0, 1500))
+legend("topleft",levels(as.factor(dd[,k])),pch=1,cex=0.6, col=paleta, ncol = 2)
+title("Room_Type_Level per cluster (nre. d'hotels)", ylab = "# habitacions per categoria", xlab = "cluster", line = 1)
+```
+
+Aquest gràfic presenta la limitació que tenim molts valors missing que hem inclòs en la categoria "Others. Aquesta categoria és la més freqüent en tots els clústers, en especial al clúster 2 (més del 80%). La resta de modalitats són força homogènies per a tots els clústers amb la salvetat que al clúster 5 hi ha major presència d'habitacions del tipus clàssic i en el clúster 3 les del tipus Standard i Deluxe. El test $\chi^{2}$ és significatiu però hem de tenir en compte que els valors centrats poden estar altament influits per la modalitat "Other".
+
+```{r, warning=F, comment = "", message=FALSE}
+print("Test Chi quadrat Room_Type_Level:")
+print(chisq.test(dd[,k], as.factor(P)))
+```
+
+La següent variable és *Guest_Type*. Aquesta fa referència al perfil del client que ha escrit la ressenya. Si analitzem com es distribueixen les modalitats d'aquesta variable entre els 5 clústers *(Figure 32)*, observem com als clústers 1, 3 i 4 les parelles són més abundants que a la resta. El clúster 3 també conté més viatgers solitaris que la resta, mentre que al clúster 2 augmenten lleugerament els grups. La resta de categories es manté força constant per a tots els conglomerats.
+
+```{r,  fig.cap="Profiling variable Guest_Type", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=8.5}
+require(colorspace)
+k <- 10
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.5,0))
+marg <-table(dd[,k])/n
+paleta<-rainbow_hcl(length(levels(dd[,k])))
+table<-table(P,dd[,k])
+#   print("Cross-table")
+#   print(table)
+rowperc<-prop.table(table,1)
+colperc<-prop.table(table,2)
+marg <- table(as.factor(P))/n
+marg <- table(as.factor(P))/n
+
+plot(marg,type="n",ylim=c(0,1))
+for(c in 1:length(levels(dd[,k]))){lines(rowperc[,c],col=paleta[c]) }
+legend("topleft", levels(dd[,k]), col=paleta, lty=2, cex=0.6, ncol = 1)
+title("Guest_Type per cluster (%)", xlab = "cluster", line = 1, ylab = "%")
+
+barplot(table(dd[,k], as.factor(P)), beside=T,col=paleta, ylim = c(0, 1500))
+legend("topleft",levels(as.factor(dd[,k])),pch=1,cex=0.6, col=paleta, ncol = 2)
+title("Guest_Type per cluster (nre. d'hotels)", ylab = "# clients per categoria", xlab = "cluster", line = 1)
+```
+
+Si construim el test, veiem com existeixen diferències significatives entre els clústers, tot i que la significació global és menys forta que en els casos anteriors.
+
+```{r, warning=F, comment = "", message=FALSE}
+print("Test Chi quadrat Guest_Type:")
+print(chisq.test(dd[,k], as.factor(P)))
+```
+
+A continuació, passem a la variable *Trip_Type* que reflecteix el motiu del viatge *(Figure 33)*. En aquest cas, observem com, en tots els conglomerats predominen els viatges amb motiu d'oci. Tanmateix, trobem diferències subtils al clúster 3 on aquesta dominànça dels viatges per plaer disminueix en benefici dels viatges per motiu de negoci.
+
+```{r, fig.cap="Profiling variable Trip_Type", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=8.5}
+require(colorspace)
+k <- 11
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.5,0))
+marg <-table(dd[,k])/n
+paleta<-rainbow_hcl(length(levels(dd[,k])))
+table<-table(P,dd[,k])
+#   print("Cross-table")
+#   print(table)
+rowperc<-prop.table(table,1)
+colperc<-prop.table(table,2)
+marg <- table(as.factor(P))/n
+marg <- table(as.factor(P))/n
+
+plot(marg,type="n",ylim=c(0,1))
+for(c in 1:length(levels(dd[,k]))){lines(rowperc[,c],col=paleta[c]) }
+legend("topleft", levels(dd[,k]), col=paleta, lty=2, cex=0.6, ncol = 2)
+title("Trip_Type per cluster (%)", xlab = "cluster", line = 1, ylab = "%")
+
+barplot(table(dd[,k], as.factor(P)), beside=T,col=paleta, ylim = c(0, 1500))
+legend("topleft",levels(as.factor(dd[,k])),pch=1,cex=0.6, col=paleta, ncol = 2)
+title("Trip_Type per cluster (nre. d'hotels)", ylab = "# viatges per categoria", xlab = "cluster", line = 1)
+```
+
+Tot i això, podem concloure que la distribució de la variable és més aviat homogènia per a tots els clústers. Si construim el test, veiem com existeixen diferències significatives entre els conglomerats, però el p-valor no és tan petit com el trobat per a altres variables (menys evidència de diferències entre clústers).
+
+```{r, warning=F, comment = "", message=FALSE}
+print("Test Chi quadrat Trip_Type:")
+print(chisq.test(dd[,k], as.factor(P)))
+```
+
+La següent variable és *Stay_Duration*. Al tenir davant una variable numèrica, construim un boxplot i un gràfic de barres *(Figure 34)*. Observem com els clústers 1, 2 i 5 inclouen llargues estades, mentre que els clústers 3 i 4 (recordem, majoria de parelles o viatgers en solitari) tendeixen a incloure estades més curtes. 
+
+```{r, fig.cap="Profiling variable Stay_Duration", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7}
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.4,0))
+k <- 12
+boxplot(dd[,k]~P, horizontal=TRUE)
+title(main=paste("Boxplot of", names(dd)[k], "vs", nameP ), ylab = "cluster", xlab = "Dies d'estada", line = 1)
+
+barplot(tapply(dd[[k]], P, mean))
+title(main=paste("Means of", names(dd)[k], "by", nameP ), xlab = "cluster", ylab = "Durada estància mitjana", line = 1) 
+abline(h=mean(dd[[k]]))
+legend(0,mean(dd[[k]]),"global mean",bty="n")
+```
+
+El test revela diferències significatives entre els conglomerats, tant a nivell global com per a cada clúster.
+
+```{r, warning=F, comment = "", message=FALSE}
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Stay_Duration:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Stay_Duration:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print("p-values ValorsTest Stay_Duration:")
+print(pvalk[,k])
+```
+
+La següent variable és *Days_Since Review*. En aquest cas, fem un resum numèric per a cada segment (clústers del 1 al 5). Observem que la mitjana del clúster 5 és considerablement superior a la resta. Els altres conglomerats semblen situar-se força a prop de la mitjana global, tot i que els clústers 1 i 4 semblen tenir valors lleugerament superiors al segon i el tercer. 
+
+```{r, warning=F, comment = "", message=FALSE}
+dd$cluster <- NULL
+k <- 14
+for(s in levels(as.factor(P))) {print(summary(dd[P==s,k]))}
+```
+
+Si realitzem el test no podem parlar de significació global forta. Tanmteix, evidencia com el clúster 5 presenta una forta desviació significativa respecte la tendència general de tots els conglomerats. Per tant, la conclusió a la que arribem és que les ressenyes incloses en el clúster 5 s'han publicat amb més retard respecte la norma general.
+
+```{r, warning=F, comment = "", message=FALSE}
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Days_Since Review:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Days_Since Review:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print("p-values ValorsTest Days_Since Review:")
+print(pvalk[,k])
+```
+
+A continuació ens fixem conjuntament en les variables *Is_Hotel_Holiday i Is_Reviewer_Holiday*, dicotòmiques les dues. Per a caracteritzar els clústers, construim dos diagrames de barres apilades de manera que poguem comparar entre els conglomerats si la ciutat de l'hotel, o la de l'usuari es troba en dia festiu *(Figure 35)*. L'objectiu és veure si en algun clúster els clients tendeixen a escriure les ressenyes en dies festius.
+
+```{r, fig.cap="Profiling variables dia Festiu", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7}
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.4,0))
+k <- 15
+barplot(table(dd[,k], as.factor(P)), beside=F,col=paleta, ylim = c(0, 1800))
+legend("topleft",levels(as.factor(dd[,k])),pch=1,cex=0.7, col=paleta, ncol = 2)
+title("Is_Hotel_Holiday per cluster (nre. d'hotels)", ylab = "# ressenyes", xlab = "cluster", line = 1)
+
+k <- 16
+barplot(table(dd[,k], as.factor(P)), beside=F,col=paleta, ylim = c(0, 1800))
+legend("topleft",levels(as.factor(dd[,k])),pch=1,cex=0.7, col=paleta, ncol = 2)
+title("Is_Reviewer_Holiday per cluster (nre. d'hotels)", ylab = "# ressenyes", xlab = "cluster", line = 1)
+```
+
+Veiem com, al clúster 4 és on la presència de dies festius en el moment d'escriure la ressenya és més alt. A la resta de clústers la proporció de **Sí** és molt baixa per a les dues variables. Si ens fixem en els p-valors dels contrastos, observem com els dos testos surten significatius.
+
+```{r, warning=F, comment = "", message=FALSE}
+k  <- 15
+print("Test Chi quadrat Is_Hotel_Holiday:")
+print(chisq.test(dd[,k], as.factor(P)))
+
+k  <- 16
+print("Test Chi quadrat Is_Reviewer_Holiday:")
+print(chisq.test(dd[,k], as.factor(P)))
+```
+
+A continuació, ens fixem en la variable *Total_Number_of_Reviews*. Aquesta variable, recordem, representa el nombre total de ressenyes vàlides que té l'hotel en qüestió. Un estudi interessant seria observar si existeix algun clúster on els hotels tinguin major nombre de ressenyes, i veure com això repercuteix en la valoració de l'hotel.     
+
+```{r, fig.cap="Profiling variable Total_Number_of_Reviews", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7}
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.4,0))
+k <- 17
+boxplot(dd[,k]~P, horizontal=TRUE)
+title(main=paste("Boxplot of", names(dd)[k], "vs", nameP ), ylab = "cluster", xlab = "Nombre de ressenyes vàlides", line = 1)
+
+barplot(tapply(dd[[k]], P, mean))
+title(main=paste("Means of", names(dd)[k], "by", nameP ), ylab = "Nombre mig de ressenyes vàlides", xlab = "cluster", line = 1)
+abline(h=mean(dd[[k]]))
+legend(0,mean(dd[[k]]),"global mean",bty="n")
+```
+       
+Al gràfic *(Figure 36)* veiem com, en nombre de ressenyes vàlides destaquen els clústers 1, 3 i 4. Els clústers 2 i 5 es troben considerablement per sota la mitjana global, en especial el clúster 5 amb un valor mig de ressenyes vàlides al voltant de 1000. Tal i com evidencia la figura anterior, el test revela diferències significatives entre els conglomerats.
+
+```{r, warning=F, comment = "", message=FALSE}
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Total_Number_of_Reviews:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Total_Number_of_Reviews:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print("p-values ValorsTest Total_Number_of_Reviews:")
+print(pvalk[,k])
+```
+
+Les següents dues variables, estan relacionades amb el grau de positivitat de la ressenya de Booking. *Review_Is_Positive* és una variable binària que pren valor 1 (Sí) si el nombre de paraules a la ressenya positiva és major que a la negativa. La proporció de ressenyes positives per cluster, juntament amb un gràfic de barres o un PlotMeans de la variable *Review_Positivity_Rate* *(Figure 37)*, ens pot donar un indici de en quin dels clústers els comentaris són més positius. Aquest coneixement combinat amb anàlisis posteriors ens revelarà quin tipus d'hotel és el més preferit pels clients, també en funció de les seves característiques.
+
+```{r, fig.cap="Profiling variables grau de positivisme de la ressenya", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7}
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.4,0))
+k <- 18
+barplot(table(dd[,k], as.factor(P)), beside=F,col=paleta, ylim = c(0, 1800))
+legend("topleft",levels(as.factor(dd[,k])),pch=1,cex=0.7, col=paleta, ncol = 2)
+title("Review_Is_Positive (nre. d'hotels)", ylab = "# hotels", xlab = "cluster", line = 1)
+
+k <- 19
+barplot(tapply(dd[[k]], P, mean))
+title(main=paste("Means of", names(dd)[k], "by", nameP ), xlab = "cluster", ylab = "Positivity Rate", line = 1)
+abline(h=mean(dd[[k]]))
+legend(0,mean(dd[[k]]),"global mean",bty="n")
+```
+
+Observant el gràfic, podem concloure que:     
+
+* El clúster 4 té gairebé totes les ressenyes i comentaris positius.
+* Els clústers 1, 2 i 5 tenen un percentatge de ressenyes positives superior al 50% i superior a la mitjana global en tots tres casos.
+* El clúster 3 té gairebé totes les ressenyes i comentaris negatius.
+
+Tal i com sembla indicar la figura, els contrastos evidencien una forta validesa estadística de les conclusions a les que hem arribat.
+
+```{r, warning=F, comment = "", message=FALSE}
+k <- 18
+print("Test Chi quadrat Review_Is_Positive:")
+print(chisq.test(dd[,k], as.factor(P)))
+
+k <- 19
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Review_Positivity_Rate:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Review_Positivity_Rate:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print("p-values ValorsTest Review_Positivity_Rate:")
+print(pvalk[,k])
+```
+
+
+La següent variable és *Reviewer Nationality*. Tal i com hem fet anteriorment, construim un snake plot i un gràfic de barres (variable categòrica) *(Figure 38)*. Es pot apreciar com la nacionalitat que predomina està altament correlacionada amb el país de l'hotel, un clar exemple en són els clústers 3 i 4 on predominen els hotels situats a Gran Bretanya i les ressenyes escrites per britànics. Això pot indicar que el turisme intern és molt més usual a Booking o, al menys, que és més comú escriure ressenyes per a hotels del teu país. 
+
+```{r, fig.cap="Profiling variable Reviewer_Nationality", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=8}
+require(colorspace)
+k <- 20
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.4,0))
+marg <-table(dd[,k])/n
+paleta<-rainbow_hcl(length(levels(dd[,k])))
+table<-table(P,dd[,k])
+#   print("Cross-table")
+#   print(table)
+rowperc<-prop.table(table,1)
+colperc<-prop.table(table,2)
+marg <- table(as.factor(P))/n
+marg <- table(as.factor(P))/n
+
+plot(marg,type="n",ylim=c(0,1))
+for(c in 1:length(levels(dd[,k]))){lines(rowperc[,c],col=paleta[c]) }
+legend("topleft", levels(dd[,k]), col=paleta, lty=2, cex=0.6, ncol = 3)
+title("Reviewer_Nationality per cluster (%)", xlab = "cluster", line = 1, ylab = "%")
+
+barplot(table(dd[,k], as.factor(P)), beside=T,col=paleta, ylim = c(0, 1800))
+legend("topleft",levels(as.factor(dd[,k])),pch=1,cex=0.6, col=paleta, ncol = 2)
+title("Reviewer_Nationality per cluster (nre. d'hotels)", ylab = "# usuaris", xlab = "cluster", line = 1)
+```
+
+De nou, el test mostra una alta significació estadística. 
+
+```{r, warning=F, comment = "", message=FALSE}
+print("Test Chi quadrat Reviewer_Nationality:")
+print(chisq.test(dd[,k], as.factor(P)))
+```
+
+
+Tot seguit entrem a analitzar variables relacionades amb les puntuacions dels hotels. Prenem conjuntament la puntuació mitjana que presentava l'hotel a finals de 2016 i la que han anat otorgant els usuaris de Booking que han escrit les ressenyes. Teòricament aquells hotels on les valoracions són més positves haurien de rebre millors valoracions així que, sembla llògic pensar que els resultats hauríen d'anar en línia amb els anteriors.
+
+$\vspace{1mm}$
+        
+```{r, fig.cap="Plot Means Valoracions", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7}
+par(mfrow = c(1, 2), cex.main = 0.8, cex.axis = 0.7, cex.lab = 0.6, mgp=c(3,2,0))
+plotMeans(dd$Average_Score, as.factor(c5), error.bars="se",connect=TRUE, 
+        main = "Plot Means Average_Score", ylab = "mitjana Average_Score",
+        xlab = "cluster")
+plotMeans(dd$Reviewer_Score, as.factor(c5), error.bars="se",connect=TRUE, 
+        main = "Plot Means of Reviewer_Score", ylab = "mitjana Reviewer_Score",
+        xlab = "cluster")
+```
+En efecte, les conclusions que podem obtenir d'aquests gràfics són calcades a les que hem obtingut analitzant *Review_Is_Positive, Review_Positivity_Rate*: clúster 3 pitjors valoracions, clúster 4 millors valoracions i la resta mantenint-se en la mitjana global. Això pot ser un indici d'alta correlació entre aquestes variables.
+
+Tots dos testos mantenen la significació global amb valors més propers a la no significació per als clústers 1, 2 i 5 que, recordem es troben a prop de la mitjana global.
+
+```{r, warning=F, comment = "", message=FALSE}
+k <- 21
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Average_Score:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Average_Score:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print("p-values ValorsTest Average_Score:")
+print(pvalk[,k])
+
+k <- 22
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Reviewer_Score:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Reviewer_Score:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print("p-values ValorsTest Reviewer_Score:")
+print(pvalk[,k])
+```
+
+La següent variable que analitzem, ja a falta de només dues per concloure el profiling, és *Total_Number_of_Reviews_Reviewer_Has_Given*. Aquesta ens dona informació sobre com d'actiu a Booking és l'usuari que ha escrit la ressenya *(Figure 39)*. En aquest sentit, observem com els usuaris relatius al clúster 1 són els més actius i la resta es manté a prop de la mitjana global, exepte els del tercer conglomerat, on la mitjana de comentaris totals escrits pels usuaris és més baixa.
+
+```{r, fig.cap="Profiling variable Total_Reviews_Given", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7.5}
+k <- 23
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.4,0))
+boxplot(dd[,k]~P, horizontal=TRUE)
+title(main=paste(names(dd)[k], "vs", nameP ), ylab = "cluster", xlab = "Total de ressenyes escrites pels usuaris", line = 1)
+
+barplot(tapply(dd[[k]], P, mean))
+title(main=paste(names(dd)[k], "by", nameP ), ylab = "Nombre mig de ressenyes escrites pels usuaris", xlab = "cluster", line = 1)
+abline(h=mean(dd[[k]]))
+legend(0,mean(dd[[k]]),"global mean",bty="n")
+```
+
+Els contrastos reforcen la conclusió obtinguda observant el gràfic, ja que la significació més forta apareix als clústers 1 i 3.
+
+```{r, warning=F, comment = "", message=FALSE}
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Total_Number_of_Reviews_Reviewer_Has_Given:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Total_Number_of_Reviews_Reviewer_Has_Given:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print("p-values ValorsTest Total_Number_of_Reviews_Reviewer_Has_Given:")
+print(pvalk[,k])
+```
+
+A continuació ens fixem en la variable *Additional_Number_of_Scoring* relativa al total de valoracions adicionals que rep l'hotel (localització, nejeta, servei...). Seria interessant veure si els hotels amb valoracions més positives també reben un major nombre de comentaris adicionals, o aquest efecte és just al contrari *(Figure 40)*.
+
+```{r, fig.cap="Profiling variable Additional_Number_of_Scoring", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7}
+k <- 24
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.4,0))
+boxplot(dd[,k]~P, main=paste("Boxplot of", names(dd)[k], "vs", nameP ), horizontal=TRUE) 
+title(ylab = "cluster", xlab = "Nombre de valoracions adicionals", line = 1)
+
+barplot(tapply(dd[[k]], P, mean),main=paste("Means of", names(dd)[k], "by", nameP ))
+title(ylab = "Nombre mig de valoracions adicionals", xlab = "cluster", line = 1)
+abline(h=mean(dd[[k]]))
+legend(0,mean(dd[[k]]),"global mean",bty="n")
+```
+
+Veiem com el resultat és clarament significatiu i, curiosament, els hotels dels clústers on les puntuacions són més extremes (cluster 3 les més negatives i clúster 4 les més positives) és on els usuaris s'entreten més a valorar aspectes extra de l'hotel. En contrapartida, aquells establiments hotelers amb valoracions mitjanes no solen rebre d'adicionals.
+
+Els contrastos mostren una forta validesa estadística per als resultats obtinguts.
+
+```{r, warning=F, comment = "", message=FALSE}
+o<-oneway.test(dd[,k]~P)
+print(paste("p-valueANOVA Additional_Number_of_Scoring:", o$p.value))
+kw<-kruskal.test(dd[,k]~P)
+print(paste("p-value Kruskal-Wallis Additional_Number_of_Scoring:", kw$p.value))
+pvalk[,k]<-ValorTestXnum(dd[,k], P)
+print("p-values ValorsTest Additional_Number_of_Scoring:")
+print(pvalk[,k])
+```
+
+Per últim, considerem la variable *Submitted_from_Mobile*. Aquesta variable ens mostrarà si en algún clúster són més freqüents les ressenyes i valoracions escrites des del mòvil. Aquesta variable pot ser indicativa de si els usuaris estàn satisfets, o no, amb el funcionament de la aplicació de Booking.
+
+```{r, fig.cap="Profiling variable Submitted_from_Mobile", warning=F, comment = "", message=FALSE, fig.height=4.5, fig.width=7}
+require(colorspace)
+k <- 25
+par(mfrow = c(1, 2), cex.main = 0.7, cex.axis = 0.6, cex.lab = 0.6, mgp=c(3,0.4,0))
+marg <-table(dd[,k])/n
+paleta<-rainbow_hcl(length(levels(dd[,k])))
+table<-table(P,dd[,k])
+#   print("Cross-table")
+#   print(table)
+rowperc<-prop.table(table,1)
+colperc<-prop.table(table,2)
+marg <- table(as.factor(P))/n
+marg <- table(as.factor(P))/n
+
+plot(marg,type="n",ylim=c(0,1), ylab = NULL)
+for(c in 1:length(levels(dd[,k]))){lines(rowperc[,c],col=paleta[c]) }
+legend("topleft", levels(dd[,k]), col=paleta, lty=2, cex=0.6, ncol = 3)
+title("Submitted_from_Mobile (%)", xlab = "cluster", line = 1, ylab = "%")
+
+barplot(table(dd[,k], as.factor(P)), beside=F,col=paleta, ylim = c(0, 1800))
+legend("topleft",levels(as.factor(dd[,k])),pch=1,cex=0.6, col=paleta, ncol = 2)
+title("Submitted_from_Mobile (nre. d'hotels)", ylab = "# usuaris", xlab = "cluster", line = 1)
+```
+
+No existeixen grans diferències entre els clústers pel que fa a la proporció de ressenyes escrites des del telèfon mòvil *(Figure 41)*. La diferència més rellevant apareix en els usuaris compressos al clúster 3, els quals tendeixen a fer servir més el telèfon mòvil per a escriure les seves ressenyes. Recordem que els hotels dins aquest conglomerat tendeixen a rebre valoracions més negatives i, en conseqüència, és possible inferir que aquestes s'escriuen en major grau des de telèfons mòvil. Pel que fa al contrast, veiem com la significació global no és massa forta, segurament degut a que, excloent el clúster 3, tots els altres es troben força a prop de la mitjana global.
+
+```{r, warning=F, comment = "", message=FALSE}
+print("Test Chi quadrat Reviewer_Nationality:")
+print(chisq.test(dd[,k], as.factor(P)))
+```
+
+Un cop tenim recopilada tota la informació descriptiva de cada clúster, podem resumir-la en una taula, donant un nom al segment en qüestió i elaborant una petita descripció que inclogui els seus atributs principals.
+
+|Clúster|Nom|Descripció|
+|:-:|:--:|:------------------:|
+|1	|Utilitaris a la periferia|Hotels un tant allunyats del centre de les ciutats amb valoracions mitjanes (ni massa bones ni massa dolentes), generalment freqüentats per parelles, però també són abundants els grups (suposem que seràn els més econòmics). La estància mitjana està al voltant de la tendèndia general de 2,5 dies (cap de setmana llarg). També són els hotels que reben més comentaris.|
+|2	|Anglesos a Barcelona|Hotels de Barcelona, majoritariament reservats per persones de nacionalitat anglesa amb presència més abundant de grups de viatgers i reservats per a llargues estades. Les valoracions són lleugerament superiors a la mitjana general però és el grup del que menys informació disposem sobre el perfil i característiques de l'hotel. El nombre de revisions i puntuacions adicionals també es baix.|
+|3	|Mal puntuats|Són hotels majoritàriament situats a Londres, no massa cèntrics, i els que han obtingut les valoracions més baixes (els que menys agraden als clients). La majoria de ressenyes corresponen a un turisme local i són freqüentats per parelles o viatgers solitaris. Mencionar també que són els que reben més ressenyes i valoracions, tot i que els usuaris que han visitat aquests hotels són els menys actius. Estades no massa llargues|
+|4	|Ben puntuats |Són hotels majoritàriament situats a Londres, no massa cèntrics, i els que han obtingut les valoracions més altes (els que més agraden als clients). De nou reben molts comentaris tot i que els usuaris que han escrit les ressenyes d'aquest clúster no són gaire actius a Booking. En aquest grup són una mica més freqüents les famílies i les parelles, en detriment del percentatge de grups grans de viatgers. Estades no massa llargues|
+|5	|Experiència Urbana| Hotels amb valoracions mitjanes i poques valoracions, que es caracteritzen per estar situats al cor de París. Predominen famílies amb nens petits i grups (les parelles no són tan habituals).|
+
+
+
+
+#DECISION TREES
+
+```{r}
+#####################REGRESSIÓ ----> Variable resposta numèrica ###################
+
+set.seed(11817)# fijo una semilla para que no cambie cuando se vuelva a generar el script
+?sample()
+
+training<-sample(1:nrow(dd), round(2*nrow(dd)/3))
+
+library(rpart)
+library(rpart.plot)
+
+dd2 <- dd[,-c(1,20)] #Farem l'arbre sense les variables Hotel_Name i Reviewer_Nationality perquè són categòriques amb molts nivells i no sortirà bé l'arbre si no.
+
+spam.tree <-rpart(Average_Score~.,dd2[training,], method="anova")
+spam.tree
+summary(spam.tree)
+
+spam.tree.predict = predict(spam.tree)
+
+plot(spam.tree)
+text(spam.tree,use.n=T)
+
+rpart.plot(spam.tree,roundint = FALSE) ##molt millor , roundint és per avisar-li que hi han nombres decimals que no seran enters
+```
+
+```{r}
+##########PODEM L'ARBRE##########  
+##### prune the tree
+
+#Escollim el millor paràmetre de complexitat 'cp' , o sigui el menor CP per tal que l'arbre sigui millor (més complexe)
+
+cp_min <- spam.tree$cptable[which.min(spam.tree$cptable[,"xerror"]),"CP"]
+
+pfit <- prune(spam.tree, cp=cp_min) #Arbol podado
+
+plot(pfit,uniform=TRUE)
+text(pfit,cex=0.75)
+
+rpart.plot(pfit,roundint=FALSE)
+
+#Exemple escollint un altre valor per cp (o sigui un valor de 'cp' que no sigui l'òptim)
+
+pfit2<-prune(spam.tree, cp=spam.tree$cptable[5,"CP"])
+pfit3<-prune(spam.tree, cp=0.01160389) # from cptable   
+
+#plot the pruned tree (Grafiquem l'arbre podat així com les probes amb altres cp's no òptims)
+
+rpart.plot(pfit)
+rpart.plot(pfit2)
+rpart.plot(pfit3)
+
+####INFO PFIT (ARBRE PODAT)#######
+printcp(pfit) # display the results
+plotcp(pfit) # visualize cross-validation results
+summary(pfit) # detailed summary of splits
+
+##### create additional plots#####
+par(mfrow=c(1,2)) # two plots on one page
+rsq.rpart(pfit) # visualize cross-validation results  
+
+
+
+```
+
+
+
+
+
+
+
+
+
+

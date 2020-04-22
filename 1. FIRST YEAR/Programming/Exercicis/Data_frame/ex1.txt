@@ -1,0 +1,6 @@
+ Nom Niub Nota_prog Nota_mitjana
+Joan   39         7            6
+Marta   15         5            5
+Laia   12         6            6
+Laura   60         8            9
+Carles   98         9            8

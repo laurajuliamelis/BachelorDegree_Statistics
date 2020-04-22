@@ -1,0 +1,74 @@
+       AMC Concord       4099         22       2930          0
+         AMC Pacer       4749         17       3350          0
+        AMC Spirit       3799         22       2640          0
+     Buick Century       4816         20       3250          0
+     Buick Electra       7827         15       4080          0
+     Buick LeSabre       5788         18       3670          0
+        Buick Opel       4453         26       2230          0
+       Buick Regal       5189         20       3280          0
+     Buick Riviera      10372         16       3880          0
+     Buick Skylark       4082         19       3400          0
+      Cad. Deville      11385         14       4330          0
+     Cad. Eldorado      14500         14       3900          0
+      Cad. Seville      15906         21       4290          0
+    Chev. Chevette       3299         29       2110          0
+      Chev. Impala       5705         16       3690          0
+      Chev. Malibu       4504         22       3180          0
+ Chev. Monte Carlo       5104         22       3220          0
+       Chev. Monza       3667         24       2750          0
+        Chev. Nova       3955         19       3430          0
+        Dodge Colt       3984         30       2120          0
+    Dodge Diplomat       4010         18       3600          0
+      Dodge Magnum       5886         16       3600          0
+   Dodge St. Regis       6342         17       3740          0
+       Ford Fiesta       4389         28       1800          0
+      Ford Mustang       4187         21       2650          0
+ Linc. Continental      11497         12       4840          0
+      Linc. Mark V      13594         12       4720          0
+  Linc. Versailles      13466         14       3830          0
+      Merc. Bobcat       3829         22       2580          0
+      Merc. Cougar       5379         14       4060          0
+     Merc. Marquis       6165         15       3720          0
+     Merc. Monarch       4516         18       3370          0
+        Merc. XR-7       6303         14       4130          0
+      Merc. Zephyr       3291         20       2830          0
+           Olds 98       8814         21       4060          0
+    Olds Cutl Supr       5172         19       3310          0
+      Olds Cutlass       4733         19       3300          0
+     Olds Delta 88       4890         18       3690          0
+        Olds Omega       4181         19       3370          0
+     Olds Starfire       4195         24       2730          0
+     Olds Toronado      10371         16       4030          0
+       Plym. Arrow       4647         28       3260          0
+       Plym. Champ       4425         34       1800          0
+     Plym. Horizon       4482         25       2200          0
+     Plym. Sapporo       6486         26       2520          0
+      Plym. Volare       4060         18       3330          0
+    Pont. Catalina       5798         18       3700          0
+    Pont. Firebird       4934         18       3470          0
+  Pont. Grand Prix       5222         19       3210          0
+     Pont. Le Mans       4723         19       3200          0
+     Pont. Phoenix       4424         19       3420          0
+     Pont. Sunbird       4172         24       2690          0
+         Audi 5000       9690         17       2830          1
+          Audi Fox       6295         23       2070          1
+          BMW 320i       9735         25       2650          1
+        Datsun 200       6229         23       2370          1
+        Datsun 210       4589         35       2020          1
+        Datsun 510       5079         24       2280          1
+        Datsun 810       8129         21       2750          1
+       Fiat Strada       4296         21       2130          1
+      Honda Accord       5799         25       2240          1
+       Honda Civic       4499         28       1760          1
+         Mazda GLC       3995         30       1980          1
+       Peugeot 604      12990         14       3420          1
+    Renault Le Car       3895         26       1830          1
+            Subaru       3798         35       2050          1
+     Toyota Celica       5899         18       2410          1
+    Toyota Corolla       3748         31       2200          1
+     Toyota Corona       5719         18       2670          1
+         VW Dasher       7140         23       2160          1
+         VW Diesel       5397         41       2040          1
+         VW Rabbit       4697         25       1930          1
+       VW Scirocco       6850         25       1990          1
+         Volvo 260      11995         17       3170          1

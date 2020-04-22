@@ -1,0 +1,1 @@
+%%encuentra la descomposicion A=LU y su detA=[2 -2 -4; 1 1 -1;3 7 5];[L,U]=lu(A);LUdisp('comprobamos si L*U=A')L*Udet(A)

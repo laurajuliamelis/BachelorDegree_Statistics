@@ -1,0 +1,180 @@
+\chapter{Métodos estadísticos}\label{cap:met}
+En este capítulo se definirán los principales tipos de estudios y conceptos de la epidemiología y se explicarán los modelos de regresión logística y log-binomial: fórmulas, parametrización, interpretación y validación. Buena parte de la notación utilizada a continuación sigue los apuntes de las asignaturas de Estadística Médica \autocite{Medica} y de Modelos Lineales Generalizados \autocite{Mlgz}.
+
+% "2.1 Diseño de estudios epidemiológicos"
+\section{Diseño de estudios epidemiológicos}\label{sec:estudios}
+En epidemiología existen diversos tipos de estudios, que pueden clasificarse de varias maneras según los criterios que se consideren: el objetivo general, el tipo de muestreo de los participantes,  la asignación de la exposición o variable de interés, la temporalidad de los sucesos o las unidades de estudio utilizadas, entre otros \autocite{Hernandez}. En general, los diseños de estudio más empleados son los estudios transversales, los estudios de cohorte y los estudios de caso-control. \\
+
+\subsection{Estudios de cohorte}
+Los estudios de cohorte son estudios no aleatorios en los que el criterio de selección se basa en la exposición de interés: las muestras de individuos libres de enfermedad son escogidos según si han sido expuestos o no a cierto factor.\\
+
+Además, existe una subclasificación que hace referencia al tiempo de seguimiento de los sujetos del estudio: por una parte, en los estudios de cohorte prospectivos se hace un seguimiento progresivo desde el presente hasta el desenlace mientras que en los estudios retrospectivos o históricos los datos son obtenidos a partir de registros ya existentes y se analizan las características de los dos grupos (expuestos y no expuestos) con el fin de determinar qué influencia tiene ese factor en la incidencia de la enfermedad. \\
+
+\subsection{Estudios transversales}
+Son estudios observacionales en los que se mide la prevalencia de cierta exposición en una muestra de la población. Dicho de otra manera, se determina la proporción de individuos que presentan una característica de interés en un momento determinado del tiempo. \\
+
+Por tanto, su objetivo es conocer qué características tienen aquellas personas que presentan la enfermedad o exposición e identificar la frecuencia de este fenómeno de interés en la población, sin importar cuánto tiempo lo mantendrán ni cuándo lo adquirieron. Como consequencia, no es posible establecer relaciones causales entre enfermedad y exposición. \\
+
+\subsection{Estudios de caso-control}
+En los estudios de caso-control el criterio de selección se basa en la enfermedad de interés: identifica a personas afectadas y las compara con un gupo control, libre de enfermedad. Son estudios no experimentales y retrospectivos en tanto que se estudian los antecedentes de los individuos, es decir, se analizan las características o factores de riesgo que el individuo ha tenido durante el pasado y hasta el presente. \\
+
+% "2.2 Medidas epidemiológicas"
+\section{Medidas epidemiológicas}\label{sec:medidas}
+
+Existen múltiples medidas epidemiológicas tanto para medir la ocurrencia de una enfermedad como para cuantificar la asociación enfermedad-exposición. En este apartado únicamente se desarrollarán aquellas necesarias para entender la interpretación de los modelos de regresión que se utilizarán posteriormente.
+
+\subsection{Incidencia acumulada}
+La incidencia acumulada (o \textbf{riesgo}) de una enfermedad es la proporción de casos nuevos que se dan entre los individuos de una población inicial libre de enfermedad durante un periodo de tiempo $\Delta$. Puede interpretarse como la probabilidad de que un individuo sano caiga enfermo durante el tiempo especificado.\\
+
+La fórmula para calcularla es la siguiente:
+\begin{equation*}
+CI(\Delta)=\frac{I}{N_0},
+\end{equation*}
+
+donde $N_0$ es el tamaño de la población inicial sin la enfermedad e $I$, el número de casos nuevos (\textbf{incidentes}) durante el periodo de tiempo. \\
+
+Puede ser estimada únicamente en estudios de cohorte calculando la proporción de nuevos casos de enfermedad en la muestra ya que, como se ha comentado en la Sección~\ref{sec:estudios}, en este tipo de estudios la muestra de individuos es siempre libre de enfermedad y se les hace un seguimiento para conocer si la exposición u otros factores son influyentes en la aparición de la enfermedad de interés. \\
+
+Su intervalo de confianza se puede calcular usando una distribución binomial o su aproximación mediante la distribución normal, si se cumplen las premisas del Teorema Central del Límite. \\
+
+De este modo, dado $I \sim Binomial(n,p)$, donde $n$ es el tamaño de la muestra y $p$, la incidencia acumulada, se puede calcular el intervalo de confianza aproximado para $p$ mediante la normal de manera que $I \sim Normal(\mu=n \cdot p, \sigma^2=n \cdot p \cdot (1-p))$. \\
+
+Por lo tanto, con $\widehat{CI}(\Delta)=\hat{p}=\frac{I}{n}$, tenemos:
+
+\begin{equation*}
+CI(p;1-\alpha)=\hat{p} \mp z_{1-\frac{\alpha}{2}} \sqrt \frac{\hat{p} \cdot (1-\hat{p})}{n}.
+\end{equation*}
+
+
+\subsection{Prevalencia}
+Se denomina prevalencia de una enfermedad a la proporción de individuos de una población de interés que presentan la enfermedad en un momento determinado del tiempo ($t$). Se puede interpretar como la probabilidad de que un sujeto seleccionado aleatoriamente de la población en el tiempo $t$ esté enfermo. Se calcula como:
+
+\begin{equation*}
+P=\frac{X}{N},
+\end{equation*}
+
+donde $X$ es el número de casos de enfermedad y $N$ es el tamaño de la población en el momento $t$, el cual puede ser un día, una semana, un mes, etc.\\
+
+La prevalencia solo puede ser estimada en estudios transversales debido a que en los estudios de cohortes o de caso-control los datos recogidos son longitudinales (se da un seguimiento de los mismos individuos a través del tiempo) mientras que la prevalencia es un indicador estático (se refiere a un momento determinado).\\
+
+De la misma manera que en la incidencia acumulada, su intervalo de confianza se puede calcular usando una distribución binomial o aproximar usando la distribución normal. Entonces, dada una muestra de tamaño $n$ y asumiendo que el número de enfermos $X_n$ sigue una distribución binomial de parámetros $n$ (tamaño de la muestra) y $P$ (prevalencia), una aproximación al intervalo de confianza exacto se calcularía como sigue:
+
+\begin{equation*}
+CI(P;1-\alpha)=\hat{P} \mp  z_{1-\frac{\alpha}{2}} 	\cdot \sqrt{\frac{\hat{P}(1-\hat{P})}{n}},
+\end{equation*}
+
+donde $\hat{P}$ ahora es el estimador de la prevalencia.
+
+\subsection{Riesgo relativo}
+Es la razón del riesgo de padecer una enfermedad o \textit{disease} (D) entre el grupo con el factor de riesgo o exposición (E) y el grupo de referencia, que no tiene el factor de exposición.\\
+
+A diferencia de las dos medidas anteriores (que evaluaban la ocurrencia de la enfermedad), se trata de un concepto estadístico utilizado como medida de asociación entre la exposición y la ocurrencia de la enfermedad. Cabe mencionar también que solo puede ser estimado en estudios de cohortes, en los cuales es posible estimar el riesgo, equivalente a la incidencia acumulada.\\
+
+Se calcula mediante la siguiente fórmula:
+
+\begin{equation}
+\label{eq:RR}
+RR=\frac{P(D|E)}{P(D|\bar{E})},
+\end{equation}
+
+donde $P(D|E)$ hace referencia a la probabilidad de enfermar condicionada a que la persona ha estado expuesta y $P(D|\bar{E})$,  a la probabilidad de enfermar si la persona no ha recibido exposición. \\
+
+Asimismo, es preciso señalar que en los estudios transversales el riesgo relativo se denomina \textbf{razón de prevalencias} (PR) e indica cuánto más probable es que se padezca la enfermedad entre expuestos que entre no expuestos.\\
+
+A partir de la fórmula \eqref{eq:RR} son observables varias características. La primera, que el RR no puede ser nunca negativo y que tiene un límite superior:
+\begin{equation*}
+RR=\frac{P(D|E)}{P(D|\bar{E})} \le \frac{1}{P(D|\bar{E})}.
+\end{equation*}
+
+También, que si $RR>1$ entonces hay una probabilidad mayor de enfermar entre los individuos expuestos; esto es, la exposición es un posible \textbf{factor de riesgo}. Luego, si $RR<1$, la exposición es un posible \textbf{factor protector} de la enfermedad y finalmente si $RR=1$, se dice que no hay diferencias entre los dos grupos respecto al riesgo de padecer la enfermedad debido a que la exposición y la enfermedad son variables independientes.  \\
+
+A continuación, a modo de ejemplo, se presenta una tabla de contingencia con los datos de un estudio de cohorte que se realizó con el fin de estudiar la relación entre enfermedades cardiovasculares y una serie de posibles factores de riesgo.   Se puede acceder a estos datos mediante el data frame \textit{wcgs} contenido en el paquete \textit{epitools} \autocite{Epitools} del software estadístico \textit{R}. Para este caso se ha escogido la variable de exposición \textit{dibpat0}, la cual recoge cierto patrón de comportamiento dicotómico ($0 = \text{Tipo B}$ y $1 = \text{Tipo A}$). Desafortunadamente, en la ayuda del paquete \textit{epitools} no se especifica a qué hace referencia cada categoría.  \\
+
+\begin{table} [h!]
+	\centering
+	\label{tab:1}
+	\begin{tabular}{l c c r}
+		\toprule
+		\multicolumn{4}{c}{\textbf{Enfermedad}} \\
+		\midrule
+		\textbf{Exposición} & Sí (chd69=1) & No (chd69=0) & 	\textbf{Total} \\
+		\midrule
+		Sí (dibpat0=1)  & 178   & 1411 &   1589\\
+		No (dibpat0=0) &   79  & 1486   &1565\\
+		\textbf{Total} & 257  & 2897 & 3154\\
+		\bottomrule
+	\end{tabular}
+	\caption{Presencia de enfermedad cardiovascular según exposición al factor \textit{``dibpat0''}. }
+\end{table}
+
+Si calculamos el riesgo relativo de padecer enfermedades cardiovasculares mediante la fórmula planteada anteriormente obtenemos:
+
+\begin{equation*}
+RR=\frac{P(D|E)}{P(D|\bar{E})}=\frac{178/1589}{79/1565}=2,22
+\end{equation*}
+
+Por lo tanto, se concluye que la probabilidad de enfermar es 2,22 veces mayor en el caso de recibir la exposición (\textit{dibpat0} $=1$). \\
+
+\subsection{\textit{Odds ratio}}\label{OR}
+Otra forma de expresar el riesgo de padecer una enfermedad (D) es mediante el \textit{odds}, el cual se interpreta a menudo como la posibilidad de ganar (en un juego de azar, por ejemplo). Su fórmula es la siguiente:
+
+\begin{equation*}
+odds(D)=\frac{P(D)}{1-P(D)}
+\end{equation*}
+
+De manera que si la probabilidad de enfermar es 0.2, entonces el \textit{odds} es 1/4 ($=1$:4), es decir, la razón de enfermar es de 1 persona por cada 4 que no enferman. Igualmente, si $P(D)<0.5$ ($P(D)>0.5)$, el \textit{odds} será inferior (superior) a 1, por lo que las posibilidades de enfermar serán menores (mayores).\\
+
+Aclarado el concepto del \textit{odds}, se pasa a comentar el \textit{odds ratio} (OR). Este se define como la razón del \textit{odds} de enfermar entre el grupo de individuos expuestos y el grupo de no expuestos. Por tanto, mide la relación que pueda existir entre la exposición y la enfermedad comparando los dos grupos.
+
+\begin{equation}
+\label{eq:or}
+OR=\frac{odds(D|E)}{odds(D|\bar{E})}=\frac{P(D|E)/(1-P(D|E))}{P(D|\bar{E})/(1-P(D|\bar{E}))}.
+\end{equation}
+
+Así pues, se observa que al obtener un $OR>1$, el riesgo de enfermedad es mayor entre el grupo de individuos expuestos e igualmente, en el caso inverso ($OR<1$), hay un menor riesgo de enfermedad entre los expuestos. En el caso en que $OR=1$, se concluye que la enfermedad y la exposición son independientes.\\
+
+El \textit{odds ratio} se interpreta en términos de \textit{odds} y no de riesgo, lo cual a menudo dificulta la explicación de los resultados obtenidos en el análisis. Por otra parte, el OR se puede calcular en toda clase de estudios. Con datos transversales, éste se suele denominar \textit{prevalence odds ratio} (\textit{POR}) aunque la fórmula para calcularlo es la misma que el OR. Pero, cuando se trabaja con resultados frecuentes, lo cual es habitual el estudios transversales, el POR puede sobreestimar fuertemente la razón de prevalencia.\\
+
+En cambio, en estudios de caso-control, a pesar de no tener $P(D|E)$ sino $P(E|D)$ (ya que el criterio de selección se basa en la enfermedad y no en la exposición) se puede calcular con la siguiente fórmula, la cual se ha demostrado ser equivalente a la presentada en la ecuación \eqref{eq:or}:
+
+\begin{equation*}
+OR=\frac{P(E|D)/(1-P(E|D))}{P(E|\bar{D})/(1-P(E|\bar{D}))}.
+\end{equation*}
+
+La siguiente tabla muestra parte de los datos de un estudio transversal realizado en 1993 en Brasil \autocite{DatosEjemplo}, en el que se deseaba conocer si la consumición del tabaco por parte de una madre embarazada podía estar relacionada con el hecho de que el recién nacido tuviera asma.
+
+\begin{table}[h!]
+	\centering
+	\label{tab:2}
+	\begin{tabular}{l c c r}
+		\toprule
+		\multicolumn{4}{c}{\textbf{Asma}} \\
+		\midrule
+		\textbf{Fuma} & Sí & No & 	\textbf{Total} \\
+		\midrule
+		Sí & 159  & 270 &   429\\
+		No &   215  & 556  & 771\\
+		\textbf{Total} & 374 & 826 & 1200\\
+		\bottomrule
+	\end{tabular}
+	\caption{Presencia de asma según exposición al factor de riesgo \textit{``fumar"}.}
+\end{table}
+
+Si se sustituyen estos valores en la fórmula del \textit{odds ratio} obtenemos que:
+
+\begin{equation*}
+POR=\frac{P(D|E)/(1-P(D|E))}{P(D|\bar{E})/(1-P(D|\bar{E}))}=\frac{159 \cdot 556}{270 \cdot 215}=\frac{88404}{58050}=1,52 .
+\end{equation*}
+
+Y este resultado nos llevaría a concluir que el \textit{odds} de que un bebé seleccionado aleatoriamente de la población en el momento de nacer padezca asma es 1,52 veces mayor si su madre es fumadora.\\
+
+\subsubsection{Relación entre el Riesgo Relativo y el \textit{Odds Ratio}}
+Dado que:
+\begin{equation*}
+OR=\frac{P(D|E)/(1-P(D|E))}{P(D|\bar{E})/(1-P(D|\bar{E}))}=RR \cdot \frac{1-P(D|\bar{E})}{1-P(D|E)},
+\end{equation*}
+
+el riesgo relativo siempre será más cercano a 1 que el \textit{odds ratio}, excepto cuando ambas medidas son iguales a 1. Así pues, si $RR>1$, entonces $OR > RR$ mientra que si $RR<1$, entonces el  \textit{odds ratio} serà menor que el riesgo relativo ($OR < RR$).\\
+
+Nótese que sin el conocimiento de $P(D|E)$ o de $P(D|\bar{E})$ no es posible calcular el riesgo relativo a partir del \textit{odds ratio}.
+

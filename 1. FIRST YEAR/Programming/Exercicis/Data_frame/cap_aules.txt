@@ -1,0 +1,4 @@
+Aula Capacitat
+A1 4
+A2 10
+A3 5

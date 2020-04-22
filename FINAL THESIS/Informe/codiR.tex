@@ -1,0 +1,225 @@
+%[formatcom=\color{Blue}]
+\begin{Verbatim}
+
+#####################################################################
+########## ANÁLISIS DE DATOS ESTUDIO DEPRESIÓN POSTPARTO ###########
+#####################################################################
+
+# -------- 0. PAQUETES NECESARIOS. -------- #
+#install.packages("epiDisplay")
+library(epiDisplay)
+#install.packages("logbin")
+library(logbin)
+
+
+# -------- 1. LECTURA DE DATOS. -------- #
+load("DPP.RData")
+head(dppdat)
+labels(dppdat)
+summary(dppdat)
+
+
+# -------- 2. MODELOS DE REGRESIÓN LOGÍSTICA. -------- #
+### 2.1. Síntomas de depresión a las 8 semanas (EPDS>9).
+logistica8 <- glm(epds8wc~epqnT+epds0+duke+antpers, data=dppdat,
+family=binomial(link="logit"))
+summary(logistica8)
+logistic.display(logistica8)
+
+### 2.2. Síntomas de depresión a las 32 semanas (EPDS>9).
+logistica32 <- glm(epds32winc~epqnT+epds0+ecoprob, data=dppdat,
+family=binomial(link="logit"))
+summary(logistica32)
+logistic.display(logistica32)
+
+### 2.3. Diagnóstico clínico de la depresión postparto (DIGS).
+logisticaDIGS <- glm(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, 
+data=dppdat,family=binomial(link="logit"))
+summary(logisticaDIGS)
+logistic.display(logisticaDIGS)
+
+
+# -------- 3. MODELOS DE REGRESIÓN LOG-BINOMIAL CON FUNCIÓN GLM. -------- #
+### 3.1. Síntomas de depresión a las 8 semanas (EPDS>9).
+logbinonial8 <- glm(epds8wc~epqnT+epds0+duke+antpers, data=dppdat,
+ family=binomial(link="log"))
+summary(logbinonial8)
+exp(coef(logbinonial8))[-1]
+
+##### Con argumento "start".
+logbinonial8.start1 <- glm(epds8wc~epqnT+epds0+duke+antpers, data=dppdat, 
+family=binomial(link="log"), start=c(-4, rep(0,4)))
+summary(logbinonial8.start1)
+exp(coef(logbinonial8.start1))[-1]
+
+
+### 3.2. Síntomas de depresión a las 32 semanas (EPDS>9).
+logbinomial32 <- glm(epds32winc~epqnT+epds0+ecoprob, data=dppdat, 
+family=binomial(link="log"))
+summary(logbinomial32)
+exp(coef(logbinomial32))[-1]
+
+
+### 3.3. Diagnóstico clínico de la depresión postparto (DIGS).
+logbinomialDIGS <- glm(digs0a32~epqnT+epds0+antpers+antpsifa+expvit,
+ data=dppdat, family=binomial(link="log"))
+summary(logbinomialDIGS)
+exp(coef(logbinomialDIGS))[-1]
+
+##### Con argumento start.
+logbinomialDIGS.start1 <- glm(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, 
+data=dppdat, family=binomial(link="log"), start=c(-4, rep(0,5)))
+summary(logbinomialDIGS.start1)
+exp(coef(logbinomialDIGS.start1))[-1]
+
+
+# -------- 4. MODELOS DE REGRESIÓN LOG-BINOMIAL CON FUNCIÓN LOGBIN. -------- #
+### 4.1. Síntomas de depresión a las 8 semanas (EPDS>9).
+logbin8 <- logbin(epds8wc~epqnT+epds0+duke+antpers, data=dppdat)
+summary(logbin8)
+exp(coef(logbin8))[-1]
+
+##### Con argumento bound.tol.
+logbin8.bound <- logbin(epds8wc~epqnT+epds0+duke+antpers, data=dppdat, 
+bound.tol= 0.05)
+summary(logbin8.bound)
+exp(coef(logbin8.bound))[-1]
+
+### 4.2. Síntomas de depresión a las 32 semanas (EPDS>9).
+logbin32 <- logbin(epds32winc~epqnT+epds0+ecoprob, data=dppdat)
+summary(logbin32)
+exp(coef(logbin32))[-1]
+
+### 4.3. Diagnóstico clínico de la depresión postparto (DIGS).
+logbinDIGS <- logbin(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, data=dppdat)
+summary(logbinDIGS)
+exp(coef(logbinDIGS))[-1]
+
+##### Con argumentos "bound.tol" y "maxit".
+logbinDIGS.bound <- logbin(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, 
+data=dppdat, maxit=100, bound.tol= 0.05)
+summary(logbinDIGS.bound)
+exp(coef(logbinDIGS.bound))[-1]
+
+
+# -------- 5. MODELOS DE REGRESIÓN LOG-BINOMIAL CON FUNCIÓN COPY. -------- #
+### 5.1. Creación de la función COPY.
+copy <- function(data, Y, vars,n, W) {
+	if (!is.numeric(data[, Y])) {
+		data[, Y] <- as.numeric(data[, Y])-1
+	}
+	data$W <- (n-1)/n
+	data.copy <- data
+	data.copy[, Y] <- 1-data.copy[, Y]
+	data.copy$W <- 1/n
+	data.all <- merge(data, data.copy, all = T)
+	formul <- paste(Y, paste(vars, collapse = " + "), sep = "~")
+	mod.mat <- model.matrix(as.formula(formul), data)
+	glm.copy <- glm(as.formula(formul), family = binomial(log), data.all,
+		    weights = W, control = list(maxit = 100),
+		    start = c(-4, rep(0, ncol(mod.mat)-1)))
+	return(glm.copy)
+}
+
+### 5.2. Síntomas de depresión a las 8 semanas (EPDS>9).
+##### 5.2.1.Con n=100 copias.
+logbinonial8.copy100 <- copy(dppdat,'epds8wc', vars = c('epqnT','epds0',
+'duke','antpers'),100)
+summary(logbinonial8.copy100)
+exp(coef(logbinonial8.copy100))[-1]
+
+##### 5.2.2.Con n=1000 copias.
+logbinonial8.copy1000 <- copy(dppdat,'epds8wc', vars = c('epqnT','epds0',
+'duke','antpers'),1000)
+summary(logbinonial8.copy1000)
+exp(coef(logbinonial8.copy1000))[-1]
+
+##### 5.2.3.Con n=10000 copias.
+logbinonial8.copy10000 <- copy(dppdat,'epds8wc', vars = c('epqnT','epds0',
+'duke','antpers'),10000)
+summary(logbinonial8.copy10000)
+exp(coef(logbinonial8.copy10000))[-1]
+
+
+### 5.3. Síntomas de depresión a las 32 semanas (EPDS>9).
+##### 5.3.1.Con n=100 copias.
+logbinonial32.copy100 <- copy(dppdat,'epds32winc', vars = c('epqnT','epds0',
+'ecoprob'),100)
+summary(logbinonial32.copy100)
+exp(coef(logbinonial32.copy100))[-1]
+
+##### 5.3.2.Con n=1000 copias.
+logbinonial32.copy1000 <- copy(dppdat,'epds32winc', vars = c('epqnT','epds0',
+'ecoprob'),1000)
+summary(logbinonial32.copy1000)
+exp(coef(logbinonial32.copy1000))[-1]
+
+###### 5.3.3.Con n=10000 copias.
+logbinonial32.copy10000 <- copy(dppdat,'epds32winc', vars = c('epqnT','epds0',
+'ecoprob'),10000)
+summary(logbinonial32.copy10000)
+exp(coef(logbinonial32.copy10000))[-1]
+
+
+### 5.4. Diagnóstico clínico de la depresión postparto (DIGS).
+##### 5.4.1.Con n=100 copias.
+logbinonialDIGS.copy100 <- copy(dppdat,'digs0a32', vars = c('epqnT','epds0',
+'antpers','antpsifa','expvit'),100)
+summary(logbinonialDIGS.copy100)
+exp(coef(logbinonialDIGS.copy100))[-1]
+
+##### 5.4.2.Con n=1000 copias.
+logbinonialDIGS.copy1000 <- copy(dppdat,'digs0a32', vars = c('epqnT','epds0',
+'antpers','antpsifa','expvit'),1000)
+summary(logbinonialDIGS.copy1000)
+exp(coef(logbinonialDIGS.copy1000))[-1]
+
+###### 5.4.3.Con n=10000 copias.
+logbinonialDIGS.copy10000 <- copy(dppdat,'digs0a32', vars = c('epqnT','epds0',
+'antpers','antpsifa','expvit'),10000)
+summary(logbinonialDIGS.copy10000)
+exp(coef(logbinonialDIGS.copy10000))[-1]
+
+
+# -------- 6. PRESENCIA DE SEPARACIÓN EN LOS MODELOS LOG-BINOMIALES 1 Y 3. -------- #
+#install.packages("safeBinaryRegression")
+library(safeBinaryRegression)
+
+### 6.1. Síntomas de depresión a las 8 semanas (EPDS>9).
+glm(epds8wc~epqnT+epds0+duke+antpers, data=dppdat, family=binomial(link="log"), 
+separation ="find")
+
+### 6.2. Diagnóstico clínico de la depresión postparto (DIGS).
+glm(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, data=dppdat, family=
+binomial(link="log"), separation ="find")
+
+# -------- 7. PRUEBAS DE BONDAD DE AJUSTE CON HOSMER-LEMESHOW. -------- #
+### 7.1. Modelos de regresión logística. 
+hoslem.test(logistica8$y, fitted(logistica8), g=10)
+hoslem.test(logistica32$y, fitted(logistica32), g=10)
+hoslem.test(logisticaDIGS$y, fitted(logisticaDIGS), g=10)
+
+### 7.2. Modelos de regresión log-binomial.
+###### 7.2.1.Con función "glm".
+hoslem.test(logbinonial8.start1$y, fitted(logbinonial8.start1), g=10)
+hoslem.test(logbinomial32$y, fitted(logbinomial32), g=10)
+hoslem.test(logbinomialDIGS.start1$y, fitted(logbinomialDIGS.start1), g=10)
+
+###### 7.2.1.Con función "logbin".
+hoslem.test(logbin8$y, fitted(logbin8), g=10) 
+hoslem.test(logbin32$y, fitted(logbin32), g=10)
+hoslem.test(logbinDIGS$y, fitted(logbinDIGS), g=10)
+
+###### 7.2.1.Con función "COPY".
+hoslem.test(logbinonial8.copy100$y, fitted(logbinonial8.copy100), g=10)
+hoslem.test(logbinonial8.copy1000$y, fitted(logbinonial8.copy1000), g=10)
+hoslem.test(logbinonial8.copy10000$y, fitted(logbinonial8.copy10000), g=10)
+
+hoslem.test(logbinonial32.copy100$y, fitted(logbinonial32.copy100), g=10)
+hoslem.test(logbinonial32.copy1000$y, fitted(logbinonial32.copy1000), g=10)
+hoslem.test(logbinonial32.copy10000$y, fitted(logbinonial32.copy10000), g=10)
+
+hoslem.test(logbinonialDIGS.copy100$y, fitted(logbinonialDIGS.copy100), g=10)
+hoslem.test(logbinonialDIGS.copy1000$y, fitted(logbinonialDIGS.copy1000), g=10)
+hoslem.test(logbinonialDIGS.copy10000$y, fitted(logbinonialDIGS.copy10000), g=10)
+\end{Verbatim}

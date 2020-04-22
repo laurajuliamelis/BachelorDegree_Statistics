@@ -1,0 +1,8 @@
+# Some more data
+
+Name 	Age   Height  Weight	  City
+Laura	 25      167	  65       BCN
+Josep    29      170      69       BCN
+Jordi    19      185      90    Lleida
+Adela    30      162      62       BCN
+Oriol	 22	 181	  83 Tarragona

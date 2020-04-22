@@ -1,0 +1,286 @@
+---
+title: "Lab Session 9b"
+author: "Lidia Montero, Josep Anton Sanchez & Jordi Cortes"
+date: "November 2018"
+output:
+  html_document: default
+---
+
+# SHIPS data (exemple McCullagh): 
+### Data
+  
+**_type_**: tipus de vaixell (A;B;C;D;E)
+
+**_construction_**: any de construccio (1960-64;1965-69;1974-79;1960-64;)
+
+**_operation_**: periode d'activitat (1960-74;1975-79)
+
+**_service_**: mesos de servei
+
+**_incidents_**: nombre d'incidencies
+
+# Inicialització
+
+### Carregar paquets i dades ShipAccidents del paquet AER
+
+```{r warning=FALSE,message=FALSE}
+options(warn = -1)
+library(MASS,warn.conflicts = FALSE,quietly = TRUE)   # glm.nb
+library(car,warn.conflicts = FALSE,quietly = TRUE)    # ShipAccidents; Anova
+library(AER,warn.conflicts = FALSE,quietly = TRUE)    # dispersion.test
+library(effects,warn.conflicts = FALSE,quietly = TRUE)# allEffects
+
+data(ShipAccidents)                                   # data in package AER
+df <- subset(ShipAccidents , service > 0)   
+```
+
+**Sol: Construim una submostra amb aquells que han estat de servei**
+
+### Descriptiva
+
+```{r}
+summary(df)
+```
+
+# Poisson
+
+### Model nul
+```{r}
+m0 <- glm(incidents ~ 1, family = poisson,  data = df, offset = log(service)) # model nul
+m0 <- glm(incidents ~ offset(log(service)), family = poisson,  data = df)     # model nul equivalent
+summary(m0)
+qchisq(0.95,m0$df.res)
+```
+
+Deviança residual 146.33  amb 33 graus de llibertat. Encara queda molt per explicar. 
+
+Estem suposant que la taxa d'incidents es la mateixa per a tots, independemtent dels factors, i com la deviança és molt gran, veiem que això és erroni.
+
+qchisq(0.95,m0$df.res), deviança residual màcima que podriem considerar amb 33 graus de llibertat. Veiem que la deviana residual està per sobre de 47.4 i per tant el model no és bó.
+
+### Models amb 1 variable
+```{r}
+m1a <- glm(incidents ~ type, family = poisson,  data = df, offset = log(service))
+summary(m1a)
+cat('Punt critic per la devianza:',qchisq(0.95,m1a$df.res),'\n')
+```
+
+```{r}
+m1c <- glm(incidents ~ construction, family = poisson,  data = df, offset = log(service))
+summary(m1c)
+cat('Punt critic per la devianza:',qchisq(0.95,m1c$df.res),'\n')
+```
+
+
+```{r}
+m1d <- glm(incidents ~ operation, family = poisson,  data = df, offset = log(service))
+summary(m1d)
+cat('Punt critic per la devianza:',qchisq(0.95,m1d$df.res),'\n')
+```
+
+**Sol: Els models amb 1 variable no ajusten prou be**. Tots tenen una deviança resiual superior als punts crícits.
+
+### Models amb 2 variables
+```{r}
+m2ac <- glm(incidents ~ type+construction, family = poisson,  data = df, offset = log(service))
+summary(m2ac)
+cat('Punt critic per la devianza:',qchisq(0.95,m2ac$df.res),'\n')
+```
+
+```{r}
+m2ad <- glm(incidents ~ type+operation, family = poisson,  data = df, offset = log(service))
+summary(m2ad)
+cat('Punt critic per la devianza:',qchisq(0.95,m2ad$df.res),'\n')
+```
+
+```{r}
+m2cd <- glm(incidents ~ construction+operation, family = poisson,  data = df, offset = log(service))
+summary(m2cd)
+cat('Punt critic per la devianza:',qchisq(0.95,m2cd$df.res),'\n')
+```
+
+**Sol: Els models amb 2 variables no ajusten prou be**. Tots tenen una deviança resiual superior als punts crícits.
+
+TOT AIXÒ HO PODEM ACOMPANYAR AMB `Anova(model)`, amb a majúscula!
+
+
+
+### Model amb 3 variables
+```{r}
+m3 <- glm(incidents ~ type + construction + operation, family = poisson, data = df, offset = log(service))
+summary(m3)
+Anova(m3)
+cat('Punt critic per la devianza:',qchisq(0.95,m3$df.res),'\n')
+```
+
+Podem complementar-ho amb:
+
+```{r}
+library(effects)
+plot(allEffects(m3))
+```
+
+**Sol: Per poc, pero aquest model amb 3 variables no s'ajusta prou be**
+
+# Comparativa de models
+```{r}
+anova(m2cd,m3,test="Chisq")
+anova(m2ad,m3,test="Chisq")
+anova(m2ac,m3,test="Chisq")
+```
+
+**Sol: Les 3 variables han d'estar en el model --> p-valors<0.05**
+
+# Interpretacio de model nul i model amb 3 variables
+```{r}
+co0 <- c(coef(m0),confint(m0))         
+round(exp(co0),4)       # mensual
+round(exp(-exp(co0)),4) # Probabilitat de 0 incidencies --> P(X=0) = exp(-lambda)
+co3 <- cbind(coef(m3),confint(m3))  
+round(exp(co3),4)       # mensual                    
+```
+
+**Sol: La taxa mitjana global d'accidents mensual per vaixell es 0.0022 (IC95%: 0.0020 a 0.0024). La taxa mitjana en el grup amb totes les categories de referencia es 0.0017 (IC95%: 0.0011 a 0.0025). Els de type E tenen una taxa mitjana mensual d'incidencies 1.38 vegades (IC95%: 0.86 a 2.18) superior als del tipus A. La probabilitat global de no tenir cap incidencia en un mes es 0.9978 (IC95%: 0.9976 a 0.9980). No obstant cap d'aquests models ha quedat validat**
+
+(Intercept) 0.0017 taxa base.
+
+Si es tracta de tipus B i any d'operació 1965-690 hauriem de fer: 0017·0.0058·2.0054.
+
+# Interaccions
+
+### 1 interaccio
+```{r}
+m3cd <- glm(incidents ~ type + construction*operation, family = poisson, data = df, offset = log(service))
+summary(m3cd)
+cat('Punt critic per la devianza:',qchisq(0.95,m3cd$df.res),'\n')
+
+m3ad <- glm(incidents ~ type*operation + construction , family = poisson, data = df, offset = log(service))
+summary(m3ad)
+cat('Punt critic per la devianza:',qchisq(0.95,m3ad$df.res),'\n')
+
+m3ac <- glm(incidents ~ type*construction + operation, family = poisson, data = df, offset = log(service))
+summary(m3ac)
+cat('Punt critic per la devianza:',qchisq(0.95,m3ac$df.res),'\n')
+
+anova(m3,m3cd,test='Chisq')
+anova(m3,m3ad,test='Chisq')
+anova(m3,m3ac,test='Chisq')
+```
+
+**Sol: surt significativa la interaccio type i construction. No obstant, en aquest model, no s'estimen be els errors estandards**. En el summary veiem molts pvalors de 0.99, al tenir massa paràmetres (12+intercept), els zvalues són tan petits que quasi no veiemem la significació. Està sobreparametritzats i no podem estimar be els coeficients (dona una mala estimació i inferència dels coeficients del model). 
+
+
+### 2 interaccions
+```{r}
+m3acad <- glm(incidents ~ type*(construction + operation), family = poisson, data = df, offset = log(service))
+summary(m3acad)
+cat('Punt critic per la devianza:',qchisq(0.95,m3acad$df.res),'\n')
+
+m3accd <- glm(incidents ~ construction*(type + operation), family = poisson, data = df, offset = log(service))
+summary(m3accd)
+cat('Punt critic per la devianza:',qchisq(0.95,m3accd$df.res),'\n')
+
+anova(m3ac,m3acad,test='Chisq')
+anova(m3ac,m3accd,test='Chisq')
+```
+
+Quan ens surt NA, és perquè són condicions que no es donen.
+
+
+**Sol: cap interaccio mes**
+
+# Seleccio de variables per stepwise partint del model saturat
+```{r}
+m4 <- glm(incidents ~ construction*type*operation, family = poisson, data = df, offset = log(service))
+summary(m4)
+m4.aic <- step(m4)              # AIC
+m4.bic <- step(m4, k=log(34))   # BIC
+summary(m4.aic)
+summary(m4.bic)
+```
+
+**Sol: amb AIC ens quedem la interaccio. Amb BIC, no. Decidim quedar-nos amb el model additiu resultant del BIC**
+
+# Overdispersion
+```{r}
+dispersiontest(m3, trafo = 1)   # Lineal amb model additiu
+dispersiontest(m3, trafo = 2)   # Quadratica amb model additiu
+```
+
+Alpha: 0.3179179 amb p-value = 0.1751. La quasi poisson no m'indica que hi hagi sobresidperssió.
+
+alpha = -0.0111868 amb p-value = 0.73. LA BN tampoc m'indica que hi hagi sobredisperssió.
+
+
+**Sol: No hi ha sobredispersio**
+
+
+# Quasi-poisson
+```{r}
+# Additiu
+m3.qp <- glm(incidents ~ type + construction + operation + offset(log(service)), family=quasipoisson, data = df)
+summary(m3.qp)
+summary(m3)
+```
+
+
+Els coeficients son iguals lo únic que canvia són els errors estàndards (std.error), ha inflat els errors.
+
+No ens podem creure aques model perquè al darrera no hi ha un model de probabilitat i no podem considerar el teorema central de limit etc etc.  No podem fer inferència a partir d'aquest modle i per tant l'efectivitat d'aplicacions pràctiques no és adequada, ens la rebutjaran.
+
+
+**Sol: Els coeficients son iguals que a la Poisson però els errors estandards estan inflats per arrel de 1.32**
+
+# Binomial negativa
+```{r}
+# Additiu
+m3.nb <- glm.nb(incidents ~ type + construction + operation + offset(log(service)), data = df)
+summary(m3.nb)
+summary(m3)
+```
+
+Theta:  52521 molt gran, ja veuiem que probablement no hi hagi sobredisperssió.
+
+**Sol: El model amb binomial negativa surt igual al de Poisson**. Degut a que theta és molt gran i no hi ha sobredisperssió.
+
+
+# Validacio
+```{r}
+residualPlots(m3.nb,label=row.names(df))
+influenceIndexPlot(m3.nb,id=list(vars=c("Cook", "hat"), n=5))
+par(mfrow=c(2,1))
+
+## Residus grans
+llista1 <- Boxplot(rstudent(m3.nb),label=row.names(df),main="RStudent")
+df[llista1,]
+
+## Dades influents
+llista2 <- Boxplot(cooks.distance(m3.nb),label=row.names(df),main="Cooks")
+df[llista2,]
+
+## Mitjana d'incidents per any 
+obsaccyear <- 12*df$incidents/df$service
+summary(obsaccyear)
+
+## Estadístic de Pearson i Deviança
+sum(resid(m3.nb, type="pearson")^2)
+m3.nb$dev
+m3.nb$df.residual
+
+## Observats vs. predits
+plot(df$incidents,predict(m3.nb,type="response"),pch=19)
+abline(0,1,lty=2)
+
+## Outliers
+outlierTest(m3.nb)
+```
+
+
+
+# Effects
+
+```{r}
+par(mfrow=c(1,3))
+plot(allEffects(m3.nb),ask=FALSE)
+```
+

@@ -1,0 +1,1 @@
+%%resuelve Ax=BA=[10 7 8 7; 7 5 6 5; 8 6 10 9;7 5 9 10];b=[32;23;33;31];solucion=A\br=norm(b-A*solucion)disp('para b2')b2=[6;-7.2;2.9;-0.1];solucion2=A\b2r2=norm(b2-A*solucion2)disp('para b3')b3=[1.5; 0.18; 1.19;0.89];solucion3=A\b3r3=norm(b3-A*solucion3)disp('numero de condicion')condicion=cond(A)

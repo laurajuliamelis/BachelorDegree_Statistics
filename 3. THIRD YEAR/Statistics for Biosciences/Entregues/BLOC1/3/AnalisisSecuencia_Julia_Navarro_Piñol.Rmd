@@ -1,0 +1,64 @@
+---
+title: "Analisis de una secuencia"
+author: "Laura Julia Melis, Victor Navarro Garces y Marta Piñol Palau"
+date: '`r format(Sys.Date(),"%e de %B de %Y")`'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+# knitr options
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r libraries, include=FALSE}
+# Install packages
+# Load packages
+# ...
+
+library(knitr)
+
+
+```
+
+
+## Secuencia 1
+
+La secuencia leida es:
+```{r, echo=FALSE}
+secuencia <- readLines("gi32141095_N_0.fa")
+
+df <- c(names(secuencia), paste(secuencia))
+df
+
+seq <- as.character(df[2])
+
+```
+
+La longitud de la secuencia es de `r nchar(seq)` bases. Estan repartidas como:
+
+**Adeninas** (A): `r sapply(regmatches(seq, gregexpr("A", seq)), length)`<br>
+**Citosinas** (C): `r sapply(regmatches(seq, gregexpr("C", seq)), length)`<br>
+**Guaninas** (G): `r sapply(regmatches(seq, gregexpr("G", seq)), length)`<br>
+**Timinas** (T): `r sapply(regmatches(seq, gregexpr("T", seq)), length)`
+
+## Secuencia 2
+
+La secuencia leida es:
+```{r, echo=FALSE}
+secuencia2 <- readLines("gi32141095_N_1.fa")
+
+df2 <-c(names(secuencia2), paste(secuencia2))
+df2
+
+seq2 <- as.character(df2[2])
+```
+
+La longitud de la secuencia es de `r nchar(seq2)` bases. Estan repartidas como:
+
+**Adeninas** (A): `r sapply(regmatches(seq2, gregexpr("A", seq2)), length)`<br>
+**Citosinas** (C): `r sapply(regmatches(seq2, gregexpr("C", seq2)), length)`<br>
+**Guaninas** (G): `r sapply(regmatches(seq2, gregexpr("G", seq2)), length)`<br>
+**Timinas** (T): `r sapply(regmatches(seq2, gregexpr("T", seq2)), length)`
+
+

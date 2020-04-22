@@ -1,0 +1,22 @@
+\chapter{Introducción}
+La epidemiología es una parte de la medicina dedicada al estudio de la distribución y los factores determinantes de enfermedades u otros eventos relacionados con la salud, así como también del control y el desarrollo de estos. Por tanto, es una disciplina científica y su palabra deriva del griego: Epi (sobre), Demos (pueblo) y Logos (ciencia). \\
+
+Existen diferentes tipos de estudios epidemiológicos: estudios de caso-control, transversales, de cohortes, etc. En todos ellos, el objetivo principal es medir el grado de asociación que existe entre enfermedades y exposiciones de interés y, para alcanzarlo, existen varios métodos estadísticos. El más utilizado es el modelo de regresión logística ya que permite valorar la contribución de diferentes factores en la ocurrencia de un evento. \\
+
+En general, en el modelo de regresión logística, la variable respuesta (dependiente o de interés) sigue una distribución de probabilidad binomial, es decir, es una variable aleatoria dicotómica (puede tomar únicamente dos valores identificados como éxito y fracaso). En cambio, el predictor lineal (la combinación de las variables explicativas o independientes del modelo)  toma valores en una escala contínua. Es por ello que es necesaria una función de enlace o \textit{link function} que relacione el valor esperado de la respuesta con los predictores lineales incluidos en el modelo de manera que transforma las probabilidades de los niveles de variable de respuesta a una escala contínua que es ilimitada. Una vez realizada la transformación, la relación entre los predictores y la respuesta puede modelarse con la regresión lineal. \\
+
+El enlace canónico para el caso binomial es el enlace logit, el cual utilitza el \textit{odds ratio} (OR) como medida de asociación. Pero cuando la variable de interés es común en la población, el OR puede verse aumentado y exagerar la asociación de riesgo. Además, el OR a menudo tiene una interpretación difícil o poco intuitiva y por estas razones puede ser útil buscar un modelo alternativo.\\
+
+Precisamente, lo que se pretende conseguir en este estudio es reproducir el modelo de regresión logística realizado en un estudio epidemiológico en concreto, \textit{``Is Neuroticism a Risk Factor for Postpartum Depression?''} de \textcite{Estudioppal}, así como también ampliar o complementar los resultados obtenidos con el modelo log-binomial, el cual utiliza el logaritmo como función de enlace.
+
+% "1.1 Presentación del estudio"
+\section{Presentación del estudio}
+El estudio, publicado el 16 de abril de 2012, pretendía ampliar el conocimiento que se tenía hasta el momento sobre el rol del neuroticismo, la extroversión y el psicoticismo como factores de riesgo de la depresión postparto, teniendo en cuenta variables psicológicas. \\
+
+Para ello, se realizó un seguimiento de 1804 mujeres españolas caucásicas entre diciembre de 2003 y octubre de 2004 que consistía en la realización de entrevistas y cuestionarios en tres momentos diferentes del tiempo: a los 2-3 días postparto, a las 8 semanas y a las 32 semanas.\\
+
+Los resultados finales mostraron diferencias estadísticamente significativas en las dimensiones de la personalidad entre las mujeres con y sin síntomas de depresión postparto. También, que el único rasgo de personalidad que hizo aumentar el riesgo de presentar síntomas de depresión postparto fue el neuroticismo. \\
+
+\section{Estructura del documento}
+Este documento recoge  el análisis que se ha llevado a cabo sobre este estudio así como también la explicación de algunos conocimientos previos. Primeramente, en el Capítulo~\ref{cap:met}, se explicarán los métodos estadísticos utilizados: se describirán los principales tipos de estudios y medidas epidemiológicas (Secciones~\ref{sec:estudios} y~\ref{sec:medidas}) y se enlazarán con la explicación del modelo de regresión logística (\ref{cap:logistica}) y el modelo log-binomial (\ref{cap:logbinom}); también se comentará brevemente el software estadístico que se ha empleado. Una vez vista la relación entre los estudios y sus respectivas medidas y modelos, se procederá a explicar detalladamente el estudio principal sobre el neuroticismo y su papel en la depresión postparto, en el Capítulo~\ref{cap:estudioppal}. Luego, se mostrará la aplicación de los dos modelos (Capítulo~\ref{cap:aplicacion}) en los datos del estudio apoyándose de distintas funciones de R \autocite{R}, tablas y gráficos. Para terminar, se realizará una discusión en base a los resultados obtenidos  y se presentarán las conclusiones.
+

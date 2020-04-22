@@ -1,0 +1,459 @@
+---
+title: "Práctica Respuesta Recuentos"
+author: "Laura Julià, Marta Piñol y Sofía Touceda"
+date: "23 de diciembre de 2018"
+output: 
+  html_document:
+    toc: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 0. Introducción.
+
+El objetivo de este análisis es identificar cuáles son los factores que explican el número de ejecuciones de problemas de e-status que realiza un alumno de la FIB (Facultad de Informática de Barcelona) de la asignatura PE así como establecer qué relación existe entre los factores: *nationality*, *group* y *repeater*.
+
+Se parte de una base de datos, `data_status.txt`, que contiene información relacionada con el número de ejecuciones que han relizado los estudiantes durante un cuatrimeste, así como otras 7 variables que inicialmente se consideran relevantes para anticipar este fenómeno. Así pues, en este informe se realizará un estudio completo y detallado de estos datos. 
+
+En primer lugar, se realizará un análisis descriptivo (univariante y bivariante) con el fin de entender mejor cómo son las variables explicativa de las que se disponen. A continuación, y en función de los resultados obtenidos, se realizará el ajuste del modelo (a partir de diferentes modelos de distribución) y se validará el modelo elegido. También se ajustará un modelo log-lineal para ver la relación que existe entre los tres factores ya mencionados en la descripción de los objetivos.
+
+Para terminar, se compararán los efectivos esperados con los observados y se explicará cuál es la interpretación de los coeficientes del modelo y se concluirán los resultados del análisis
+
+## Importación de la base de datos.
+```{r}
+df <- read.table("data_status.txt", header=T)
+```
+
+```{r message=FALSE, warning=FALSE}
+##install.packages("car")
+library(car)
+##install.packages("MASS")
+library(MASS)
+##install.packages("AER")
+library(AER)
+##install.packages("effects")
+library(effects)
+##install.packages("lmtest")
+library(lmtest)
+##install.packages("Hmisc")
+library(Hmisc)
+#install.packages("catspec")
+library(catspec)
+#install.packages("FactoMineR")
+library(FactoMineR)
+#install.packages("dplyr")
+library(dplyr)
+```
+
+La base de datos contiene información sobre los 228 alumnos matriculados en l'assignatura de PE de la FIB durante un quatrimestre específico. Los datos no estan agrupados por lo que cada fila corresponde a un alumno. A continuación se describen las variables que recoge:
+
+**Variables explicativas**
+
+1. **id:** identificador del alumno
+2. **repeater:** si el alumno es repetidor (No/Yes)
+3. **n_subject:** número de asignaturas que cursa el alumno a parte de PE
+4. **group:** si el estudiante está matriculado en un grupo de mañana o tarde (Morning/Afternoon)
+5. **nationality:** si el alumno es español o estrangero
+6. **n_test:** número de pruebas presenciales en clase que el alumno va a realizar sobre un total de 12.
+7. **note:** nota que sacó el alumno de la asignatura en una escala de 0 a 10
+
+**Variable respuesta**
+
+**y:** número de problemas de e-status que realizó el alumno durante todo el quatrimestre
+
+
+# 1. Análisis descriptivo.
+
+## 1.1. Análisis descriptivo univariante. 
+
+```{r}
+summary(df)
+```
+A continuación se procede a realizar un análisis descriptivo para cada una de las variabes de la base de datos por separado[^nota1]. Para aquellas variables numéricas, se realizará un resumen numérico, un histograma y un box-plot. Por otro lado, para analizar las categóricas, se hará una tabla de frecuencias y un diagrama circular.
+
+[^nota1]:La variable `id`, al tratarse de un identificador, no tiene valor numérico ni influencia posible sobre el valor de la respuesta y por ello, no se estudiará.
+
+### 1.1.1. Variables explicativas.
+
+**1. Variable repeater.**
+```{r}
+describe(df$repeater)
+table_repeater <- table(df$repeater)
+pie(table_repeater, labels = paste(c('No', 'Yes'), round(table_repeater/228,2)*100, '%'), main = 'Diagrama circular de repeater',col=c('lightblue3','lightblue1'))
+```
+
+Se observa que la mayoría de los estudiantes son no repetidores (94%) y que el 6% sí lo son. Esto es, 14 han repetido y 214 no.
+
+**2. Variable n_subject.**
+```{r}
+(c(summary(df$n_subject),sd=sd(df$n_subject)))
+par(mfrow=c(1,2), las=1)
+hist(df$n_subject, ylab = 'Frecuencia', xlab = 'N_subject', main = 'Histograma de N_subject', col = 'lightblue3')
+boxplot(df$n_subject, main = 'Boxplot de N_subject', col = 'lightblue3') 
+```
+
+A partir del summary y los gráficos se puede observar que lo más frecuente es que el número de asignaturas que tiene un alumno sea 5, con un mínimo de 2 y un máximo de 6. Los alumnos tienen de media 4.4 asignaturas.
+
+**3. Variable group.**
+```{r}
+describe(df$group)
+table_group <- table(df$group)
+pie(table_group, labels = paste(c('Afternoon', 'Morning'), round(table_group/228,2)*100, '%'), main = 'Diagrama circular de group',col=c('lightblue3','lightblue1'))
+```
+
+En el diagrama de pastel realizado se muestra que ser del grupo de mañanas es lo más frecuente, con un 68% de los casos (154 de los 228 estudiantes) y que un 32% van a clases de tarde.
+
+**4. Variable nationality.**
+```{r}
+describe(df$nationality)
+table_nationality <- table(df$nationality)
+pie(table_nationality, labels = paste(c('Foreign', 'Spanish'), round(table_nationality/228,2)*100, '%'), main = 'Diagrama circular de nationality',col=c('lightblue3','lightblue1'))
+```
+
+La gran mayoría de los estudiantes, el 92%, son españoles mientras que sólo 18 (8%) son extranjeros (tienen una nacionalidad diferente a la española).
+
+**5. Variable n_test.**
+```{r}
+(c(summary(df$n_test),sd=sd(df$n_test)))
+par(mfrow=c(1,2), las=1)
+hist(df$n_test, ylab = 'Frecuencia', xlab = 'N_test', main = 'Histograma de N_test', col = 'lightblue3')
+boxplot(df$n_test, main = 'Boxplot de N_test', col = 'lightblue3') 
+```
+
+El número de pruebas presenciales que el alumno va a realizar es, en media, 10.2, con un valor mínimo de 0 y un valor máximo de 12. En la mayoría de casos, el número de pruebas es 12, por lo que la distribución es muy asimétrica.
+
+
+**6. Variable note.**
+```{r}
+(c(summary(df$note),sd=sd(df$note)))
+par(mfrow=c(1,2), las=1)
+hist(df$note, ylab = 'Frecuencia', xlab = 'Note', main = 'Histograma de note', col = 'lightblue3')
+boxplot(df$note, main = 'Boxplot de note', col = 'lightblue3') 
+```
+
+Se observa cómo la nota media de la asignatura en los 228 alumnos es 6.2, con una nota mínima de 0 y máxima de 9.7. Sólo el 25% de los estudiantes sacaron una nota final inferior a 5.4.
+
+### 1.1.2. Variable respuesta.
+
+**Variable y.**
+```{r}
+(c(summary(df$y),sd=sd(df$y)))
+par(mfrow=c(1,2), las=1)
+hist(df$y, ylab = 'Frecuencia', xlab = 'Y', main = 'Histograma de y', col = 'lightblue3')
+boxplot(df$y, main = 'Boxplot de y', col = 'lightblue3') 
+```
+
+A partir del histograma se puede observar cómo la variable respuesta, número de ejecuciones, tiene una distribución asimétrica positiva o a la derecha. El 50% de los estudiantes han realizado 32 ejecuciones o menos pero hay casos en los que se han llegado a realizar los problemas hasta un máximo de 126 veces. El valor mínimo es 0.
+
+## 1.2. Análisis descriptivo bivariante de las variables explicativas con la respuesta.
+
+En este apartado se realizará una descriptiva bivariante entre la variable respuesta (y) y las variables predictoras de las que se dispone.
+
+**1. Variable repeater con la respuesta.**
+```{r}
+No <- vector()
+Yes <- vector()
+for (i in 1:nrow(df)){
+  if (df$repeater[i]== "No"){
+    No<- c(No,df$y[i])
+  }else{
+    Yes<- c(Yes,df$y[i])
+  }
+}
+par(mfrow=c(1,2))
+hist(No, main = "Histograma de y", xlab="Repeater=No", col = 'lightblue4')
+hist(Yes, main = "Histograma de y", xlab="Repeater=Yes", col = 'lightblue2')
+
+rbind("Repeater=No"=c(summary(No),"N"=length(No)),"Repeater=Yes"=c(summary(Yes),"N"=length(Yes)))
+```
+
+Se han realizado dos histogramos, uno para cada grupo de la variable repeater, así como también resúmenes numéricos. Se observa una gran diferencia en el número de ejecuciones realizadas según si el estudiante es o no repetidor: la media de ejecuciones para los no repetidores es 33.6 con un máximo de 126 mientras que para los estudiantes que han repetido la media es 13.5 y el valor máximo, 36; además, el 50% de los repetidores ha realizado tan solo 5 o menos veces los problemas. Para ambos grupos el mínimo es 0.
+
+**2. Variable n_subject con la respuesta.**
+```{r}
+# Se clasifica la variable respuesta en 8 categorías:
+y_cat <- vector()
+for (i in 1:nrow(df)){
+  if (df$y[i] <= 10){
+    y_cat[i]<- "0-10"
+  }else if (df$y[i] > 10 & df$y[i] <= 20){
+    y_cat[i]<- "11-20"
+  }else if (df$y[i] > 20 & df$y[i] <= 30){
+    y_cat[i]<- "21-30"
+  }else if (df$y[i] > 30 & df$y[i] <= 40){
+    y_cat[i]<- "31-40"
+  }else if (df$y[i] > 40 & df$y[i] <= 50){
+    y_cat[i]<- "41-50"
+  }else if (df$y[i] > 50 & df$y[i] <= 60){
+    y_cat[i]<- "51-60"
+  }else if (df$y[i] > 60 & df$y[i] <= 70){
+    y_cat[i]<- "61-70"
+  }else{
+    y_cat[i]<- "70-126"
+  }
+}
+boxplot(df$n_subject~y_cat, main = 'Boxplot de n_subject según y', col = 'lightblue3')
+table(df$n_subject,y_cat)
+```
+
+Se ha agrupado la variable respuesta en 8 clases y se ha realizado un boxplot del número de asignaturas para cada una de las categorías. Se puede ver como la distribución de la variable n_subjects es prácticamente igual para todos los grupos de la variable respuesta: todos tienen una mediana de 5 asignaturas por estudiante a excepción del grupo de estudiantes que ha ejecutado los problemas del e-status entre 61 y 70 veces, que tienen una mediana de 4.5 asignaturas. Además los estudiantes que tienen 6 asignaturas son los que han realizado menos de 20 o entre 31 y 40 ejecuciones.
+
+**3. Variable group con la respuesta.**
+```{r}
+Afternoon <- vector()
+Morning <- vector()
+for (i in 1:nrow(df)){
+  if (df$group[i]== "Afternoon"){
+    Afternoon<- c(Afternoon,df$y[i])
+  }else{
+    Morning<- c(Morning,df$y[i])
+  }
+}
+par(mfrow=c(1,2))
+hist(Afternoon, main = "Histograma de y", xlab="group=Afternoon", col = 'lightblue4')
+hist(Morning, main = "Histograma de y", xlab="group=Morning", col = 'lightblue2')
+
+rbind("Group=Afternoon"=c(summary(Afternoon),"N"=length(Afternoon)),"Group=Morning"=c(summary(Morning),"N"=length(Morning)))
+```
+
+Al observar los dos histogramas y resumenes numéricos (uno para cada grupo de clase) no se aprecian diferencias siginicativas respecto a la media de ejecuciones (los estudiantes de tarde tienen una media de 31.96 y los de mañanas, de 32.6).
+
+**4. Variable nationality con la respuesta.**
+```{r}
+Foreign <- vector()
+Spanish <- vector()
+for (i in 1:nrow(df)){
+  if (df$nationality[i]== "Foreign"){
+    Foreign<- c(Foreign,df$y[i])
+  }else{
+    Spanish<- c(Spanish,df$y[i])
+  }
+}
+par(mfrow=c(1,2))
+hist(Foreign, main = "Histograma de y", xlab="Nationality=Foreign", col = 'lightblue4')
+hist(Morning, main = "Histograma de y", xlab="Nationality=Spanish", col = 'lightblue2')
+
+rbind("Nationality=Foreign"=c(summary(Foreign),"N"=length(Foreign)),"Nationality=Spanish"=c(summary(Spanish),"N"=length(Spanish)))
+```
+
+Los estudiantes extranjeros han realizado, en media, alrededor de 60 ejecuciones mientras que los españoles la mitad (30.09). Además, el valor mñáximo de la variable respuesta en el grupo de extranjeros es 126 mientras que en el grupo de españoles es 85. Aun así, se debe tener en cuenta que tan solo 18 de los 228 estudiantes tienen una nacionalidad no española.
+
+**5. Variable n_test con la respuesta.**
+```{r}
+boxplot(df$n_test~y_cat, main = 'Boxplot de n_test según y', col = 'lightblue3')
+```
+
+Se pueden apreciar grandes diferencias en los boxplots realizados. En los grupos de estudiantes que han realizado 41 o más ejecuciones, el número de pruebas presenciales en clase que el alumno va a realizar es 12 (a excepción de algunos casos). En cambio, a medida que el número de ejecuciones realizadas por el estudiante disminuye, el número de pruebas presenciales también también lo hace, llegando a una mediana de 8 pruebas presenciales (y un 25% de estudiantes con 3 o menos pruebas) en el caso de los estudiantes que han ejecutado los problemas entre 0 y 10 veces.
+
+**6. Variable note con la respuesta.**
+```{r}
+boxplot(df$note~y_cat, main = 'Boxplot de note según y', col = 'lightblue3')
+```
+
+Se observa que la nota sacada en la asignatura es ligeramente superior en cada grupo de ejecuciones respecto al grupo anterior: así, aquellos alumnos que más veces han realizado los problemas de e-status han obtenido una nota mayor. Se observa un caso atípico de un estudiante con una nota cercana a 10 que ha realizado entre 11 y 20 ejecuciones.
+
+# 2. Ajuste del modelo.
+## 2.1. Modelo de Poisson.
+
+A modo de repaso, y para entender mejor el presente apartado, se procede a comentar brevemente la distribución de Poisson y la aplicación en el caso que nos concierene. 
+
+La distribución de Poisson expresa el número de eventos en un intervalo de tiempo y/o espacio determinados y por lo tanto es una distribución de probabilidad discreta.
+
+$$X \sim P(\lambda),\quad  con \quad  \lambda >0$$
+Donde X es el número de ejecuciones de problemas de e-status que realiza un alumno en un cuatrimestre y $\lambda$, la frecuencia de ocurrencia media.
+
+Para ajustar el modelo de respuesta de Poisson, será necesario modelar el logaritmo de la esperanza en función de las variables predictoras.
+
+$$log(\mu_i)=x_i^T\beta,\quad i=1,\dots,n$$
+Donde $x_i$ son las covariables y factores, $\beta$, los parámetros asociados a las variables predictoras y $\mu$, la esperanza condicionada, $\mu=E(Y|X)$.
+
+En un modelo de Poisson, la esperanza es igual a la varianza.
+$$E(X)=Var(X) = \lambda$$
+
+**MODELO NULO.**
+```{r}
+m0 <- glm(y ~ 1, family=poisson, data=df)
+summary(m0)
+```
+
+Con este modelo, se esta suponiendo que independientemente del valor de las variables explicativas, la tasa de ejecuciones de problemas esperada es la misma para todos los alumnos.Tiene máxima devianza, 3658.9, y 227 grados de libertad ya que hay 228 filas en la base de datos y el modelo ajusado solo tiene la constante (intercept) por lo que solo se ha gastado un grado de libertad. 
+
+La devianza es mucho mayor que los grados de libertad por lo que el modelo no se ajusta bien a los datos observados y podemos concluir que la ejecución de problemas no es independiente de las variables explicativas (nacionalidad, número de asignaturas que se están cursando, etc.).
+
+**MODELO ADDITIVO COMPLETO.**
+```{r}
+m1 <- glm(y ~ repeater+n_subject+group+nationality+n_test+note, family=poisson, data=df)
+summary(m1)
+```
+
+En este nuevo modelo se han introducido todas las variables predictoras sin considerar posibles interacciones entre ellas. Se ha conseguido reducir bastante la devianza a costa de perder 6 grados de libertad pero todavía no se puede considerar como un modelo bueno.
+
+
+**MODELO CON INTERACCIONES.**
+
+Como hay 3 factores (repeater, group y nationality) y 3 covariables (n_subject, n_test y note), las combinaciones a hacer serán: 
+
+- repeater vs. n_subject
+- repeater vs. group
+- repeater vs. nationality 
+- repeater vs. n_test
+- repeater vs. note
+- n_subject vs. group
+- n_subject vs. nationality
+- group vs. nationality 
+- group vs. n_test 
+- group vs. note
+- nationality vs. n_test
+- nationality vs. note
+
+```{r}
+m2 <- glm(y ~ repeater + n_subject + group + nationality + n_test + note + repeater:n_subject + repeater:group + repeater:nationality + repeater:n_test + repeater:note + n_subject:group + n_subject:nationality + group:nationality + group:n_test + group:note + nationality:n_test + nationality:note, family=poisson, data=df)
+summary(m2)
+```
+
+Se procede a realizar el método stepwise del modelo más completo (con todas las variables e interacciones):
+
+```{r}
+summary(m3 <- step(glm(y ~ repeater + n_subject + group + nationality + n_test + note + repeater:n_subject + repeater:group + repeater:nationality + repeater:n_test + repeater:note + n_subject:group + n_subject:nationality + group:nationality + group:n_test + group:note + nationality:n_test + nationality:note, data=df, family=poisson), direction="both", k=log(nrow(df))))
+```
+
+
+**Resumen de resultados:**
+
+      m0 -> DEVIANZA 3658.9 y GRADOS DE LIBERTAD 227.
+      m1 -> DEVIANZA 2283.9 y GRADOS DE LIBERTAD 221.
+      m2 -> DEVIANZA 1943.9 y GRADOS DE LIBERTAD 209.
+      m3 -> DEVIANZA 1948.0 y GRADOS DE LIBERTAD 214.
+
+Comparamos los dos modelos con menor devianza:
+
+```{r}
+anova(m2,m3, test="Chisq")
+```
+
+Se obtiene un pvalor = 0.5281, muy superior a 0.05 por lo que se acepta el modelo obtenido con el método stepwise ya que se ganan 5 grados de libertad y la devianza es apenas 4 unidades superior.
+
+**Modelo elegido**
+
+    y ~ repeater + n_subject + group + nationality + n_test + note + repeater:group + repeater:nationality + repeater:n_test + repeater:note + n_subject:nationality + group:n_test + group:note
+
+## 2.2. Validación del modelo.
+
+**i.Test de la devianza.**
+
+Compara nuestro modelo con el modelo saturado, el que explica toda la variabilidad de los datos.
+
+Las hipótesis són:
+
+- $H_0:$ Modelo consistente con los datos,
+- $H_1:$ Modelo inconsistente con los datos.
+
+```{r}
+m3$dev
+m3$df.residual
+1 - pchisq(m3$dev,m3$df.residual) # Test devianza
+```
+
+Como el pvalor, $P(\chi^2(214)>1948.011)=0$, es inferior a 0.05, se acepta la hipótesis alternativa, por lo que se puede confirmar que el modelo es inconsistente con los datos y el modelo queda invalidado.
+
+**ii. Análisis de los residuos.**
+```{r warning=FALSE}
+par(mfrow=c(2,2))
+plot(m3)
+```
+
+Con los gráficos de los residuos tampoco queda validado el modelo.
+
+**iii. Análisis de la sobredispersión.**
+
+Un modelo log-lineal posee la característica de que la varianza condicionada de la respuesta es proporcional a su esperanza y constante en todo el conjunto de los datos. Es decir,
+$$Var(Y_i|X_i) = \phi·\mu_i$$
+En el caso de la Poisson, habitualmente la esperanza condicionada es igual a la varianza condicionada, es decir $\phi=1$, pero puede que esta premisa no se cumpla.
+
+Así pues, analizar la presencia de sobredispersión es analizar si el modelo tiene el parámetro de dispersión superior a uno ($\phi>1$).
+
+Para estimar la sobredispersión se plantea el siguiente contraste de hipótesis:
+
+- $H_0: \sigma^2=\mu$ 
+- $H_1: \sigma^2=\mu+\alpha·g(\mu)$ 
+
+donde $\sigma^2=Var(Y|X)$, $\mu=E(Y|X)$ y $g(\mu)$ es cualquier función de $\mu$.
+
+```{r}
+dispersiontest(m3,trafo=1) # V(Y|X)=(1+alpha)E(Y)  -> Testea relación lineal
+dispersiontest(m3,trafo=2) # V(Y|X)=E(Y)+alpha*E(Y)^2  -> Testea relación cuadrática
+```
+
+En ambos casos se ha obtenido un pvalor inferior a 0.05, por lo que se rechaza la hipotesis nula y se confirma que hay sobredispersión. Se observa también gráficamente este hecho:
+
+```{r}
+plot(log(fitted(m3)),log((df$y-fitted(m3))^2),xlab=expression(hat(mu)),ylab=expression((y-hat(mu))^2 ))
+abline(0,1) # No sobredispersió
+```
+
+
+## 2.3. Tratamiento de la sobredispersión.
+
+No se ha podido obtener un modelo satisfactorio (en el que el valor de la devianza esté por debajo del umbral según los grados de libertad que tienen) y además, del modelo elegido, en ningún caso se ha podido validar.
+
+Una de las posibilidades para tratar la sobredispersión podria ser utilizar un modelo de pseudo-poisson, en el que los coeficientes se estiman usando la distribución de Poisson pero los errores estándar se ajustan para $\phi \neq 1$. Pero al no ser este tipo de modelo un modelo estrictamente probabilístico, no se podrá calcular su AIC ni comparar modelos con este estadístico. 
+
+Así pues, se intentará conseguir un modelo válido tratando la sobredispersión detectada en el modelo usando un modelo de binomial negativa.
+
+**Binomial negativa.**
+
+En una distribución binomial negativa la esperanza y la varianza de la variable respuesta son:
+
+$$E(Y)=\mu$$
+$$Var(Y)=\mu+\frac{\mu^2}{\theta}$$
+Por ello, se empezará por estimar el valor del parámatro de $\theta$ con la función `glm.nb`.
+
+```{r}
+m3.nb <- glm.nb(y ~ repeater + n_subject + group + nationality + n_test + note + repeater:group + repeater:nationality + repeater:n_test + repeater:note + n_subject:nationality + group:n_test + group:note, data = df)
+summary(m3.nb)
+```
+
+Se ha obtenido $\theta = 2.970$ y ahora, esta estimación se utilizará para formular el modelo completo:
+
+```{r}
+m4 <- glm(y ~ repeater + n_subject + group + nationality + n_test + note + repeater:group + repeater:nationality + repeater:n_test + repeater:note + n_subject:nationality + group:n_test + group:note, data = df, family=neg.bin(2.970))
+summary(m4)
+```
+
+Se comparara con el modelo de Poisson anterior.
+
+```{r}
+# Comparación con el modelo Poisson
+AIC(m3,m4)
+```
+
+El número de parámetros en ambos modelos es el mismo (14) y por lo tanto, también el número de grados de libertad (214) pero como el m4 tiene un AIC más pequeño confirmamos que es el mejor modelo. Además, este modelo tiene una devianza de 264.54.
+
+**Validación**
+```{r}
+m4$dev
+m4$df.residual
+1 - pchisq(m4$dev,m4$df.residual) # Test devianza
+```
+
+Como el pvalor es inferior a 0.05, se confirma que el modelo es inconsistente con los datos y el modelo queda invalidado.
+
+**Conclusiones finales de este ajuste**
+
+El mejor modelo obtenido ha sido el siguiente:
+
+    y ~ repeater + n_subject + group + nationality + n_test + note + repeater:group + repeater:nationality + repeater:n_test + repeater:note + n_subject:nationality + group:n_test + group:note
+
+Pero a pesar de ser el mejor, no se ha podido validar. Esto es, los datos de los que se disponen no consiguen explicar bien el comportamiento de la variable respuesta sobre las ejecucuiones de los problemas de e-status. 
+
+Por este motivo, se recomienda recoger más datos: información sobre más estudiantes y quizá considerar nuevas variables que no se han tenido en cuenta.
+
+# 3. Ajuste del modelo log-lineal. 
+
+
+# 4. Interpretación.
+
+
+# 5. Resumen y conclusiones finales.

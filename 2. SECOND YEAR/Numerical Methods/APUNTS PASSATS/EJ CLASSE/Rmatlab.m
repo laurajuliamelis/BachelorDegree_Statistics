@@ -1,0 +1,1 @@
+  Function[Rn]=r(N)  Rn= zeros(1,N+1);  Rn(1)= 1;   for i = 1:N      Rn(i+1) = !/2 * Rn(i);   endforendfunction

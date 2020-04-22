@@ -1,0 +1,10 @@
+A little exercise: Read these data in R using function read.table
+
+
+Name    Age   Height  Weight   Sex
+Laura    25     1,67      65     F
+Maria    21     1,60      57     F
+Pedro     *     1,78      83     M
+Josep    29     1,70      --     M
+Martha   23     1,63      65     F
+Jordi    19     1,85      90     M

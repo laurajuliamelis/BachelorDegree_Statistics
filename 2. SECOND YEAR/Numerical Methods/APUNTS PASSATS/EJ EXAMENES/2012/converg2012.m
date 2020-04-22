@@ -1,0 +1,1 @@
+x(1)=1;[0 x];for i=2:6x(i)=1/4*(8*x(i-1)-x(i-1).^2); x(i)=x(i);[i x(i)];endxxerr=[x,abs(x(6)-4)]y(1)=1;[0 y']';for i=2:6y(i)=1/3*(y(i-1).^2 -4);y(i)=y(i);[i y(i)];endyyerr=[y,abs(y(6)-4)]z(1)=1;[0 z];for i=2:6z(i)=sqrt(3*z(i-1)+4);z(i)=z(i);[i z(i)];endzzerr=[z,abs(z(6)-4)]taula=[x;y;z]'terr=[xerr;yerr;zerr]' %% ultima fila es el error absoluto

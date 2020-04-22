@@ -1,0 +1,121 @@
+                                           The SAS System         18:46 Wednesday, March 7, 2012  88
+
+ Obs _row_         x1    x2    x3 d1me d1ma d2me d2ma d3me d3ma d4me d4ma d5me d5ma _type_   _rhs_
+
+  1  Objectius      0     0     0   1    1    1    1    1    1    1    1    1    1   MIN         .
+  2  Petites        1     0     0   1   -1    0    0    0    0    0    0    0    0   EQ          5
+  3  Mitjanes       0     1     0   0    0    1   -1    0    0    0    0    0    0   EQ         10
+  4  Grans          0     0     1   0    0    0    0    1   -1    0    0    0    0   EQ         15
+  5  Superfície   400   750  1050   0    0    0    0    0    0    1   -1    0    0   EQ      25000
+  6  Pressupost 18000 33000 45150   0    0    0    0    0    0    0    0    1   -1   EQ    1000000
+                                           The SAS System         18:46 Wednesday, March 7, 2012  89
+
+                                          The LP Procedure
+
+                                          Problem Summary
+
+                               Objective Function      Min Objectius
+                               Rhs Variable                    _rhs_
+                               Type Variable                  _type_
+                               Problem Density (%)             29.23
+
+                               Variables                      Number
+
+                               Non-negative                       13
+
+                               Total                              13
+
+                               Constraints                    Number
+
+                               EQ                                  5
+                               Objective                           1
+
+                               Total                               6
+                                           The SAS System         18:46 Wednesday, March 7, 2012  90
+
+                                          The LP Procedure
+
+                                          Solution Summary
+
+                                      Terminated Successfully
+
+                          Objective Value                     1766.3344408
+
+                          Phase 1 Iterations                             5
+                          Phase 2 Iterations                             4
+                          Phase 3 Iterations                             0
+                          Integer Iterations                             0
+                          Integer Solutions                              0
+                          Initial Basic Feasible Variables               7
+                          Time Used (seconds)                            0
+                          Number of Inversions                           3
+
+                          Epsilon                                     1E-8
+                          Infinity                            1.797693E308
+                          Maximum Phase 1 Iterations                   100
+                          Maximum Phase 2 Iterations                   100
+                          Maximum Phase 3 Iterations              99999999
+                          Maximum Integer Iterations                   100
+                          Time Limit (seconds)                         120
+                                           The SAS System         18:46 Wednesday, March 7, 2012  91
+
+                                          The LP Procedure
+
+                                          Variable Summary
+
+                         Variable                                          Reduced
+                     Col Name         Status Type        Price  Activity      Cost
+
+                       1 x1                  NON-NEG         0         0  17.20598
+                       2 x2                  NON-NEG         0         0 15.710963
+                       3 x3           BASIC  NON-NEG         0 22.148394         0
+                       4 d1me         BASIC  NON-NEG         1         5         0
+                       5 d1ma                NON-NEG         1         0         2
+                       6 d2me         BASIC  NON-NEG         1        10         0
+                       7 d2ma                NON-NEG         1         0         2
+                       8 d3me                NON-NEG         1         0         2
+                       9 d3ma         BASIC  NON-NEG         1 7.1483942         0
+                      10 d4me         BASIC  NON-NEG         1  1744.186         0
+                      11 d4ma                NON-NEG         1         0         2
+                      12 d5me                NON-NEG         1         0 1.0232337
+                      13 d5ma                NON-NEG         1         0 0.9767663
+                                           The SAS System         18:46 Wednesday, March 7, 2012  92
+
+                                          The LP Procedure
+
+                                         Constraint Summary
+
+                         Constraint              S/S                          Dual
+                     Row Name         Type       Col       Rhs  Activity  Activity
+
+                       1 Objectius    OBJECTVE     .         0 1766.3344         .
+                       2 Petites      EQ           .         5         5         1
+                       3 Mitjanes     EQ           .        10        10         1
+                       4 Grans        EQ           .        15        15        -1
+                       5 Superfície   EQ           .     25000     25000         1
+                       6 Pressupost   EQ           .   1000000   1000000 -0.023234
+                                           The SAS System         18:46 Wednesday, March 7, 2012  93
+
+
+ Obs   _OBJ_ID_    _RHS_ID_   _BASIC_         INVB_R         x1         x2   x3   d1me   d1ma
+
+  1    Objectius    _rhs_     R_COSTS            .      17.2060    15.7110    0     0      2
+  2    Objectius    _rhs_     d1me              5.00     1.0000     0.0000    0     1     -1
+  3    Objectius    _rhs_     d3ma              7.15     0.3987     0.7309    0     0      0
+  4    Objectius    _rhs_     d2me             10.00     0.0000     1.0000    0     0      0
+  5    Objectius    _rhs_     x3               22.15     0.3987     0.7309    1     0      0
+  6    Objectius    _rhs_     d4me           1744.19   -18.6047   -17.4419    0     0      0
+  7    Objectius    _rhs_     PHASE_1_OBJE      0.00     0.0000     0.0000    0     0      0
+  8    Objectius    _rhs_     Objectius      1766.33   -17.2060   -15.7110   -0     0     -2
+
+                                                                               PHASE_
+ Obs   d2me    d2ma    d3me    d3ma    d4me    d4ma      d5me        d5ma      1_OBJE    Objectius
+
+  1      0       2       2       0       0       2      1.02323     0.97677       0          0
+  2      0       0       0       0       0       0      0.00000     0.00000       0          0
+  3      0       0      -1       1       0       0      0.00002    -0.00002       0          0
+  4      1      -1       0       0       0       0      0.00000     0.00000       0          0
+  5      0       0       0       0       0       0      0.00002    -0.00002       0          0
+  6      0       0       0       0       1      -1     -0.02326     0.02326       0          0
+  7      0       0       0       0       0       0      0.00000     0.00000       1          0
+  8      0      -2      -2       0       0      -2     -1.02323    -0.97677       0          1

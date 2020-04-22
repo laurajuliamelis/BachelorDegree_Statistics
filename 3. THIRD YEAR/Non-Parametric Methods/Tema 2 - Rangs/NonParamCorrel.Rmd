@@ -1,0 +1,290 @@
+---
+title: "No Parametrica Correlacio"
+author: "Mireia Vilardell"
+date: "23 març de 2018"
+output: html_document
+---
+
+##Exercici 12
+Es tracta de fer servir les dades modificades per tal de que no hi hagi empats de l'exercici 2 ja realitzat (recordem que es tractava d'un test de dades aparallades)
+
+## Apartat a)
+### PAS 0
+Introducció de les dades
+
+```{r}
+
+# Dades agafades del problema 2, pesos que eren capaços d'aixecar 12 voluntaris, 
+# abans (x) i després (y) de programa d'entrenament ("lleugerament" retocades per que
+# no hi hagi empats)
+x = c(14.4, 15.9, 14.5, 13.9, 16.6, 17.4, 18.6, 20.3, 20.4, 15.4, 15.5, 14.1)
+y = c(20.4, 22.9, 19.4, 24.3, 25.1, 20.9, 24.6, 24.4, 24.9, 19.9, 21.5, 21.4)
+
+
+
+# Tambe podem fer un analisis exploratori de les dades.
+
+plot(x,y)
+
+```
+
+### PAS 1; Definir el contrast hipotesis que estem realitzant
+
+#### $H_{0}:$ X,Y son estocasticament independents equival a $H_{0}:\tau=0$??
+$H_{1}: \tau>0$ esperem una correlació positiva; és a dir que després de l'entrenament encara ho faran millor
+
+### PAS 2 Calculs;
+
+```{r}
+# Mida mostral:
+n = length(x)
+
+# cal comptar les diferencies entre tots els i,j tant en X com en Y 
+
+
+# Taula amb totes les possibles diferències entre x[i] i x[j]:
+difs.x = outer(x,x, "-")
+difs.x
+# Fixeu-vos que de manera similar al que obteniem per Wilcox hi ha una matriu simetrica (per que les diferencies les fem amb la mateixa mostra, aixo no passa per la U Mann whitney per que es una dada d'una mostra respecte totes les altres de l'altra mostra) per tant 
+# Descartem les diferències de la diagonal (i == j) i de la meitat triangular superior:
+difs.x = difs.x[ltri <- lower.tri(difs.x)]
+# Totes les possibles diferències entre y[i] i y[j]:
+difs.y = outer(y,y, "-")[ltri]
+difs.y
+# ens succeix el mateix
+```
+
+### PAS 3; Càlcul de l'Estadístic de Test o Mesura de discrepància
+
+```{r}
+# Total de diferències concordants i discordants:
+concor = sum(sign(difs.x)*sign(difs.y) > 0)
+discor = sum(sign(difs.x)*sign(difs.y) < 0)
+
+# Forma1; Estadístic de Kendall:
+k1<-(concor - discor) / length(difs.x)
+concor
+discor
+k1
+
+# Forma2; Versió alternativa de l'estadístic de Kendall
+k2<-sum(sign(difs.x)*sign(difs.y)) / length(difs.x)
+k2
+
+# Falta 2/(n-1) segons les diapositives!
+#NOOO
+n
+n*(n-1)/2
+length(difs.x)
+
+```
+
+### PAS 4; Cal fer una correcció?
+
+En aquest cas no ja que l'exercici s'ha corregit per tal de que no hi hagi empats.
+
+#### En quines situacions es podria fer aixo en un analisis real???
+
+### PAS 5; Definir la regió de rebuig;  resultat del test
+En aquest cas podem triar fer dues alternatives: utilitzar les taules del test exactes o bé com que la n es suficientment gran per poder utilitzar 
+la aproximació asintótica. 
+
+```{r}
+#Test exacte
+library(SuppDists)
+#Recordeu que es simetrica, recordem que teniem una alternativa unilateral per tant fem servir una cua
+qKendall(0.95, N=n)
+qKendall(0.05,N=n)
+pvalor<-1-pKendall(k2,N=n)
+pvalor
+# De l'output de l'R tenim que;
+pKendall(0, N=10) 
+#Per tant cal vigilar ja que aquesta distribucio NO esta centrada en el 0 i per tant no és equivalent a la que poguem obtenir de les taules
+qKendall(0.95, N=n)
+pKendall(c(-.42,0.02,.42), N=10) ## approximately 5% 50% and 95%
+
+```
+Noteu que aquests valors no coincideixen amb els de les taules de kendall, segurament cal introduir alguna correcció. 
+
+#### SI HO FEU A MA PROCOREU COMPARAR SEMPRE AMB LES TAULES DEL CAMPUS MES QUE LES DONADES PER l'R.
+
+### PAS 6; comparació resultats R amb els obtinguts a mà
+```{r}
+
+# Càlcul directe amb la funció 'cor' de R:
+cor(x,y, method = "kendall")
+# Comparació amb la correlació de Pearson:
+cor(x,y)
+
+# Forma directa R per fer la prova de significació de la correlació de Kendall
+# H0: tau = 0   vs   H1: tau > 0
+cor.test(x,y, method = "kendall", alternative = "greater", exact = TRUE)
+
+# R realitza l'aprox asintotica per n>12
+
+
+# L'índex de Kendall és un estadístic basat en rangs, solament utilitza la
+# informació continguda als rangs, el resultat és el mateix amb les dades
+# originals i amb els seus rangs:
+rX = rank(x)
+rY = rank(y)
+
+cor(rX,rY, method = "kendall")
+
+```
+
+Una diferencia important amb el que haviem vist fins ara és que en general sempre calculavem primer l'estadistic de test i després una mesura que ens resumis aquesta informacio però en aquest cas es realitza conjuntament.
+
+####En l'output de R surt una T, que és aquesta T??
+
+## Apartat b)
+
+## PAS 1; 
+Definir el contrast hipotesis que estem realitzant
+
+$H_{0}:$ X,Y son estocasticament independents
+
+### PAS 3; Càlcul de l'Estadístic de Test o Mesura de discrepància
+Càlcul de la correlació de Spearman a partir de la fórmula directa:
+```{r}
+(12 / (n * (n^2 - 1))) * sum(rX * rY) - 3 * (n + 1) / (n - 1)
+```
+
+### PAS 5; Definir la regió de rebuig;  resultat del test
+```{r}
+1-pSpearman(0.5734266, 12)
+```
+
+### PAS 6; comparació resultats R amb els obtinguts a mà
+```{r}
+# Correlació de Spearman:
+# La calcularem com la correlació mostral de Pearson sobre els rangs:
+cor(rX, rY)
+cor(x, y, method = "spearman")
+
+# Prova de significació:
+cor.test(x, y, method = "spearman", alternative = "greater")
+# Que no és el mateix que fer:
+cor.test(rX, rY, alternative = "greater")
+# Fixem-nos que pel primer cas ha utilitzat la prova de significació
+# no paramétrica, basada en rangs, pel coeficient de Spearman.
+# En canvi, pel segon cas ha fet (possiblement no del tot adequadament)
+# la prova paramètrica basada en la suposició de normalitat bivariant,
+# sobre les dades de rangs.
+
+```
+
+####Que caldria fer més? Aproximacions a la Normal?
+
+## EXERCICI 13
+### CAS AMB EMPATS
+### Tau de Kendall
+### PAS 0
+Introducció de les dades
+
+```{r}
+
+proves = read.table("D:/Usuarios/mireia/Documents/Law_school.txt", header = TRUE)
+
+```
+### PAS 1; Contrast
+
+
+### PAS 2; Calculs
+
+```{r}
+
+# Versió més ràpida, utilitzant la funció 'outer':
+difs.x = outer(proves$LSAT, proves$LSAT, "-")
+difs.x = difs.x[ltri <- lower.tri(difs.x)]
+difs.y = outer(proves$GPA, proves$GPA, "-")[ltri]
+
+```
+
+### PAS 3; Estadistic de Test o Mesura de Discrepancia
+```{r}
+n = length(proves$LSAT)
+N = length(difs.x) # = n(n - 1) / 2
+
+# Total de diferències concordants i discordants:
+concor = sum(sign(difs.x)*sign(difs.y) > 0)
+discor = sum(sign(difs.x)*sign(difs.y) < 0)
+
+(concor + discor) / N
+
+# Tau-a:
+(concor - discor) / length(difs.x)
+```
+
+### PAS 4; Cal fer una correcció?
+```{r}
+# Determinació de totes les sèries d'empats i la seva llargada per 
+# un vector qualsevol 'x':
+ties = function(x) {
+  ti = sapply(lapply(unique(x), function(xi, x) x %in% xi, x),sum)
+  result = ti[ti > 1]
+  if (length(result) > 0)
+    names(result) = paste("t", 1:length(result), sep = "")
+  return(result)
+}
+
+# Sèries d'empats i llargada de cada sèrie, per x i y:
+ti = ties(proves$LSAT)
+ti
+ui = ties(proves$GPA)
+ui
+
+# Tau-b:
+(concor - discor) / 
+  sqrt((N - 0.5 * sum(ti*(ti-1))) * (N - 0.5 * sum(ui*(ui-1))))
+# Tau-c:
+k = min(n - sum(ti), n - sum(ui))
+2 * k * (concor - discor) / (n * n * (k - 1))
+
+# Tau-b:
+sum(sign(difs.x)*sign(difs.y)) / 
+  sqrt((N - 0.5 * sum(ti*(ti-1))) * (N - 0.5 * sum(ui*(ui-1))))
+# Tau-c:
+k = min(n - sum(ti), n - sum(ui))
+2 * k * sum(sign(difs.x)*sign(difs.y)) / (n * n * (k - 1))
+
+
+
+```
+
+
+### PAS 5; Definir la regió de rebuig;  resultat del test
+Aquí cal fer l'aprox a la Normal ja que el nombre de dades que tenim es elevat.
+
+### PAS 6; comparació resultats R amb els obtinguts a mà
+```{r}
+# Per defecte 'cor' calcula Tau-b quan hi ha empats:
+cor(proves, method = "kendall")
+cor(proves$LSAT, proves$GPA, method = "kendall")
+
+cor.test(proves$LSAT, proves$GPA, method = "kendall")
+
+rLSAT = rank(proves$LSAT)
+rGPA  = rank(proves$GPA)
+
+cor.test(proves$LSAT, proves$GPA, method = "kendall")
+cor.test(rLSAT, rGPA, method = "kendall")
+
+```
+
+### CAS AMB EMPATS
+### SPEARMAN AMB R
+
+```{r}
+# Correlació de Spearman:
+# La calcularem com la correlació mostral de Pearson sobre els rangs:
+cor(rLSAT, rGPA, method = "pearson")
+# o directament:
+cor(proves$LSAT, proves$GPA, method = "spearman")
+
+# Significació:
+cor.test(proves$LSAT, proves$GPA, method = "spearman")
+# Que no és el mateix que fer la prova t de Student basada en la suposició
+# de normalitat bivariant sobre els rangs:
+cor.test(rLSAT, rGPA, method = "pearson")
+```

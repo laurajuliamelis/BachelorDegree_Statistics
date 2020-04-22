@@ -1,0 +1,323 @@
+---
+title: "Análisis de datos estudio depresión postparto"
+author: "Laura Julià"
+date: "10/5/2019"
+output: 
+  html_document:
+   toc: true
+   toc_depth: 4
+---
+## 0. PAQUETES NECESARIOS.
+```{r message=FALSE, warning=FALSE}
+##install.packages("epiDisplay")
+library(epiDisplay)
+##install.packages("logbin")
+library(logbin)
+#install.packages("ResourceSelection")
+library(ResourceSelection)
+```
+
+## 1. LECTURA DE DATOS. 
+```{r}
+setwd("~/Desktop/Estadística/4. Quart/TFG/Informe")
+load("DPP.RData")
+```
+
+## 2. MODELOS DE REGRESIÓN LOGÍSTICA.
+#### 2.1. Síntomas de depresión a las 8 semanas (EPDS>9).
+```{r}
+logistica8 <- glm(epds8wc~epqnT+epds0+duke+antpers, data=dppdat,family=binomial(link="logit"))
+summary(logistica8)
+logistic.display(logistica8)
+```
+
+#### 2.2. Síntomas de depresión a las 32 semanas (EPDS>9).
+```{r}
+logistica32 <- glm(epds32winc~epqnT+epds0+ecoprob, data=dppdat,family=binomial(link="logit"))
+summary(logistica32)
+logistic.display(logistica32)
+```
+
+#### 2.3. Diagnóstico clínico de la depresión postparto (DIGS).
+```{r}
+logisticaDIGS <- glm(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, data=dppdat,family=binomial(link="logit"))
+summary(logisticaDIGS)
+logistic.display(logisticaDIGS)
+```
+
+## 3. MODELOS DE REGRESIÓN LOG-BINOMIAL CON FUNCIÓN GLM.
+#### 3.1. Síntomas de depresión a las 8 semanas (EPDS>9).
+```{r}
+##logbinonial8 <- glm(epds8wc~epqnT+epds0+duke+antpers, data=dppdat, family=binomial(link="log"))
+##summary(logbinonial8)
+```
+**Error: no valid set of coefficients has been found: please supply starting values**
+
+##### 3.1.1 Con argumento start.
+**Valores -4 i 0**
+```{r message=FALSE, warning=FALSE}
+logbinonial8.start1 <- glm(epds8wc~epqnT+epds0+duke+antpers, data=dppdat, family=binomial(link="log"), start=c(-4, rep(0,4)))
+summary(logbinonial8.start1)
+exp(coef(logbinonial8.start1))[-1]
+```
+
+**Valores de la función logbin**
+```{r message=FALSE, warning=FALSE}
+logbinonial8.start2 <- glm(epds8wc~epqnT+epds0+duke+antpers, data=dppdat, family=binomial(link="log"), start=c(-3.905,0.03624,0.03717,7.772e-16,0.2553))
+summary(logbinonial8.start2)
+exp(coef(logbinonial8.start2))[-1]
+```
+
+#### 3.2. Síntomas de depresión a las 32 semanas (EPDS>9).
+```{r}
+logbinomial32 <- glm(epds32winc~epqnT+epds0+ecoprob, data=dppdat, family=binomial(link="log"))
+summary(logbinomial32)
+exp(coef(logbinomial32))[-1]
+```
+
+#### 3.3. Diagnóstico clínico de la depresión postparto (DIGS).
+```{r}
+##logbinomialDIGS <- glm(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, data=dppdat, family=binomial(link="log"))
+##summary(logbinomialDIGS)
+```
+**Error: no valid set of coefficients has been found: please supply starting values**
+
+##### 3.3.1 Con argumento start.
+**Valores -4 i 0**
+```{r message=FALSE, warning=FALSE}
+logbinomialDIGS.start1 <- glm(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, data=dppdat, family=binomial(link="log"), start=c(-4, rep(0,5)))
+summary(logbinomialDIGS.start1)
+exp(coef(logbinomialDIGS.start1))[-1]
+```
+
+**Valores de la función logbin**
+```{r message=FALSE, warning=FALSE}
+logbinomialDIGS.start2 <- glm(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, data=dppdat, family=binomial(link="log"), start=c(-4.56916,0.03249,0.02600,0.69298,0.32336,0.60922))
+summary(logbinomialDIGS.start2)
+exp(coef(logbinomialDIGS.start2))[-1]
+```
+
+## 4. MODELOS DE REGRESIÓN LOG-BINOMIAL CON FUNCIÓN LOGBIN.
+#### 4.1. Síntomas de depresión a las 8 semanas (EPDS>9).
+```{r message=FALSE, warning=FALSE}
+logbin8 <- logbin(epds8wc~epqnT+epds0+duke+antpers, data=dppdat)
+summary(logbin8)
+exp(coef(logbin8))[-1]
+```
+**nplbin: fitted probabilities numerically 1 occurred**
+
+##### 4.1.1 Con argumento bound.tol.
+```{r message=FALSE, warning=FALSE}
+logbin8.bound <- logbin(epds8wc~epqnT+epds0+duke+antpers, data=dppdat, bound.tol= 1)
+summary(logbin8.bound)
+exp(coef(logbin8.bound))[-1]
+```
+
+
+#### 4.2. Síntomas de depresión a las 32 semanas (EPDS>9).
+```{r message=FALSE, warning=FALSE}
+logbin32 <- logbin(epds32winc~epqnT+epds0+ecoprob, data=dppdat)
+summary(logbin32)
+exp(coef(logbin32))[-1]
+```
+
+#### 4.3. Diagnóstico clínico de la depresión postparto (DIGS).
+```{r message=FALSE, warning=FALSE}
+logbinDIGS <- logbin(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, data=dppdat)
+summary(logbinDIGS)
+exp(coef(logbinDIGS))[-1]
+```
+**nplbin: fitted probabilities numerically 1 occurred**
+
+##### 4.3.1 Con argumentos "bound.tol" y "maxit".
+```{r message=FALSE, warning=FALSE}
+logbinDIGS.bound <- logbin(digs0a32~epqnT+epds0+antpers+antpsifa+expvit, data=dppdat, maxit=100, bound.tol= 0.05)
+summary(logbinDIGS.bound)
+exp(coef(logbinDIGS.bound))[-1]
+```
+
+
+## 5. MODELOS DE REGRESIÓN LOG-BINOMIAL CON FUNCIÓN COPY.
+### 5.1. Creación de la función COPY.
+```{r}
+copy <- function(data, Y, vars,n, W) {
+  if (!is.numeric(data[, Y])) {
+    data[, Y] <- as.numeric(data[, Y])-1
+  }
+  data$W <- (n-1)/n
+  data.copy <- data
+  data.copy[, Y] <- 1-data.copy[, Y]
+  data.copy$W <- 1/n
+  data.all <- merge(data, data.copy, all = T)
+  formul <- paste(Y, paste(vars, collapse = " + "), sep = "~")
+  mod.mat <- model.matrix(as.formula(formul), data)
+  glm.copy <- glm(as.formula(formul), family = binomial(log), data.all,
+                  weights = W, control = list(maxit = 100),
+                  start = c(-4, rep(0, ncol(mod.mat)-1)))
+  return(glm.copy)
+}
+```
+
+### 5.2. Síntomas de depresión a las 8 semanas (EPDS>9).
+#### 5.2.1.Con n=100 copias.
+```{r, warning=FALSE}
+logbinonial8.copy100 <- copy(dppdat,'epds8wc', vars = c('epqnT','epds0','duke','antpers'),100)
+summary(logbinonial8.copy100)
+exp(coef(logbinonial8.copy100))[-1]
+```
+
+#### 5.2.2.Con n=1000 copias.
+```{r, warning=FALSE}
+logbinonial8.copy1000 <- copy(dppdat,'epds8wc', vars = c('epqnT','epds0','duke','antpers'),1000)
+summary(logbinonial8.copy1000)
+exp(coef(logbinonial8.copy1000))[-1]
+```
+
+#### 5.2.3.Con n=10000 copias.
+```{r, warning=FALSE}
+logbinonial8.copy10000 <- copy(dppdat,'epds8wc', vars = c('epqnT','epds0','duke','antpers'),10000)
+summary(logbinonial8.copy10000)
+exp(coef(logbinonial8.copy10000))[-1]
+```
+
+### 5.3. Síntomas de depresión a las 32 semanas (EPDS>9).
+#### 5.3.1.Con n=100 copias.
+```{r, warning=FALSE}
+logbinonial32.copy100 <- copy(dppdat,'epds32winc', vars = c('epqnT','epds0','ecoprob'),100)
+summary(logbinonial32.copy100)
+exp(coef(logbinonial32.copy100))[-1]
+```
+
+#### 5.3.2.Con n=1000 copias.
+```{r, warning=FALSE}
+logbinonial32.copy1000 <- copy(dppdat,'epds32winc', vars = c('epqnT','epds0','ecoprob'),1000)
+summary(logbinonial32.copy1000)
+exp(coef(logbinonial32.copy1000))[-1]
+```
+
+#### 5.3.3.Con n=10000 copias.
+```{r, warning=FALSE}
+logbinonial32.copy10000 <- copy(dppdat,'epds32winc', vars = c('epqnT','epds0','ecoprob'),10000)
+summary(logbinonial32.copy10000)
+exp(coef(logbinonial32.copy10000))[-1]
+```
+
+### 5.4. Diagnóstico clínico de la depresión postparto (DIGS).
+#### 5.4.1.Con n=100 copias.
+```{r, warning=FALSE}
+logbinonialDIGS.copy100 <- copy(dppdat,'digs0a32', vars = c('epqnT','epds0','antpers','antpsifa','expvit'),100)
+summary(logbinonialDIGS.copy100)
+exp(coef(logbinonialDIGS.copy100))[-1]
+```
+
+#### 5.4.2.Con n=1000 copias.
+```{r, warning=FALSE}
+logbinonialDIGS.copy1000 <- copy(dppdat,'digs0a32', vars = c('epqnT','epds0','antpers','antpsifa','expvit'),1000)
+summary(logbinonialDIGS.copy1000)
+exp(coef(logbinonialDIGS.copy1000))[-1]
+```
+
+#### 5.4.3.Con n=10000 copias.
+```{r, warning=FALSE}
+logbinonialDIGS.copy10000 <- copy(dppdat,'digs0a32', vars = c('epqnT','epds0','antpers','antpsifa','expvit'),10000)
+summary(logbinonialDIGS.copy10000)
+exp(coef(logbinonialDIGS.copy10000))[-1]
+```
+
+# 6. PRUEBAS DE BONDAD DE AJUSTE CON HOSMER-LEMESHOW.
+### 6.1. Modelos de regresión logística.
+```{r}
+hoslem.test(logistica8$y, fitted(logistica8), g=10)
+hoslem.test(logistica32$y, fitted(logistica32), g=10)
+hoslem.test(logisticaDIGS$y, fitted(logisticaDIGS), g=10)
+```
+
+### 6.2. Modelos de regresión log-binomial.
+###### 6.2.1.Con función "glm".
+```{r}
+hoslem.test(logbinonial8.start1$y, fitted(logbinonial8.start1), g=10)
+hoslem.test(logbinomial32$y, fitted(logbinomial32), g=10)
+hoslem.test(logbinomialDIGS.start1$y, fitted(logbinomialDIGS.start1), g=10)
+```
+
+###### 6.2.1.Con función "logbin".
+```{r}
+hoslem.test(logbin8$y, fitted(logbin8), g=10) 
+hoslem.test(logbin32$y, fitted(logbin32), g=10)
+hoslem.test(logbinDIGS$y, fitted(logbinDIGS), g=10)
+```
+
+###### 6.2.1.Con función "COPY".
+```{r}
+hoslem.test(logbinonial8.copy100$y, fitted(logbinonial8.copy100), g=10)
+hoslem.test(logbinonial8.copy1000$y, fitted(logbinonial8.copy1000), g=10)
+hoslem.test(logbinonial8.copy10000$y, fitted(logbinonial8.copy10000), g=10)
+
+hoslem.test(logbinonial32.copy100$y, fitted(logbinonial32.copy100), g=10)
+hoslem.test(logbinonial32.copy1000$y, fitted(logbinonial32.copy1000), g=10)
+hoslem.test(logbinonial32.copy10000$y, fitted(logbinonial32.copy10000), g=10)
+
+hoslem.test(logbinonialDIGS.copy100$y, fitted(logbinonialDIGS.copy100), g=10)
+hoslem.test(logbinonialDIGS.copy1000$y, fitted(logbinonialDIGS.copy1000), g=10)
+hoslem.test(logbinonialDIGS.copy10000$y, fitted(logbinonialDIGS.copy10000), g=10)
+```
+
+# 7. PRUEBAS DE BONDAD DE AJUSTE CON LA DEVIANZA.
+### 7.1. Modelos de regresión logística.
+```{r}
+rbind("Estadistico de la devianza" = logistica8$deviance , "Grados de libertad" = logistica8$df.residual, "P-valor"=1-pchisq(logistica8$deviance, logistica8$df.residual))
+rbind("Estadistico de la devianza" = logistica32$deviance , "Grados de libertad" = logistica32$df.residual, "P-valor"=1-pchisq(logistica32$deviance, logistica32$df.residual))
+rbind("Estadistico de la devianza" = logisticaDIGS$deviance , "Grados de libertad" = logisticaDIGS$df.residual, "P-valor"=1-pchisq(logisticaDIGS$deviance, logisticaDIGS$df.residual))
+```
+
+### 7.2. Modelos de regresión log-binomial.
+###### 7.2.1.Con función "glm".
+```{r}
+rbind("Estadistico de la devianza" = logbinonial8.start1$deviance , "Grados de libertad" = logbinonial8.start1$df.residual, "P-valor"=1-pchisq(logbinonial8.start1$deviance, logbinonial8.start1$df.residual))
+rbind("Estadistico de la devianza" = logbinomial32$deviance , "Grados de libertad" = logbinomial32$df.residual, "P-valor"=1-pchisq(logbinomial32$deviance, logbinomial32$df.residual))
+rbind("Estadistico de la devianza" = logbinomialDIGS.start1$deviance , "Grados de libertad" = logbinomialDIGS.start1$df.residual, "P-valor"=1-pchisq(logbinomialDIGS.start1$deviance, logbinomialDIGS.start1$df.residual))
+
+```
+
+###### 7.2.1.Con función "logbin".
+```{r}
+rbind("Estadistico de la devianza" = logbin8$deviance , "Grados de libertad" = logbin8$df.residual, "P-valor"=1-pchisq(logbin8$deviance, logbin8$df.residual))
+rbind("Estadistico de la devianza" = logbin32$deviance , "Grados de libertad" = logbin32$df.residual, "P-valor"=1-pchisq(logbin32$deviance, logbin32$df.residual))
+rbind("Estadistico de la devianza" = logbinDIGS$deviance , "Grados de libertad" = logbinDIGS$df.residual, "P-valor"=1-pchisq(logbinDIGS$deviance, logbinDIGS$df.residual))
+```
+
+###### 7.2.1.Con función "COPY".
+```{r}
+rbind("Estadistico de la devianza" = logbinonial8.copy100$deviance , "Grados de libertad" = logbinonial8.copy100$df.residual, "P-valor"=1-pchisq(logbinonial8.copy100$deviance, logbinonial8.copy100$df.residual))
+rbind("Estadistico de la devianza" = logbinonial8.copy1000$deviance , "Grados de libertad" = logbinonial8.copy1000$df.residual, "P-valor"=1-pchisq(logbinonial8.copy1000$deviance, logbinonial8.copy1000$df.residual))
+rbind("Estadistico de la devianza" = logbinonial8.copy10000$deviance , "Grados de libertad" = logbinonial8.copy10000$df.residual, "P-valor"=1-pchisq(logbinonial8.copy10000$deviance, logbinonial8.copy10000$df.residual))
+
+rbind("Estadistico de la devianza" = logbinonial32.copy100$deviance , "Grados de libertad" = logbinonial32.copy100$df.residual, "P-valor"=1-pchisq(logbinonial32.copy100$deviance, logbinonial32.copy100$df.residual))
+rbind("Estadistico de la devianza" = logbinonial32.copy1000$deviance , "Grados de libertad" = logbinonial32.copy1000$df.residual, "P-valor"=1-pchisq(logbinonial32.copy1000$deviance, logbinonial32.copy1000$df.residual))
+rbind("Estadistico de la devianza" = logbinonial32.copy10000$deviance , "Grados de libertad" = logbinonial32.copy10000$df.residual, "P-valor"=1-pchisq(logbinonial32.copy10000$deviance, logbinonial32.copy10000$df.residual))
+
+rbind("Estadistico de la devianza" = logbinonialDIGS.copy100$deviance , "Grados de libertad" = logbinonialDIGS.copy100$df.residual, "P-valor"=1-pchisq(logbinonial8.copy100$deviance, logbinonialDIGS.copy100$df.residual))
+rbind("Estadistico de la devianza" = logbinonialDIGS.copy1000$deviance , "Grados de libertad" = logbinonialDIGS.copy1000$df.residual, "P-valor"=1-pchisq(logbinonialDIGS.copy1000$deviance, logbinonialDIGS.copy1000$df.residual))
+rbind("Estadistico de la devianza" = logbinonialDIGS.copy10000$deviance , "Grados de libertad" = logbinonialDIGS.copy10000$df.residual, "P-valor"=1-pchisq(logbinonialDIGS.copy10000$deviance, logbinonialDIGS.copy10000$df.residual))
+```
+
+# 8. TABLAS DE CONTINGENCIA.
+* Frecuencias en número de personas.
+```{r}
+# table(dppdat$epds8wc)
+# table(dppdat$epds32winc)
+# table(dppdat$digs0a32)
+
+df <- data.frame("Modelo 1"=c(1189,218, 1407), "Modelo 2"=c(922,78, 1000), "Modelo 3"=c(1032,142, 1174), row.names = c("No", "Yes","Total"))
+df
+```
+
+* Frecuencias en porcentajes.
+```{r}
+# prop.table(table(dppdat$epds8wc))*100
+# prop.table(table(dppdat$epds32winc))*100
+# prop.table(table(dppdat$digs0a32))*100
+
+df.perc <- data.frame("Modelo 1"=c(84.51,15.49, 100), "Modelo 2"=c(92.2,7.8, 100), "Modelo 3."=c(87.9,12.1, 100), row.names = c("No", "Yes","Total"))
+df.perc
+```

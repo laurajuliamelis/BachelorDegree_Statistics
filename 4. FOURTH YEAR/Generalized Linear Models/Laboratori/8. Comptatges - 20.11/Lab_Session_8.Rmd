@@ -1,0 +1,311 @@
+---
+title: "Lab Session 8"
+author: "Lidia Montero, Josep Anton Sanchez & Jordi Cortes"
+date: "November 2018"
+output:
+  html_document: default
+---
+
+# Children Ever Born: ceb data set
+### Data
+**_id_**: identificador de la regió
+
+**_dur_**: durada del matrimoni (6 categories)
+
+**_res_**: residencia (urbà, rural, sub-urbà) (4 categ)
+
+**_educ_**: nivell educatiu (3 nivells)
+
+**_mean_**: mitjana de fills
+
+**_var_**: variança de fills
+
+**_n_**: número de dones enquestades
+
+**_y_**: número total de fills 
+
+ ---------------
+Les dades estan agrupades, cada fila no respon a una dona, sió a una combinació de categories, donantnos per a cada fila el nombre de dones enquestades i el nombre total de fills (var resposta).
+
+S'ha pogut agrupar perquè no hi ha cap var numèrica. Només tenim 3 vars categòriques, i com que cada una te, respectivaament, 6,4 i 3 nivells, existeicen 72 (6*4*3) combinacions posibles (files a la bbdd).
+
+Al estar agrupades, el nombre de dones enquestades per a cada categoria no serà el mateix per a totes, llavors la taxa de fills (var resposta), variarà segons el n de la fila (combinació) estem mirant. ALERTA! 
+
+La mida de cada registre (n), el paper que juga aquesta n es el offset: correspon a una variable que justificarà que en una situació el valor esperat de la resposta sigui alt (offset: variable explicativa que en realitat no te beta)
+
+- Dades desagregades:
+
+log(lambda_i)=beta_0 + (beta_1 * x_1) ...
+
+- Dades agregades(el nostre cas):
+
+log(lambda_i)=log(n) + beta_0 + (beta_1 * x_1) ... on log(n) = OFFSET
+
+`ex.` Si Y: nombre de casos en el que pasa X cosa; la taxa (lambda) vindrà donada per l'offset, el nombre de la població, que te en compte el nombre d'individus que hi ha en aquell registre.
+
+
+
+
+
+```{r warning=FALSE}
+options(warn = -1)
+library(effects,warn.conflicts = TRUE,quietly=TRUE)
+library(MASS,warn.conflicts = TRUE,quietly=TRUE)
+library(AER,warn.conflicts = TRUE,quietly=TRUE)
+library(car,warn.conflicts = TRUE,quietly=TRUE)
+library(lmtest,warn.conflicts = TRUE,quietly=TRUE)
+load("ceb.RData")
+head(ceb)
+summary(ceb)
+```
+
+**COMENTARIS head(ceb)**
+
+Fila 1, 8 dones amb aquelles característiques sumen 4 fills en total. No sabem quants en tenen 1 o cap, sinó que en total, aquestes 8 sumen 4.
+
+Ens interessa la taxa esperada de fills per dones.
+
+
+
+Les dades estan agragades per regió.
+
+# Models
+
+### Model nul
+```{r}
+ceb$logn <- log(ceb$n)  # creem offset =log(n)
+m0 <- glm(y ~ offset(ceb$logn), family=poisson, data=ceb)
+summary(m0)
+```
+
+L'offset no te ningun paràmetre, la constant beta_0 (intercept) és la que ens dira el nombre esperat de fills per dona. 
+
+En aquest model nul estem suposant que independentment dels factors (vars explicatives), la taxa de fills esperada és la mateixa per a totes les dones.
+
+Té màxima deviança. Té 69 g.ll perquè en total hi ha 70 files (tot i que hi ha 72 combinacions, hi ha 2 que no es donen). si ajustem el model amb nomes una constant gastem 1 grau de llibertat 70-1=69.
+
+**Seria assumible aquest model?**
+
+És a dir, és compatible amb les dades observades, i podem dir que podem suposar ue la taxa sempre serà aquesta independentment del nombre d'anys de matrimoni etc?
+
+La deviança es molt mes gran que el graus de llibertat, per tant podem rebutjar la ho de que el model s'ajusti a les dades i que la taxa sigui una constant. 
+
+*------*
+
+### Models amb una predictora
+```{r}
+m1.dur <- glm(y ~ offset(ceb$logn) + dur, family=poisson, data=ceb)
+summary(m1.dur)
+m1.res <- glm(y ~ offset(ceb$logn) + res, family=poisson, data=ceb)
+summary(m1.res)
+m1.educ <- glm(y ~ offset(ceb$logn) + educ, family=poisson, data=ceb)
+summary(m1.educ)
+```
+
+La variable més rellevant, a priori, sembla la durada de matrimoni ja queté una deviança residual i un AIC menor de la resta. Les significacions en totes les variables del diferents models podrien venir explicades per no condiderar la sobredispersió.
+
+En els altres casos tenim més graus de libertat (només gasten 2 i 3 g de llibertat) però la deviança residual només s' ha reduit en uns 100 i 900 casos o unitats, respectivament.
+
+En cap cas hem obtingut un model satisfactori (el valor de la deviança no està per sota de l'umbral segons el grau de llibertats que tenen com per considferarlo un model correcte).
+ 
+ *------*
+ 
+### Models additius
+```{r}
+m2.DR <- glm(y ~ offset(ceb$logn) + dur + res, family=poisson, data=ceb)
+summary(m2.DR)
+m2.DE <- glm(y ~ offset(ceb$logn) + dur + educ, family=poisson, data=ceb)
+summary(m2.DE)
+m2.RE <- glm(y ~ offset(ceb$logn) + res + educ ,family=poisson, data=ceb)
+summary(m2.RE)
+m3 <- glm(y ~ offset(ceb$logn) + dur + res + educ ,family=poisson, data=ceb) # Model additiu complert (addició dels 3 predictors, sense considerar interaccions)
+summary(m3)
+```
+
+
+**Resum resultats:**
+
+      m2.DR -> DEV 120.68 i g.ll. 62
+      m2.DE -> DEV 100.19 i g.ll. 61
+      m2.RE -> DEV 2646.5 i g.ll. 64
+      m3    -> DEV 70.66  i g.ll. 59
+
+(En m3, 10 paràmetres: l'intercept s'explicaria com, l'exponencial de l'intercept seria la taxa de fills d'ua dona sense estudis amb la durada i la residencia en la categroia base)
+
+S'ha aconseguit baixar molt la Deviança i si mirem el word, veiem que el valora partir del qual la dev residual em faria rebutjar el model com a bo, amb 59 g.ll. seria 77.93. Com que la DEV=70.665, el model és acceptat.
+ 
+*------*
+ 
+# Interpretació
+### Model nul:
+
+L'exponencial de la intercept, `r round(exp(1.376346),2)`, representa la mitjana de fills per dona.
+
+```{r}
+# Model nul
+summary(m0)
+exp(coef(m0)) # Nb esperat de fills per dona en qualsevol grup
+(pr <- predict(m0,type="response"))  # Nb total de fills per regio
+# cbind(pr,pr/ceb$n)    
+```
+
+El nombre esperat de fills per ca en cada regió és el mateix (4 fills per dona), independentment de les seves característiques.
+
+Les prediccions son diferentes magrat la taxa és la mateixa a causa de l'offset: els nº són el resultats de multiplicar 3.960403 per n.
+
+      log(lambda)= log(n) + beta0 <--> lambda=n*exp(beta)
+
+*------*
+
+### Model additiu complert:
+
+(el que ens haviem quedat, el bó)
+
+```{r}
+coef(m3)[1] # Logaritme nb esperat de fills per dona del grup 0-4, Suva, none
+exp(coef(m3)[1]) # Nb esperat fills per dona del grup referencia
+head(predict(m3,type="response"))  # Nb total de fills en el grup
+plot(ceb$y,predict(m3,type="response"))  # Comparativa de la resposta versus el comptatge
+abline(0,1,lty=2)
+cbind(pr,ceb$y) # Valors esperats y realització d¡una poison per a cada una de les lambdas. [,1] Taxa resultant de multiplicar el predictor per n y [,2]el valor esperat de fills. 
+Anova(m3)
+```
+
+Si vull saber el nombre esperat de fills per dona, per a una dona amb unes altres característiques, hauriem d'anar tenint en compte els coeficients dels altres parámetres, en funció de la durada del matrimoni que tingui etc.
+
+# Validació
+Model additiu prou bo?
+```{r}
+# H0: Model consistent amb les dades
+m3$dev
+m3$df.residual
+
+# Test deviança  P(X2(59)>70.66)=0.14 >>0.05 -> H0 ACC
+1 - pchisq(m3$dev,m3$df.residual)
+```
+
+
+# Interaccions
+
+### 1 parella interaccions
+```{r}
+ma1 <- glm(y ~ offset(ceb$logn) + dur + res*educ,family=poisson,data=ceb)
+ma2 <- glm(y ~ offset(ceb$logn) + dur*res + educ,family=poisson,data=ceb)
+ma3 <- glm(y ~ offset(ceb$logn) + dur*educ + res,family=poisson,data=ceb)
+
+# Comparar amb model d'efectes principals
+anova(m3,ma1,test="Chisq")  # pval = 0.966 > 0.05 H0 ACC (Profe no) Perdem 6 gll però disminuim 10 la DEV, però no val la pena introduir la interacció.
+
+AIC(m3, ma1)# df: nre de param. Estan anniuats, elAIC més petit es el de m3, tornem a confirmar que és el millor.
+anova(m3,ma2,test="Chisq")  #  H0 ACC
+anova(m3,ma3,test="Chisq")  #  H0 ACC
+```
+
+# Sobredispersió
+### Model amb durada
+
+Com que la variancia és igual a la mitjana (lambda), és molt restrictiu, ja que la variabilitat queda fixada per la lambda, no hi ha un segon arametre ("sigma") // la $\phi$ (fi) sempre es 1:
+
+Quan la taxa es baixa la variabilitat serà baixa mentre que pels valors alts de lamba, la variabilitat serà alta. 
+
+```{r}
+X2dur <- sum(resid(m1.dur,type="pearson")^2)
+# Estimo paràmetre sobredispersió
+fimd <- X2dur/m1.dur$df.residual
+fimd
+```
+
+### Model additiu amb 3 variables
+```{r}
+X2DER <- sum(resid(m3,type="pearson")^2)
+
+# Estimo paràmetre sobredispersió
+fi <- X2DER/m3$df.residual
+fi
+```
+
+### Graphic assessment
+```{r}
+plot(log(fitted(m3)),log((ceb$y-fitted(m3))^2),xlab=expression(hat(mu)),ylab=expression((y-hat(mu))^2 ))
+abline(0,1) # No overdispersion = No sobredispersió
+```
+
+### Inferencia
+```{r}
+dispersiontest(m3,trafo=1) # V(Y|X)=(1+alpha)E(Y)  -> Model pseuversemblants
+dispersiontest(m3,trafo=2) # V(Y|X)=E(Y)+alpha*E(Y)^2  -> Y Binomial Negativa generalitzada
+# No hi ha sobredispersió
+# No cal fer res més
+```
+
+
+### Sobredispersió tractament: Pseudo-poisson
+
+```{r}
+# NB 1 in AER terminology
+maqv <-glm(y~offset(logn)+dur+res+educ, family=quasi(link=log,variance="mu"),data=ceb)
+maqv1<-glm(y~offset(logn)+dur+res*educ, family=quasi(link=log,variance="mu"),data=ceb)
+summary(maqv)
+summary(maqv,dispersion=1.212432)  # Considered in pvalues calculation
+summary(maqv1)
+anova(maqv,maqv1,test="Chisq")                     # Not correct
+anova(maqv,maqv1,test="F")                         # Correct
+anova(maqv,maqv1,dispersion=1.159071,test="Chisq") # Not correct
+anova(maqv,maqv1,dispersion=1.159071,test="F")     # Correct
+anova(maqv,maqv1,dispersion=1.159071,test="Rao")   # Correct
+```
+
+
+
+### Sobredispersió tractament: Binomial negativa
+
+```{r}
+gma <- glm.nb(y~offset(logn) + dur + res + educ,data = ceb)
+gma1 <- glm.nb(y~offset(logn) + dur + res*educ,data = ceb)
+summary(gma1)
+anova(gma,gma1)
+anova(gma,gma1,test="Rao")
+lrtest(gma,gma1)
+waldtest(gma,gma1)
+
+
+summary(gma1)
+
+bnma <- glm(y~offset(logn)+dur+res+educ,family=neg.bin(971918),data = ceb)
+bnma1 <- glm(y~offset(logn)+dur+res*educ,family=neg.bin(971918),data = ceb)
+
+overdis <- sum(resid(bnma1,type="pearson")^2)/df.residual(bnma1);overdis
+summary(bnma1)
+anova(bnma,bnma1,test="F")  #Correcte
+
+# Considero el model amb interaccions, segons diu POISSON
+anova(ma3,ma1,test="Chisq") #Correcte
+
+AIC(ma1)
+AIC(bnma)
+
+plot(log(fitted(ma1)),log((ceb$y-fitted(ma1))^2),xlab=expression(hat(mu)),ylab=expression((y-hat(mu))^2 ))
+abline(0,1)
+```
+
+
+# Residual analysis
+
+```{r}
+residualPlots(m3, layout=c(1, 2))
+# marginalModelPlots(m3,id=list(method=abs(cooks.distance(m3)), n=5)) 
+```
+
+# Outliers
+
+```{r}
+outlierTest(m3)
+influenceIndexPlot(m3,id=list(method=abs(cooks.distance(m3)),n=5))
+ll <- influencePlot(m3,id=list(method=abs(cooks.distance(m3)),n=5))
+
+ceb[row.names(ll),]
+matplot(dfbetas(m3),type='l')
+abline(h=sqrt(4/(dim(ceb)[1])),lty=3,col=6)
+abline(h=-sqrt(4/(dim(ceb)[1])),lty=3,col=6)
+lines(sqrt(cooks.distance(m3)),lwd=3,col=1)
+```

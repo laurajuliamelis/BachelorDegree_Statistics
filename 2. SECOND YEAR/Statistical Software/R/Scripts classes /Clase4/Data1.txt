@@ -1,0 +1,7 @@
+Name    Age   Height   Weight   Sex
+Laura    25      167       65     F
+Maria    21      160       57     F
+Pedro    23      178       83     M
+Josep    29      170       69     M
+Martha   23      163       65     F
+Jordi    19      185       90     M

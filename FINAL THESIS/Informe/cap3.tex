@@ -1,0 +1,98 @@
+\chapter{Estudio sobre la depresión postparto}\label{cap:estudioppal}
+
+En este capítulo se recoge una amplia explicación sobre el estudio epidemiológico de \textcite{Estudioppal} a partir del cual, en el Capítulo~\ref{cap:aplicacion}, se realizará el ajuste del modelo de regresión logística y del modelo de regresión log-binomial.\\
+
+El estudio fue publicado el 16 de abril de 2012 en la revista \textit{Psychological medicine} con el título \textit{``Is Neuroticism a Risk Factor for Postpartum Depression?"} y su objetivo principal fue ampliar el conocimiento del rol del neuroticismo, la extroversión y el psicoticismo como factores de riesgo de la depresión postparto, teniendo en cuenta diversas variables psicológicas, económicas y sociales.\\
+
+Por aquel entonces ya se habían realizado múltiples estudios \parencites{otrosestudios1, otrosestudios2, otrosestudios3} en los que se analizaba la relación entre la personalidad y la depresión, una relación considerablemente compleja, con los que se obtuvieron evidencias empíricas de que ciertos rasgos de la personalidad de una persona, especialmente el \textbf{neuroticismo} \footnote{Es un rasgo psicológico relativamente estable que conlleva inestabilidad e inseguridad emocional, tasas elevadas de ansiedad, estado continuo de preocupación y tensión, con tendencia a la culpabilidad.}, están relacionados con el riesgo de padecer depresión. \\
+
+No obstante, la mayoría de las investigaciones tenían numerosas limitaciones metodológicas debidas al tamaño de la muestra, el sesgo de selección, la evaluación de la depresión o la falta de consideración de ciertos factores de confusión, razón por la que surgió la necesidad de realizar un nuevo estudio. \\
+
+
+\section{Metodología}\label{cap:metodologia}
+
+Entre diciembre del año 2003 y octubre del 2004 se invitó a un gran número de mujeres de siete hospitales españoles diferentes a participar en el estudio; un total de 1804 mujeres dieron su consentimiento por escrito. Todas las mujeres que participaron en el estudio fueron españolas, caucásicas, capaces de entender y responder los cuestionarios clínicos, libres de depresión u otra enfermedad psiquiátrica en ese momento y durante el embarazo. Se excluyeron aquellas mujeres cuyos hijos murieron al nacer. \\
+
+A los dos o tres días postparto (tiempo \textbf{baseline} en el que se recogieron los valores iniciales, a partir de los cuales se compararon valores posteriores) todas las participantes completaron una entrevista semiestructurada en la que se recogió información sociodemográfica (edad, estado civil, trabajo y situación económica), obstétrica (paridad y tipo de parto) y la historia clínica psiquiátrica personal y familiar. Además, todas las mujeres fueron evaluadas con varios cuestionarios.\\
+
+\textbf{1. Cuestionario de personalidad de Eysenk abreviado (EPQR-A) }\\
+[0.3cm]
+Se trata de un cuestionario con 48 preguntas de las 100 que contiene el cuestionario completo de \textcite{cuest1}, con el que se miden tres dimensiones de la personalidad: extraversión (E), neuroticismo (N) y psicoticismo (P). Los resultados se categorizaron clasificándolos en: valores altos de extraversión, neuroticismo y psicoticismo si la puntuación era superior a 55 y valores bajos en las tres dimensiones si la puntuación era igual o inferior a 45.\\
+
+\textbf{2. Escala de Acontecimientos Vitales de St. Paul Ramsey (SPR) }\\
+[0.3cm]
+El cuestionario, de \textcite{cuest2}, se usó al inicio del estudio para identificar y calificar el impacto de los eventos estresantes en la vida de las participantes durante el embarazo. Se utilizó una escala de siete puntos para medir la gravedad de los eventos y se consideraron seis categorías diferentes: apoyo primario, entorno social, vivienda, trabajo, salud y economía. El \textit{outcome} o variable respuesta fue dicotómica: presencia o ausencia de eventos estresantes durante el periodo de embarazo. \\
+
+\textbf{3. Escala de Apoyo Social de Duke-UNC (DUFSS)}\\
+[0.3cm]
+Este cuestionario de \textcite{cuest3} consta de 11 preguntas diseñadas para evaluar el apoyo social funcional, es decir, el grado en que las necesidades sociales básicas de la persona son satisfechas a través de la interacción con otros. Las opciones de respuesta de cada pregunta están en una escala de cinco puntos que va desde 1 (``mucho menos de lo que me gustaría") a 5 (``todo lo que me gustaría"). Las puntuaciones más altas reflejan un mayor apoyo social percibido.
+
+\textbf{4. Escala Edinburgh para la Depresión Postnatal (EPDS) }\\
+[0.3cm]
+Este cuestionario\footnote{El cuestionario está incluido, en su versión en inglés, en el Apéndice~\ref{cap:apendiceA}.} de \textcite{cuest4} se utilizó para evaluar los síntomas depresivos en tres momentos diferentes del tiempo: inmediatamante después del parto (\textit{baseline}), a las 8 semanas y a las 32 semanas después del parto.\\
+
+Está compuesto de 10 preguntas con cuatro respuestas posibles, de 0 a 3 puntos, y una puntuación total máxima de 30 puntos. Si la calificación obtenida por la participante era superior a 9, entonces se la consideraba un caso probable de padecer depresión postparto. \\
+
+Adicionalmente, aquellas mujeres que obtuvieron un $\text{EPDS}>9$ tanto a las 8 como a las 32 semanas después del parto fueron citadas para realizar una Entrevista de Diagnóstico para Estudios Genéticos (en inglés, DIGS) para ser evaluadas según los criterios del Manual Diagnóstico y Estadístico de los Transtornos Mentales (DSM-IV). \\
+
+En lo referente al análisis estadístico de los datos recogidos, se considedaron tres variables respuesta: (1) síntomas depresivos a las 8 semanas postparto ($\text{EPDS}>9$), (2) síntomas depresivos ($\text{EPDS}>9$) a las 32 semanas en el caso de $\text{EPDS}<9$ a las 8 semanas; y (3) la presencia de un episodio depresivo mayor (DIGS = ``\textit{Major Depression}") durante las 32 semanas posteriores al parto utilizando DIGS.\\
+
+Se ajustó un modelo de regresión logística para cada una de las tres variables respuesta en función de las variables independientes de interés (neuroticismo, extraversión y psicoticismo, además de otras variables relacionadas con la personalidad, la depresión y variables sociodemográficas) siguiendo el método propuesto por \textcite{hosmer}, el cual combina elementos \textit{backward} y \textit{forward} del criterio de selección de variables \textit{stepwise}. Es decir, inicialmente se incluyeron en los modelos todas las variables predictoras y se fueron eliminando iterativamente aquellas estadísticamente no significativas, con un nivel de significación del 5\%, siempre y cuando las estimaciones de los parámetros de las variables restantes no cambiaran sustancialmente y a continuación, se comprobó la importancia de variables excluidas anteriormente. Se consideraron posibles interacciones entre variables y se descartaron posibles factores de confusión en el modelo. \\
+
+La interpretación de los parámetros se realizó en términos del OR ajustado, también con intervalos de confianza al 95\%. Finalmente, se verificó la bondad de ajuste global de cada uno de los tres modelos utilizando el test propuesto por \textcite{bondad}, que está implementado en la función \textit{``residuals.lrm"} del paquete \textit{rms} \autocite{rms} de R. Todo esto fue llevado a cabo con los \textit{softwares} estadísticos SPSS y R.
+\newpage
+\section{Resultados}\label{cap:resultados}
+
+En primer lugar, se realizó un análisis descriptivo para describir las características de las mujeres que participaron en el estudio. La edad media del total de la muestra fue de 31.7 años (con una desviación típica de 4.6 y un rango de edades de 18-46 años), más del 95\% de las participantes estaban casadas o tenía pareja estable y vivían con su propia familia, la mayoría (68\%) tenían empleo y solo un 27\% tenía un grado universitario. Además, casi la mitad de las mujeres eran primíparas (46\%) y el 80\% tuvieron un parto vaginal. En cuanto a la historia clínica psiquiátrica, el 31\% tenían un historial psiquiátrico familiar y el 16\%, personal.\\
+
+Respecto a la participación de las $n=1804$ mujeres de la muestra, fueron 1407 las que permanecieron en en el estudio a las 8 semanas y 1337 a las 32 (78\% y 74.1\% del total, respectivamente). Las participantes que abandonaron el seguimiento  se caracterizaron por tener un nivel de educación bajo, problemas económicos, relaciones de pareja cortas y ninguna historia clínica psiquiátrica. \\
+
+A continuación se muestran los resultados medios obtenidos por las participantes en los dferentes cuestionarios que tuvieron que realizar:
+
+\begin{table} [h!]
+	\centering
+	\label{tab:3}
+	\begin{tabular}{l c c}
+		\toprule
+		\textbf{Variable} & Puntuación media & Desviación típica \\
+		\midrule
+		Extroversión  & 51.1   & 9.6 \\
+		Neuroticismo&   43.6  & 8.5 \\
+		Psicoticismo & 48  & 8.9 \\
+		Duke-UNC  & 52   & 8.6 \\
+		EPDS (\textit{baseline})&   6.1  & 4.5 \\
+		EPDS (8 semanas) & 5.3  & 4.6 \\
+		EPDS (32 semanas) & 4.4  & 4.7 \\
+		\bottomrule
+	\end{tabular}
+	\caption{Resumen de resultados de los cuestionarios.}
+\end{table}
+
+Por otra parte, el porcentaje de mujeres que padecieron ciertos eventos de depresión fueron los siguientes:
+
+\begin{table} [h!]
+	\centering
+	\label{tab:4}
+	\begin{tabular}{l c}
+		\toprule
+		\textbf{Evento} & Porcentaje\\
+		\midrule
+		 Evento estresante durante el embarazo & 37\% \\
+		Síntomas depresivos a las 8 semanas (EPDS$>9$) & 11.9\%\\
+		Síntomas depresivos a las 32 semanas (EPDS$>9$) & 24\%\\
+		Síntomas depresivos SOLO a partir de las 8 semanas & 7.6\%\\
+		Episodio depresivo mayor (DIGS) & 12.7\%  \\
+		\bottomrule
+	\end{tabular}
+	\caption{Porcentajes de eventos depresivos durante el seguimiento del estudio.}
+\end{table}
+
+Luego, se realizó un análisis univariante en el que se utilizaron los tests $\chi^2$ de Pearson y $t$ de \textit{Student} para las variables cualitativas y cuantitativas, respectivamente. Los resultados mostraron diferencias estadísticamente significativas en las dimensiones de la personalidad entre las mujeres con y sin síntomas de depresión postparto. Los valores más altos en los cuestionarios de personalidad se observaron en las mujeres con síntomas de depresión postparto. \\
+
+Para terminar, se llevaron a cabo análisis de regresión logística para explorar qué características de la personalidad y factores de riesgo podrían ayudar a predecir síntomas de depresión postparto (EPDS$>9$) a las 8 y a las 32 semanas posteriores al parto, así como también episodios depresivos mayores durante las 32 semanas postparto. El único rasgo de personalidad que hizo aumentar el riesgo de EPDS $>9$ y de padecer un episodio de depresión mayor fue el neuroticismo. Variables como la historia clínica de depresión, el valor inicial del EPDS, la situación económica y la vivencia de eventos estresantes durante el embarazo fueron identificados como factores de riesgo e incorporados en los modelos de regresión que se ajustaron.
+
+
+
+
+
+

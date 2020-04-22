@@ -1,0 +1,1 @@
+%%ejemplo2A=[1 1; 2 1; 1 2; 2 3; 2 5; 2 4]b=[30.006; 44.013; 46.006; 76.012; 108.010; 92.011]%%ecuaciones normalesrank(A) %% es distinto de 0 tiene soluciónB=A'*AC=A'*b%%solucionx=B\C%%vector residuo %%comprobar que N=14 y O=16 residuo mas grander=norm(b-A*x)rn=norm(b-A*[14 16]')

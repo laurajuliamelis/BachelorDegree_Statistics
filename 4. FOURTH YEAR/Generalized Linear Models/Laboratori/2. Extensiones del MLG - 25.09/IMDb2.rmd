@@ -1,0 +1,334 @@
+---
+title: 'Sesión 2: Model Lineal General, caso IMDb (2)'
+author: "MLGz"
+date: "25 de septiembre de 2018"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(car)
+library(effects)
+library(emmeans)
+```
+
+# IMDb data
+
+El conjunto de datos  contiene información de 322 películas de cine de USA de la última década. Los datos se han recogido de la web www.imdb.com e incluyen la siguiente información:
+
+- movie_title:	Título de la película
+
+- gross:	Recaudación total (millones de $)
+
+- budget:	Presupuesto	(millones de $)
+
+- duration:	Duración (minutos)	
+
+- title_year:	Año de estreno	
+
+- actor1_fl:	Popularidad del primer actor (número de "Likes" en Facebook)	
+
+- actor2_fl:	Popularidad del segundo actor (número de "Likes" en Facebook)	
+
+- actor3_fl:	Popularidad del tercer actor (número de "Likes" en Facebook)	
+
+- cast_fl:	Popularidad total del casting (número de "Likes" en Facebook)	
+
+- faces_poster:	Número de caras que aparecen en el póster	
+
+- Genre: 	Género de la película (Comedy, Drama, Action, Horror)
+
+Se pretende explorar las relaciones entre las variables recogidas y la recaudación de la película. 
+
+A partir del modelo obtenido mediante mecanismo stepwise, explora la extensón del modelo:
+
+1. Corrige la multicolinealidad eliminando alguna de las variables que están altamente correlacionadas (*actor_fl* y *cast_fl*)
+
+2. Verifica la significación de la variable *faces_poster* si eliminamos la observación más extrema (leverage muy alto)
+
+3. Comprueba si es mejor incluir un término cuadrático en *lnbudget* o categorizar la variable
+
+4. Comprueba si es mejor incluir transformar la variable *cast_fl* con logaritmos, añadir un término cuadrático o categorizar la variable.
+
+
+
+```{r}
+data=read.csv2("IMDb.csv")
+summary(data)
+row.names(data)=data[,1]
+data=data[,-1]
+head(data)
+```
+
+
+
+## Modelo Lineal General (Extensiones)
+
+```{r}
+data$gross=data$gross/1e6
+data$budget=data$budget/1e6
+data$year=factor(cut(data$title_year,c(0,2008,2012,2017)),labels=c("2006-2008","2009-2012","2013-2016"))
+data$lngross=log(data$gross)
+data$lnbudget=log(data$budget)
+```
+
+```{r}
+data1=data[,c(13,14,3,5:10,11,12)]
+summary(data1)
+pairs(data1)
+```
+
+(fins aqui igual que la classe anterior)
+
+Hem vista abans que entre cast y actor 1 existia multicolinealitat. Ara ens demanen que escollim quin predictorens quedem en el model i quin ens carreguem. Com ho decidim? Quina variable eliminiem, actor1 o cast, per tal de eliminar la multiolinealitat?
+
+Ajustem dos models en els que sabem que no hi ha multicolinealitat perque hem eliminat en cada un una de les dues variables: en un ens quedem amb actor 1 y en l'alte, amb cast
+
+```{r}
+summary(mod<-lm(lngross~lnbudget+duration+actor1_fl+faces_poster+Genre,data1))
+summary(mod<-lm(lngross~lnbudget+duration+cast_fl+faces_poster+Genre,data1))
+```
+
+Ens quedem amb el swegon, primer per la significació, y segon y mes principalment, perqe el R^2 al primer es 0.49 y al segon: 0.50.
+
+així, eliminem l'actor1 del model.
+
+Mirem tambe el VIF:
+```{r}
+vif(mod)
+```
+
+Els VIF em confirmem que no hi ha multicolinealitat.
+
+Estudiem la variable cares als posters. 
+```{r}
+table(data1$faces_poster)
+scatterplot(lngross~faces_poster,data1)
+data1=data1[data1$faces_poster<20,]
+nrow(data1)
+```
+
+com que tenim ua observació contaminant (31 cares), la eliminem. I decidim que nomes hi hagi les que tinguin com a maxim 19 cares en els posters.
+
+si ara tornem a aplicar el scatterplot veurem que les linies no seran tan corbes, el model estara mes ajustat.
+
+De fet, si apliquem el summary d'aquest nou model veiem que el nombre de cares deixa de ser significant un cop eliminada aquella observació tan alta:
+```{r}
+summary(mod<-lm(lngross~lnbudget+duration+cast_fl+faces_poster+Genre,data1))
+
+```
+
+```{r}
+anova(mod)
+Anova(mod,type=3)
+```
+
+Així, despres de eliminar la variable correlacionada i la dada contaminant que ha fet que la var deixas de sr significativa, el model final que ens quedem es el següent:
+```{r}
+summary(mod<-lm(lngross~lnbudget+duration+cast_fl+Genre,data1))
+```
+
+
+```{r}
+anova(mod)
+Anova(mod,type=3)
+```
+
+```{r}
+par(mfrow=c(2,2))
+plot(mod)
+par(mfrow=c(1,1))
+```
+
+
+```{r}
+residualPlots(mod)
+```
+
+Residus no horitzontals, encara podem millorar més el model.
+
+
+Ara, discutirem si per a les covariables del model val la pena categoritzarla, convertirla a logaritmes o afegir un polinomi:
+
+Si no sabem que hem de fer, femho tot. 
+
+PRIMER MODEL: afegim un polinomi de grau dos.
+
+Si elevam budget al 2 ens donara multicolinalitat, si afegim poly, ja s'encarrega de ferho de manera que elimina el problema de la multicolinealitat
+```{r}
+summary(mod1a<-lm(lngross~poly(lnbudget,2)+duration+cast_fl+Genre,data1))
+```
+
+poly(lnbudget, 2)2 no es es logaritme al quadrat, es una transofrmació al quadrat igual que poly(lnbudget, 2)1 no és exactament el terme lineal. Però dona igual, no cal etrar en això.
+
+Lo important és la interpretació: vegem que ambdós son significatius. Tant el terme quadrat com el nileal, també el R^2 i la significació global es millor. 
+
+També ho confirmem amb l'anova 3. 
+
+```{r}
+anova(mod1a)
+Anova(mod1a,type=3)
+```
+
+
+```{r}
+residualPlots(mod1a)
+```
+
+Ara ja viem que la linia es totalment horitxontal i no s'observa la curvatura d'abans: la distribució dels residus ja es totaltment aleatoria (lineal) per a cualsevol valor del presupost. També, eñp valor ens confirma que ja no son significatius i el Tuckey (global) em diu que encara que afegim una forma quafràtica, el model no serà millor.
+
+```{r}
+shapiro.test(resid(mod1a))
+shapiro.test(rstudent(mod1a))
+par(mfrow=c(1,2))
+qqPlot(resid(mod1a))
+qqPlot(rstudent(mod1a))
+par(mfrow=c(1,1))
+```
+
+```{r}
+influencePlot(mod1a)
+```
+
+```{r}
+outlierTest(mod1a)
+```
+
+
+```{r}
+plot(allEffects(mod1a))
+```
+
+```{r}
+summary(data1$budget)
+scatterplot(resid(mod)~data1$lnbudget)
+abline(v=c(log(10),log(30),log(90)))
+
+scatterplot(lngross~lnbudget,data1)
+abline(v=c(log(10),log(30),log(90)))
+
+data1$lnbudgetCat=cut(data1$lnbudget,c(-999,log(10),log(30),log(90),999),labels=c("<10","10-30","30-90",">90"))
+summary(data1$lnbudgetCat)
+
+```
+
+Els scatterplots son els residus enftonr a les variable explicativa lnbudget. Amb les línies, es defineixen 4 grups. Així, extendrem el model el model amb una var categorica a 4 nivells per veure si podem millorar l'ajust i convertir la distribucio dels residus a lineal.
+
+Tenir en compte qe gastarem 3 variables mes que haurem d'afegir.
+
+Peruè aquests límits? és una mica anar jugant. S'ha d'anar mirant de separar els punts de tall seegons si la recta esta per sota per sobre o damunt de la recta ideal. I veure si amb mes o menys categories i quins punts ens dona un ajust millor. 
+
+
+```{r}
+summary(mod1b<-lm(lngross~lnbudgetCat+duration+cast_fl+Genre,data1))
+```
+
+
+```{r}
+residualPlots(mod1b)
+```
+
+```{r}
+plot(allEffects(mod1b))
+```
+
+El model també queda validat
+
+
+Ara cal rspondre, quins ens quedem, el del polinomi o el de les categories?
+
+Els comparem
+
+```{r}
+anova(mod,mod1a)
+anova(mod,mod1b)
+```
+
+
+```{r}
+AIC(mod,mod1a,mod1b)
+BIC(mod,mod1a,mod1b)
+mod1=mod1a
+```
+
+CONCLUSIÓ:
+
+Ens quedem amb el del terme quadrpàtic.
+
+Mateix que lo anterior però am la variable cast:
+```{r}
+data1$lncast_fl=log(data1$cast_fl+1)
+summary(mod2a<-lm(lngross~poly(lnbudget,2)+duration+lncast_fl+Genre,data1))
+```
+
+```{r}
+summary(mod2b<-lm(lngross~poly(lnbudget,2)+duration+poly(cast_fl,2)+Genre,data1))
+```
+```{r}
+scatterplot(resid(mod1)~data1$cast_fl)
+abline(v=50000)
+
+data1$cast_flCat=cut(data1$cast_fl,c(-999,50000,999999),labels=c("<15k",">50k"))
+summary(data1$cast_flCat)
+summary(mod2c<-lm(lngross~poly(lnbudget,2)+duration+cast_flCat+Genre,data1))
+```
+
+```{r}
+anova(mod1,mod2a)
+anova(mod1,mod2b)
+anova(mod1,mod2c)
+```
+
+El mejor AIC y BIC es para el modelo con el término cuadrático.
+
+```{r}
+AIC(mod1,mod2a,mod2b,mod2c)
+BIC(mod1,mod2a,mod2b,mod2c)
+mod2=mod2b
+```
+
+
+
+```{r}
+anova(mod2)
+Anova(mod2,type=3)
+vif(mod2)
+```
+```{r}
+anova(mod1,mod2)
+```
+```{r}
+residualPlots(mod2)
+```
+
+```{r}
+shapiro.test(resid(mod2))
+shapiro.test(rstudent(mod2))
+par(mfrow=c(1,2))
+qqPlot(resid(mod2))
+qqPlot(rstudent(mod2))
+par(mfrow=c(1,1))
+```
+
+```{r}
+influencePlot(mod2)
+```
+
+```{r}
+outlierTest(mod2)
+```
+
+
+```{r}
+plot(allEffects(mod2))
+```
+```{r}
+pr<-predict(mod2,newdata=data.frame(lnbudget=log(20),duration=90,year="2013-2016",director_fl=0,actor1_fl=0,actor2_fl=0,cast_fl=0,faces_poster=1,Genre="Horror"),interval="confidence")
+exp(pr)
+pr2<-predict(mod2,newdata=data.frame(lnbudget=log(20),duration=90,year="2013-2016",director_fl=0,actor1_fl=0,actor2_fl=0,cast_fl=0,faces_poster=1,Genre="Horror"),interval="prediction")
+exp(pr2)
+```
+
+

@@ -1,0 +1,112 @@
+---
+title: "Analisis de una secuencia"
+author: "Laura Juli? Melis, V?ctor Navarro Garc?s y Marta Pi?ol Palau"
+date: '`r format(Sys.Date(),"%e de %B de %Y")`'
+output: 
+  html_document: default
+---
+
+
+```{r setup, include=FALSE}
+# knitr options
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r libraries, include=FALSE}
+# Install packages
+# Load packages
+# ...
+
+library(knitr)
+
+ #source("http://bioconductor.org/biocLite.R")
+ #biocLite("Biostrings")
+library(Biostrings)
+
+```
+
+
+## Secuencia 1
+
+La secuencia leida es:
+```{r, echo=FALSE}
+secuencia <- readDNAStringSet("gi32141095_N_0.fa")
+
+df <- c(names(secuencia), paste(secuencia))
+df
+```
+
+La longitud de la secuencia es de `r width(secuencia)` bases. Estan repartidas como:
+
+**Adeninas** (A): `r letterFrequency(secuencia, "A")`<br>
+**Citosinas** (C): `r letterFrequency(secuencia, "C")`<br>
+**Guaninas** (G): `r letterFrequency(secuencia, "G")`<br>
+**Timinas** (T): `r letterFrequency(secuencia, "T")`
+
+## Secuencia 2
+
+La secuencia leida es:
+```{r, echo=FALSE}
+secuencia2 <- readDNAStringSet("gi32141095_N_1.fa")
+
+c(names(secuencia2), paste(secuencia2))
+```
+
+La longitud de la secuencia es de `r width(secuencia2)` bases. Estan repartidas como:
+
+**Adeninas** (A): `r letterFrequency(secuencia2, "A")`<br>
+**Citosinas** (C): `r letterFrequency(secuencia2, "C")`<br>
+**Guaninas** (G): `r letterFrequency(secuencia2, "G")`<br>
+**Timinas** (T): `r letterFrequency(secuencia2, "T")`
+
+## Secuencia 3
+
+La secuencia leida es:
+```{r, echo=FALSE}
+secuencia3 <- readDNAStringSet("glnA glutamine synthase class I [Mycobacterium leprae TN]_reference assembly.fa")
+df3 <- c(names(secuencia3), paste(secuencia3))
+df3
+```
+
+La longitud de la secuencia es de `r width(secuencia3)` bases. Estan repartidas como:
+
+**Adeninas** (A): `r letterFrequency(secuencia3, "A")`<br>
+**Citosinas** (C): `r letterFrequency(secuencia3, "C")`<br>
+**Guaninas** (G): `r letterFrequency(secuencia3, "G")`<br>
+**Timinas** (T): `r letterFrequency(secuencia3, "T")`
+
+## Secuencia 4
+
+```{r}
+secuencia4 <- readBStringSet("glutamine synthase class I [Mycobacterium leprae TN]_Protein.fa")
+
+df4 <- c(names(secuencia4), paste(secuencia4))
+df4
+```
+
+La longitud de la secuencia es de `r width(secuencia4)` aminoacidos/proteinas. Estan repartidos como:
+
+**Alanina** (A): `r letterFrequency(secuencia4, "A")`<br>
+**Arginina** (R): `r letterFrequency(secuencia4, "R")`<br>
+**Asparagina** (N): `r letterFrequency(secuencia4, "N")`<br>
+**Aspartato** (D): `r letterFrequency(secuencia4, "D")`<br>
+**Ciste?na** (C): `r letterFrequency(secuencia4, "C")`<br>
+**Glutamina** (Q): `r letterFrequency(secuencia4, "Q")`<br>
+**?cido glut?mico** (E): `r letterFrequency(secuencia4, "E")`<br>
+**Glicina** (G) : `r letterFrequency(secuencia4, "G")`<br>
+**Histidina** (H): `r letterFrequency(secuencia4, "H")`<br>
+**Isoleucina** (I): `r letterFrequency(secuencia4, "I")`<br>
+**Leucina** (L): `r letterFrequency(secuencia4, "L")`<br>
+**Lisina** (K): `r letterFrequency(secuencia4, "K")`<br>
+**Metionina** (M): `r letterFrequency(secuencia4, "M")`<br>
+**Fenilalanina** (F): `r letterFrequency(secuencia4, "F")`<br>
+**Prolina** (P): `r letterFrequency(secuencia4, "P")`<br>
+**Serina** (S): `r letterFrequency(secuencia4, "S")`<br>
+**Treonina** (T): `r letterFrequency(secuencia4, "T")`<br>
+**Tript?fano** (W): `r letterFrequency(secuencia4, "W")`<br>
+**Tirosina** (Y): `r letterFrequency(secuencia4, "Y")`<br>
+**Valina** (V): `r letterFrequency(secuencia4, "V")` 
+
+`
+

@@ -1,0 +1,170 @@
+# mostra en format tabulat:
+y = 0:5
+ni = c(229, 211, 93, 35, 7, 1)
+
+n = sum(ni)
+n
+
+# mostra en format extens:
+yi = rep(y, ni)
+yi
+# Ara han quedat ordenats: primer 229 valors 0, a continuació 211 valors 1, etc.
+# En realitat a la mostra original devien estar desordenats, era quelcom semblant a:
+yi = sample(yi, replace = FALSE)
+yi
+
+# Una remostra bootstrap no paramètric de 'yi':
+yi.boot = sample(yi, replace = TRUE)
+yi.boot
+# Que s'ha de tornar a tabular per tenir una taula similar a l'original:
+ni.boot = table(yi.boot)
+ni.boot
+# En una sola passada:
+table(sample(yi, replace = TRUE))
+
+
+# Fixem-nos que al procés anterior es van generant els valors de 'y' (0 o 1 o 2 etc.)
+# amb probabilitats iguals a la seva proporció de presència a la mostra original.
+# Amb 'sample' es podria fer:
+freq.rels = ni / n
+yi.boot = sample(y, replace = TRUE, size = n, prob = freq.rels)
+table(yi.boot)
+# En una sola passada:
+table(sample(y, replace = TRUE, size = n, prob = freq.rels))
+
+# L'anterior es pot fer de manera més directa generant una multinomial de paràmetres 'n' i
+# probabilitats = les freqüències relatives:
+rmultinom(1, size = n, prob = freq.rels)
+
+# De les tres opcions, amb molta diferència, la més eficient és la tercera, 
+# generar directament una multinomial:
+
+require(microbenchmark)
+
+resampl1 = function(ni, nboot = 10000) {
+  yi = rep(y, ni)
+  ni.boot = replicate(nboot, table(sample(yi, replace = TRUE)))
+}
+resampl2 = function(ni, nboot = 10000) {
+  n = sum(ni)
+  freq.rels = ni / n
+  ni.boot = replicate(nboot, table(sample(y, replace = TRUE, size = n, prob = freq.rels)))
+}
+resampl3 = function(ni, nboot = 10000) {
+  n = sum(ni)
+  freq.rels = ni / n
+  ni.boot = rmultinom(nboot, size = n, prob = freq.rels)
+}
+microbenchmark(
+  resampl1(ni, 1000), 
+  resampl2(ni, 1000), 
+  resampl3(ni, 1000)
+)
+
+# Estimador no esbiaixat de lambda: la mitjana:
+lambda.estim = weighted.mean(y, ni) # Amb el mateix resultat que: lambda.estim = mean(yi)
+lambda.estim
+
+# Variància de les dades:
+sum(ni * (y - lambda.estim)^2) / (n - 1)
+
+# Variància de la mitjana:
+(sum(ni * (y - lambda.estim)^2) / (n - 1)) / n
+
+# Estimador del seu error estàndard:
+se.lambda = sqrt(sum(ni * (y - lambda.estim)^2) / ((n - 1) * n))
+se.lambda
+
+# Tot integrat en una funció, l'error estàndard com un atribut de l'estimació de lambda:
+lambdaEstim = function(ni, compute.se = TRUE) {
+  y = 0:(length(ni) - 1)
+  lambda.estim = weighted.mean(y, ni)
+  if (compute.se) {
+    n = sum(ni)
+    attr(lambda.estim, "se") = sqrt(sum(ni * (y - lambda.estim)^2) / ((n - 1) * n))
+  }
+  return(lambda.estim)
+}
+
+lambdaEstim(ni)
+
+# Remostratge bootstrap:
+nboot = 10000
+y.boot = as.data.frame( rmultinom(nboot, size = n, prob = freq.rels))
+rownames(y.boot) = 0:5
+y.boot[,1:10]
+# Càlcul de l'estimació de lambda (amb el seu corresponent error estàndard)
+# sobre cada remostra bootstrap:
+lambda.boot = lapply(y.boot, lambdaEstim)
+lambda.boot[1:10]
+
+# Error estàndard estimat dels 10 primers valors bootstrap de lambda:
+vapply(lambda.boot[1:10], attr, "se", FUN.VALUE = 0)
+
+t.boot = (unlist(lambda.boot) - lambda.estim) / vapply(lambda.boot, attr, "se", FUN.VALUE = 0)
+t.boot[1:10]
+
+# Interval bootstrap-t:
+alpha = 0.05 # 1 - alpha = 0.95
+ci = lambda.estim - 
+  quantile(t.boot, probs = c(1 - alpha/2, alpha/2)) * se.lambda
+names(ci) = NULL
+attr(ci, "conf.level") = 1 - alpha
+ci
+
+# Interval bootstrap-t simetritzat:
+t.alpha = quantile(abs(t.boot), probs = 1 - alpha)
+ci = lambda.estim - c(t.alpha, -t.alpha) * se.lambda
+names(ci) = NULL
+attr(ci, "conf.level") = 1 - alpha
+ci
+
+# Interval percentil bootstrap:
+lambda.boot = unlist(lambda.boot) # Ara ja no cal l'error estàndard
+ci = quantile(lambda.boot, probs = c(alpha/2, 1 - alpha/2))
+names(ci) = NULL
+attr(ci, "conf.level") = 1 - alpha
+ci
+
+# Interval bootstrap BCa:
+# Correcció del biaix:
+z0 = qnorm(sum(lambda.boot <= lambda.estim) / nboot)
+z0
+# Solament hi ha length(y) valors jackkcnife de lambda diferents, cadascun repetit 'ni' vegades:
+k = length(y)
+matrix(ni, ncol = k, nrow = k)
+# Vectors de freqüències quan falta una dada 0, quan falta una dada 1, etc:
+n_i = matrix(ni, ncol = k, nrow = k) - diag(k)
+# Diferents possibles valors jackknife lambda.estim_i:
+lambda.estim_i = apply(n_i, 2, lambdaEstim)
+lambda.estim_i
+# cadascun repetit
+ni
+
+lambda.estim. = weighted.mean(lambda.estim_i, ni)
+lambda.estim.
+a = sum(ni * (lambda.estim. - lambda.estim_i)^3) / (6 * sum(ni * (lambda.estim. - lambda.estim_i)^2)^1.5)
+a
+
+zalpha = -qnorm(alpha/2)
+zalpha
+
+p1 = pnorm(z0 + (z0 - zalpha) / (1 - a * (z0 - zalpha)))
+p2 = pnorm(z0 + (z0 + zalpha) / (1 - a * (z0 + zalpha)))
+
+ci = quantile(lambda.boot, probs = c(p1, p2))
+names(ci) = NULL
+attr(ci, "conf.level") = 1 - alpha
+ci
+
+# Bootstrap paramètric basat en assumir distribució de Poisson pels valors de y:
+# Calculem les probabilitats dels diferents valors de y segons la densitat Poisson
+# (excepte el darrer):
+# k = length(y)
+pois.probs = rep(0.0, k)
+pois.probs[-k] = dpois(y[-k], lambda = lambda.estim)
+# El darrer serà 1 - suma dels anteriors (aquestes probabilitats han de sumar 1):
+pois.probs[k] = 1 - sum(pois.probs)
+# Generem les remostres de la mateixa manera (multinomial) però amb probabilitats Poisson:
+y.boot = as.data.frame( rmultinom(nboot, size = n, prob = pois.probs))
+# El procés de càlcul dels intervals de confiança seria el mateix...

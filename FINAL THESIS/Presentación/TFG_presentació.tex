@@ -1,0 +1,661 @@
+%--------------------------------------------------------------------------------
+%	PAQUETES
+%--------------------------------------------------------------------------------
+\documentclass{beamer}
+\usetheme{Boadilla}
+\usecolortheme{seahorse}
+\usepackage{graphicx}
+\usepackage[spanish, es-tabla]{babel}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{adjustbox}
+\usepackage{amsmath}
+\usepackage{relsize}
+
+
+\usepackage[backend = biber, style = apa, autocite = inline,%
+defernumbers = true]{biblatex}
+\addbibresource{references.bib}
+
+\beamertemplatenavigationsymbolsempty
+
+%%%% ELIMINAR FOOTNOTE A LA FRAME FINAL %%%%
+\BeforeBeginEnvironment{frame}{%
+	\setbeamertemplate{footline}[split theme]
+}
+
+\makeatletter
+\define@key{beamerframe}{standout}[true]{%
+	\setbeamertemplate{footline}{}%
+}
+\makeatother
+
+\AtEndDocument{\begin{frame}[standout]
+	\centering
+	\vspace{1cm}
+	{\color{green!55!blue}\Huge{MUCHAS GRACIAS POR SU ATENCIÓN}}
+\end{frame}
+}
+
+
+%--------------------------------------------------------------------------------
+%	PORTADA
+%--------------------------------------------------------------------------------
+\title[Grado en Estadística UB-UPC]{El modelo de regresión log-binomial: una alternativa al modelo de regresión logística en estudios de cohortes y transversales.}
+\titlegraphic{\includegraphics[height=1cm,width=3.7cm]{UBlogo} \hspace*{1cm} \includegraphics[height=1cm,width=4cm]{UPClogo}}
+\subtitle{Trabajo Final de Grado}
+\author[Laura Julià Melis]{Laura Julià Melis \and \\ \vspace{0.3cm}
+	\footnotesize{Director: Klaus Langohr}}
+\date{Julio 2019}
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%--------------------------------------------------------------------------------
+%	ÍNDICE
+%--------------------------------------------------------------------------------
+%\begin{frame}
+%\frametitle{Índice}
+%\setcounter{tocdepth}{1}
+%\small{\tableofcontents}
+%\end{frame}
+
+%--------------------------------------------------------------------------------
+%	CAPÍTULO 1: INTRODUCCIÓN
+%--------------------------------------------------------------------------------
+\section{Introducción}
+\begin{frame}
+\frametitle{1. Introducción}
+\textbf{Motivación}\\
+\begin{itemize}
+	\item El modelo de {\color{green!55!blue}regresión logística} es el más utilizado en estudios epidemiológicos.
+	\item El enlace canónico para el caso binomial es el enlace ``logit'' o ``log-odds'' y utilitza el {\color{green!55!blue} \textit{odds ratio}} (OR) como medida de asociación.
+\end{itemize}
+
+\begin{alertblock}{Inconvenientes}
+	\begin{itemize}
+		\item OR sobreestima el riesgo cuando la variable de interés es frecuente. 
+		\item Su interpretación a menudo es difícil o poco intuitiva.
+	\end{itemize}	
+\end{alertblock}
+\vspace{0.2cm}
+\textbf{Objetivo}\\
+\begin{itemize}
+	\item Presentar el modelo {\color{green!55!blue}log-binomial} y diversas técnicas para solucionar los problemas de convergencia.
+
+\end{itemize}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+%	CAPÍTULO 2: MÉTODOS ESTADÍSTICOS
+%--------------------------------------------------------------------------------
+\section{Métodos estadísticos}
+
+% "2.2 Medidas epidemiológicas"
+\subsection{Medidas epidemiológicas}
+\begin{frame}
+\frametitle{2. Métodos estadísticos (I)}
+\framesubtitle{Medidas epidemiológicas}
+
+	\begin{block}{\textbf{Riesgo relativo}}
+		\small
+		$$RR=\frac{P(D|E)}{P(D|\bar{E})}.$$
+		\normalsize
+	\end{block}
+%		\begin{itemize}
+%			\item Límite superior: $RR \le \frac{1}{P(D|\bar{E})}.$
+%		\end{itemize}
+		\begin{block}{\textbf{Odds ratio}}
+		\small
+		$$OR=\frac{odds(D|E)}{odds(D|\bar{E})}=\frac{P(D|E)/(1-P(D|E))}{P(D|\bar{E})/(1-P(D|\bar{E}))}$$
+		\normalsize
+		\end{block}
+%   		\begin{itemize}
+%   		\item En casos-controles: calcularlo con $P(E|D)$ es equivalente.
+%  		 \end{itemize}
+\vspace{0.2cm}
+\small
+\begin{equation*}
+\text{\textbf{Relación RR-OR}    } \longrightarrow \boxed{OR=\frac{P(D|E)/(1-P(D|E))}{P(D|\bar{E})/(1-P(D|\bar{E}))}=RR \cdot \frac{1-P(D|\bar{E})}{1-P(D|E)}}
+\end{equation*}
+\normalsize
+\end{frame}
+
+% "2.3 Regresión logística"
+\subsection{Regresión logística}
+\begin{frame}
+	\frametitle{2. Métodos estadísticos (II)}
+	\framesubtitle{Regresión logística (i)}
+
+Sea $Y$ la variable respuesta de interés:
+	\vspace{-0.25cm}
+	\small
+	$$Y= \left\{\begin{array}{l}1 \quad \text{Presencia de enfermedad (D)}\\
+	0 \quad \text{Ausencia de enfermedad ($\bar{D}$)}\end{array}\right.$$
+	\normalsize
+	
+	La probabilidad de éxito condiconada al valor de las predictoras es:
+	\small $$\pi_{\boldsymbol{X}}=P(Y=1|\boldsymbol{X}) \quad \text{con} \quad Y \sim B(1,\pi) \quad \text{sujeto a} \quad \pi_{\boldsymbol{X}} \in [0,1].$$
+	\normalsize
+	
+	Pero $\eta = \alpha+ \boldsymbol{\beta'X}$ tiene rango ${\rm I\!R} \rightarrow$  {\color{green!55!blue} función de enlace ``logit''}.
+	
+	\begin{block}{\textbf{Expresión del modelo}}
+	\small
+		$$ \text{logit}(\pi_{\boldsymbol{X}}) =\log \Big( \frac{\pi_{\mathsmaller{\boldsymbol{X}}}}{1-\pi_{\mathsmaller{\boldsymbol{X}}}} \Big)= \alpha + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k$$
+	O equivalentemente, 
+		$$\pi_{\mathsmaller{\boldsymbol{X}}}=g^{-1}(\eta)=\frac{\exp(\eta)}{1+\exp(\eta)}=\frac{\exp(\alpha + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k)}{1+\exp(\alpha + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k)}$$
+	\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{2. Métodos estadísticos (III)}
+\framesubtitle{Regresión logística (ii)}
+	\begin{itemize}\itemsep8pt
+		\vspace{-0.2cm}
+  	\item Estimación de los parámetros: criterio de {\color{green!55!blue} \textbf{máxima verosimilitud}}.
+	\begin{block}{\textbf{Función de máxima verosimilitud}}
+		\small
+		\vspace{-0.5cm}
+		\begin{align*}
+		L(\alpha, \boldsymbol{\beta} | Y, \boldsymbol{X})
+		&=\prod_{i=1}^{n}P(Y=y_i|\boldsymbol{x_i})f(\boldsymbol{x_i})\propto \prod_{i=1}^{n}P(Y=y_i|\boldsymbol{x_i})\\
+		&=\prod_{i=1}^{n}P(Y=1|\boldsymbol{x_i})^{\delta_i}P(Y=0|\boldsymbol{x_i})^{1-\delta_i} \\
+		& =\prod_{i=1}^{n}\frac{\exp(\alpha + \boldsymbol{\beta'x_i})^{\delta_i}}{1+\exp(\alpha + \boldsymbol{\beta'x_i})},
+		\end{align*}
+		\normalsize
+	\end{block}
+	
+	\item Interpretación a partir del OR, siendo $X_i$ una variable dicotómica:
+			\small
+		\hspace{-0.5cm}
+		$$OR_{X_i}= \frac{odds(Y=1|X_1,..., X_i=1, ... , X_k)}{odds(Y=1|X_1,..., X_i=0, ... , X_k)} = \exp(\beta_i)$$
+		\normalsize
+	\end{itemize}
+\end{frame}
+
+
+% "2.4 Regresión log-binomial"
+\subsection{Regresión log-binomial}
+\begin{frame}
+\frametitle{2. Métodos estadísticos (IV)}
+\framesubtitle{Regresión log-binomial (i)}
+La función de enlace que utiliza es el {\color{green!55!blue} \textbf{logaritmo}}.\\
+\vspace{0.2cm}
+Siendo:
+   	\begin{itemize}
+		\item $\boldsymbol{X}= (X_1,...,X_k)'$ el conjunto de variables explicativas,
+		\item $\alpha$ el término independiente,
+		\item $\boldsymbol{\beta}=(\beta_0,...,\beta_k)'$ los parámetros del modelo y
+		\item $\pi_{\mathsmaller{\boldsymbol{X}}}=P(Y=1|\boldsymbol{X})$ la probabilidad de éxito
+	\end{itemize}
+\vspace{0.2cm}
+Se define el modelo log-binomial como:
+
+	\begin{block}{ }
+	\small
+	\vspace{-0.15cm}
+	\begin{equation}
+	\label{eq:bin}
+	\eta=g(\pi_{\mathsmaller{\boldsymbol{X}}})=\log(\pi_{\mathsmaller{\boldsymbol{X}}})=\alpha + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k
+	\end{equation}
+	\normalsize
+	\end{block}
+\vspace{0.2cm}
+Probabilidad de respuesta positiva modelada a partir de (\ref{eq:bin}):
+	\begin{block}{ }
+	\small
+	\vspace{-0.4cm}
+	$$\pi_{\mathsmaller{\boldsymbol{X}}}=g^{-1}(\eta)=\exp(\eta)=\exp(\alpha +\boldsymbol{\beta'X})=\exp(\alpha + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k)$$
+	\normalsize
+	\end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{2. Métodos estadísticos (V)}
+\framesubtitle{Regresión log-binomial (ii)}
+	\begin{itemize}\itemsep5pt
+		\item \textbf{Interpretación de parámetros}
+			\begin{itemize}\itemsep4pt
+				\item En estudios de cohortes prospectivos: {\color{green!55!blue} riesgo relativo} (RR).
+				\item En estudios transversales: {\color{green!55!blue} razón de prevalencias} (PR).
+			\end{itemize}
+		
+			\begin{block}{\small RR/PR asociado a $X_i=1$ ($X_i$ dicotómica) y ajustado para el resto de covariables}
+			\small
+			\vspace{-0.45cm}
+			\begin{align*}
+			RR_{X_i} (\text{o } PR_{X_i} )
+			&= \frac{P(Y=1|X_1,...  ,X_i=1,... , X_k)}{P(Y=1|X_1, ... ,X_i=0, ..., X_k)} \\[1.2ex]
+			&= \frac{\exp(\beta_0 + \beta_1X_1 + \cdots + \beta_iX_i + \cdots + \beta_kX_k)}{\exp(\beta_0 +\beta_1X_1+ \cdots + \beta_kX_k)}  = \exp(\beta_i)
+			\end{align*}
+			\normalsize
+		\end{block}
+		\vspace{0.1cm}
+		\item \textbf{Posibles problemas de estimación}
+			\begin{itemize}\itemsep4pt
+				\item Rango de valores diferentes $  \rightarrow \pi_{\mathsmaller{\boldsymbol{X}}} \in [0,1] $ y $\exp(\boldsymbol{\beta'X}) > 0$. 
+				\item Problemas de convergencia al maximizar la función de verosimilitud.
+				\item Imposibilidad de obtener la estimación de los parámetros del modelo.
+		\end{itemize}
+		
+	\end{itemize}
+\end{frame}
+
+\subsection{Bondad del ajuste}
+\begin{frame}
+\frametitle{2. Métodos estadísticos (VI)}
+\framesubtitle{Pruebas para evaluar la bondad del ajuste}
+
+	\begin{enumerate}
+		\item \textbf{Hipótesis:}
+			\begin{center}
+				$H_0:$ el modelo se ajusta bien a los datos.\\ 
+				$H_1:$ el modelo NO se ajusta bien a los datos. 
+			\end{center}
+		\item \textbf{Estadístico:}
+			\begin{block}{}
+				\footnotesize
+						{\color{green!55!blue} \textbf{Test de Hosmer-Lemeshow}}
+						$$\chi^2_{HL}=\sum_{k=1}^{g}\frac{(O_k-E_k)^2}{E_k} \sim \chi^2_{g-2}$$
+						{\color{green!55!blue} \textbf{Test basado en el estadístico de la devianza}}
+						$$D=2 \sum_{j=1}^{J}\Big\{ y_j \log\Big( \frac{y_j}{\hat{y}_j}\Big)+(n_j-y_j)\log\Big( \frac{n_j-y_j}{n_j-\hat{y}_j}\Big)\Big\} \sim \chi^2_{n-p}$$
+				\normalsize
+		\end{block}
+		\item \textbf{P-valor y conclusión:}\\
+		\vspace{0.2cm}
+			Si P($ \chi^2_{g-2} > \chi^2_{HL}$) o P($ \chi^2_{n-p} > D$) inferiores a $\alpha \rightarrow$ rechazar $H_0$.
+	\end{enumerate}
+\end{frame}
+
+% "2.5 Software"
+\subsection{Software}
+\begin{frame}[fragile]
+\frametitle{2. Métodos estadísticos (VII)}
+\framesubtitle{Software}
+	\begin{enumerate}
+		\vspace{-0.2cm}
+		\item Función \textit{``glm"}:
+		\vspace{-0.15cm}
+			\begin{exampleblock}{}
+				\begin{tiny}
+					\begin{verbatim}
+					> glm(formula = response~terms, family = binomial (link ="log" / "logit"), data, start = NULL, ... )
+					\end{verbatim}
+				\end{tiny}
+			\end{exampleblock}
+		\item Función \textit{``logbin"} \autocite{logbinR}:
+		\vspace{-0.15cm}
+			\begin{exampleblock}{}
+				\begin{tiny}
+					\begin{verbatim}
+					> logbin(formula, data, start = NULL, method = c("cem","em","glm","glm2","ab"), warn = TRUE, ...)
+					\end{verbatim}
+			\end{tiny}
+			\end{exampleblock}
+		\item Función \textit{``COPY"} \autocite{COPY}:
+		\vspace{-0.15cm}
+			\begin{exampleblock}{}
+			\begin{tiny}
+				\begin{verbatim}
+				>  copy <- function(data, Y, vars,n, W) {
+				+  if (!is.numeric(data[, Y])) {
+								      data[, Y] <- as.numeric(data[, Y])-1
+				+  }
+				+  data$W <- (n-1)/n
+				+  data.copy <- data
+				+  data.copy[, Y] <- 1-data.copy[, Y]
+				+  data.copy$W <- 1/n
+				+  data.all <- merge(data, data.copy, all = T)
+				+  formul <- paste(Y, paste(vars, collapse = " + "), sep = "~")
+				+  mod.mat <- model.matrix(as.formula(formul), data)
+				+  glm.copy <- glm(as.formula(formul), family = binomial(log), data.all, weights = W, control = 
+							               list(maxit = 100), start = c(-4, rep(0, ncol(mod.mat)-1))
+				+  return(glm.copy)
+				+  }
+				\end{verbatim}
+			\end{tiny}
+		\end{exampleblock}
+	\end{enumerate}
+\end{frame}
+
+
+%--------------------------------------------------------------------------------
+%	CAPÍTULO 3: ESTUDIO PRINCIPAL
+%--------------------------------------------------------------------------------
+\section{Estudio sobre la depresión postparto}
+% "3.1. Metodología"
+\subsection{Metodología}
+\begin{frame}
+\frametitle{3. Estudio sobre la depresión postparto}
+\framesubtitle{Metodología}
+	\vspace{-0.15cm}
+	\footnotesize{\color{green!55!blue} \textit{``Is Neuroticism a Risk Factor for Postpartum Depression?"}\autocite{Estudioppal} }
+	\normalsize
+ 	\begin{itemize}\itemsep8pt
+ 		\item 1804 mujeres libres de depresión.
+ 		\item Evaluaciones mediante cuestionarios.
+ 		\item Tres variables respuesta diferentes.  
+% 			\begin{itemize}
+% 				\item $\text{EPDS}>9$ a las 8 semanas postparto,
+% 				\item $\text{EPDS}>9$ a las 32 semanas en el caso de $\text{EPDS}<9$ a las 8 semanas,
+% 				\item Presencia de un episodio depresivo mayor durante las 32 semanas.
+% 			\end{itemize}
+ 		\item Ajuste de tres modelos de regresión logística siguiendo el método de \textcite{hosmer}.
+ 		\item  Interpretación de parámetros en términos del OR ajustado.
+ 		\item Bondad de ajuste utilizando el test propuesto por \textcite{bondad}, implementado en la función \textit{``residuals.lrm"}.
+ 	\end{itemize}
+\end{frame}
+
+%% "3.2. Resultados"
+%\subsection{Resultados}
+%\begin{frame}
+%\frametitle{3. Estudio sobre la depresión postparto (II)}
+%\framesubtitle{Resultados}
+%	\begin{enumerate}\itemsep12pt
+%		\item \textbf{Análisis descriptivo}.
+%			\begin{itemize}
+%				\item Edad media: 31.7 (sd 4.6) años.
+%				\item 95\% casadas, 68\% con empleo y  16\% con historial psiquiátrico.
+%			\end{itemize}
+%		\item \textbf{Seguimiento}.
+%			\begin{itemize}
+%				\item 1407 (78\%) mujeres a las 8 semanas y 1337 (74.1\%) a las 32.
+%			\end{itemize}
+%		\item \textbf{Análisis univariante}.
+%			\begin{itemize}
+%				\item Diferencias estadísticamente significativas en las dimensiones de la personalidad entre las mujeres con y sin síntomas de depresión.
+%			\end{itemize}
+%		\item \textbf{Regresión logística}.
+%			\begin{itemize}
+%				\item  {\color{green!55!blue} Neuroticismo}: único rasgo que hizo aumentar el riesgo de depresión.
+%				\item Otros {\color{green!55!blue}factores de riesgo}: valor inicial del EPDS, situación económica, ...
+%			\end{itemize}
+%	\end{enumerate}
+%\end{frame}
+
+%--------------------------------------------------------------------------------
+%	CAPÍTULO 4: APLICACIÓN DE LA REGRESIÓN LOGÍSTICA/BINOMIAL AL ESTUDIO
+%--------------------------------------------------------------------------------
+\section{Aplicación de los modelos de regresión }
+% "4.1. Descripción de la base de datos"
+\subsection{Descripción de la base de datos}
+\begin{frame}[fragile]
+\frametitle{4. Aplicación de los modelos de regresión (I)}
+\framesubtitle{Descripción de la base de datos}
+\vspace{-0.1cm}
+ 	\begin{itemize}\itemsep6pt
+ 		\item 1804 filas y 30 columnas.
+ 		\item Categorización de variables contínuas.
+% 			 	\begin{itemize}
+% 				\item \texttt{EPDS}: ``EPDS$<=9$'' y ``EPDS$>9$''.
+% 					\item \texttt{EPQR-A}:``\textit{Low}", ``\textit{Medium}'' y ``\textit{High}''.
+% 			\end{itemize}
+ 		\item Variables explicativas:
+ 				\begin{itemize}\itemsep2pt
+ 				\item \texttt{epqnT:} Puntuación de neuroticismo.
+ 				\item \texttt{epds0:} Puntuación basal del cuestionario EPDS.
+ 				\item \texttt{duke:} Puntuación en el cuestionario sobre el apoyo social.
+ 				\item \texttt{antpers:} Historial clínico psiquiátrico personal.
+ 			\end{itemize}
+ 		\item Resumen de las variables explicativas numéricas.
+ 	\end{itemize}
+  \vspace{-0.4cm}
+\begin{scriptsize}
+ \begin{table} [h!]
+ 	\centering
+ 	\adjustbox{max height=\dimexpr\textheight-7.5cm\relax,
+ 		max width=\textwidth}{
+ 			\begin{tabular}{l c c c c c c c}
+ 			\toprule
+ 			\textbf{Variable} & \textbf{Min.} & \textbf{1st Qu.} & \textbf{Median} & \textbf{Mean} & \textbf{3rd Qu.} & \textbf{Max.} & \textbf{\textit{Missings}}\\
+ 			\midrule
+ 			\textbf{epqnT} &  32.0 &  37.0 & 43.0  & 43.6 & 47.0 & 73.0 & 7\\
+ 			\textbf{epds0} & 0.0 &  3.0 &  6.0 & 6.2 &  9.0 & 27.0 & 0 \\
+ 			\textbf{duke} & 5.0 & 49.0 & 54.0 & 52.2 & 58.0 & 62 & 18\\
+ 			\bottomrule
+ 		\end{tabular}
+ 	}	
+ \end{table}
+\end{scriptsize}
+\end{frame}
+
+% "4.2. Modelo de regresión logística"
+\subsection{Modelo de regresión logística}
+\begin{frame}
+\frametitle{4. Aplicación de los modelos de regresión (II)}
+\framesubtitle{Modelo de regresión logística}
+\textbf{Síntomas de depresión a las 8 semanas postparto (EPDS$>9$)}
+\vspace{-0.4cm}
+\begin{table} [h!]
+	\centering
+	\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
+		max width=\textwidth}{
+	\begin{tabular}{l c c c c c}
+		\toprule
+		\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & adj. OR(IC 95\%)\\
+		\midrule
+		Constante & -4.305 &  0.731& -5.888  & $<$ 0.0001 &  \\
+		Neuroticismo &  0.047   & 0.011   & 4.119 & $<$ 0.0001  & 1.05 (1.02,1.07) \\
+		Puntuación EPDS & 0.177  &  0.022  & 7.903 &$<$ 0.0001  &1.19 (1.14,1.25) \\
+		Apoyo social &  -0.020  &    0.009  &-2.291  & 0.022 &0.98 (0.96,1) \\
+		Historia psiquiátrica personal & 0.668  & 0.190 &  3.515 & 0.0004  &1.95 (1.34,2.83) \\
+		\bottomrule
+	\end{tabular}
+	}	
+\end{table}
+\vspace{-0.2cm}
+	\begin{block}{Expresión matemática del modelo}
+	\small
+	\vspace{-0.4cm}
+	$$\text{logit}(\hat{\pi}_{\mathsmaller{\boldsymbol{X}}})=\log\Big(\frac{\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}}{1-\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}}\Big)=-4.305+0.047X_1+0.177X_2-0.02X_3+0.668X_4,$$
+	$$\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\frac{\exp(-4.305+0.047X_1+0.177X_2-0.02X_3+0.668X_4)}{1+\exp(-4.305+0.047X_1+0.177X_2-0.02X_3+0.668X_4)}$$
+	\normalsize
+\end{block}
+\end{frame}
+
+% "4.3. Modelo de regresión log-binomial"
+\subsection{Modelo de regresión log-binomial}
+\begin{frame}
+\frametitle{4. Aplicación de los modelos de regresión (III)}
+\framesubtitle{Modelo de regresión log-binomial (i)}
+ \textbf{Función ``glm":}
+ \vspace{-0.4cm}
+ \begin{table} [h!]
+ 	\centering
+ 	\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
+ 		max width=\textwidth}{
+ 		\begin{tabular}{l c c c c c}
+ 			\toprule
+ 			\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & $\widehat{RR}$\\
+ 			\midrule
+ 			Constante &  -4.835&  0.334&-14.459 & $<$ 0.0001 &  \\
+ 			Neuroticismo &   0.042 & 0.006 &  6.753& $<$ 0.0001 & 1.043 \\
+ 			Puntuación EPDS &  0.068  &0.007  &10.157&  $<$ 0.0001 & 1.070\\
+ 			Apoyo social &  0.007 & 0.001   &8.139 &$<$ 0.0001 & 1.007\\
+ 			Historia psiquiátrica personal & 0.219 &  0.138 & 1.581  &  0.114 &1.245 \\
+ 			\bottomrule
+ 		\end{tabular}
+ 	}	
+ \end{table}
+\vspace{-0.2cm}
+\begin{block}{Expresión matemática del modelo}
+	\small
+	$$\log(\hat{\pi}_{\mathsmaller{\boldsymbol{X}}})=-4.835+0.042X_1+0.068X_2+0.007X_3+0.219X_4$$
+	O alternativamente, en función de $\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}$:
+	$$\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\exp(-4.835+0.042X_1+0.068X_2+0.007X_3+0.219X_4)$$
+	\normalsize
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{4. Aplicación de los modelos de regresión (IV)}
+\framesubtitle{Modelo de regresión log-binomial (ii)}
+ \textbf{Función ``logbin":}
+ \begin{alertblock}{ }
+ 	\small
+ 	\begin{verbatim}
+		Warning message:
+		nplbin: fitted probabilities numerically 1 occurred 
+	\end{verbatim}
+	\normalsize
+\end{alertblock}
+ 
+ \begin{table} [h!]
+ 	\centering
+ 	\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
+ 		max width=\textwidth}{
+ 		\begin{tabular}{l c c c c c}
+ 			\toprule
+ 			\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & $\widehat{RR}$\\
+ 			\midrule
+ 			Constante &  -3.905 & NA  & NA &NA &  \\
+ 			Neuroticismo &  3.62e-02   & NA  & NA &NA &1.037  \\
+ 			Puntuación EPDS &  3.72e-02 & NA  & NA &NA &1.038 \\
+ 			Apoyo social & 7.77e-16   & NA  & NA &NA& 1.000 \\
+ 			Historia psiquiátrica personal & 2.55e-01  & NA  & NA &NA  &1.291 \\
+ 			\bottomrule
+ 		\end{tabular}
+ 	}	
+ \end{table}
+	\begin{itemize}
+		\item Coste computacional muy alto.
+		\item Varias pruebas fijando como tolerancia interior \scriptsize(\texttt{bound.tol}) \normalsize diferentes valores entre 0 y 1 pero no obtención de todos los valores del modelo.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{4. Aplicación de los modelos de regresión (V)}
+\framesubtitle{Modelo de regresión log-binomial (iii)}
+ \textbf{Función ``COPY":}
+ 
+ \begin{itemize}
+ 	\item Modelo con $n=10000$ copias.
+ \end{itemize}
+\vspace{-0.5cm}
+ \begin{table} [h!]
+ 	\centering
+ 	\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
+ 		max width=\textwidth}{
+ 		\begin{tabular}{l c c c c c}
+ 			\toprule
+ 			\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & $\widehat{RR}$\\
+ 			\midrule
+ 			Constante &   -4.734  &0.299 &-15.815 & $<$ 0.0001 &  \\
+ 			Neuroticismo &   0.043 &0.005   &7.847 &$<$ 0.0001 &  1.044\\
+ 			Puntuación EPDS & 0.064 & 0.006 & 10.597  &$<$ 0.0001 &1.066 \\
+ 			Apoyo social&   0.007 &0.001 &  9.891 & $<$ 0.0001 & 1.007 \\
+ 			Historia psiquiátrica personal &  0.155 & 0.1267108  & 1.226  &   0.22 & 1.168\\
+ 			\bottomrule
+ 		\end{tabular}
+ 	}	
+ \end{table}
+\vspace{-0.2cm}
+\begin{block}{Expresión matemática del modelo}
+	\small
+	$$\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\exp(-4.734+0.043X_1+0.064X_2+0.007X_3+0.155X_4)$$
+	\normalsize
+\end{block}
+\end{frame}
+
+% "4.4. Pruebas de bondad de ajuste"
+\subsection{Pruebas de bondad de ajuste}
+\begin{frame}
+\frametitle{4. Aplicación de los modelos de regresión (VI)}
+\framesubtitle{Pruebas de bondad de ajuste}
+Prueba de \textit{Hosmer-Lemeshow}  \autocite{hosmer}, con la función \texttt{hoslem.test} del paquete \textit{ResourceSelection}. 
+\vspace{-0.5cm}
+\begin{table} [h]
+	\centering
+	\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
+		max width=\textwidth}{	\begin{tabular}{ l | l c c } 
+			\toprule
+			\textbf{Modelo} & Función de R & Estadístico $\chi^2$ & p-valor\\
+			\midrule
+			\multirow{3}{10em}{Síntomas depresivos a las 8 semanas} & logística  &  10.092 & 0.259 \\ 
+			& \alert{log-binomial ``glm"}  & \alert{35.526} & \alert{2.14e-05}\\ 
+			&\alert{log-binomial ``logbin"}  & \alert{55.778}  & \alert{3.12e-09}  \\ 
+			\midrule
+			\multirow{3}{10em}{Síntomas depresivos a las 32 semanas} & logística  & 8.367  & 0.398 \\ 
+			& log-binomial ``glm"   &  8.796    &0.360\\ 
+			& log-binomial ``logbin"   &  8.796  & 0.360 \\ 
+			\midrule
+			\multirow{3}{10em}{Diagnóstico de depresión mayor} & logística  &  11.442 & 0.178\\ 
+			& log-binomial ``glm"   &  12.238  &   0.141\\ 
+			& log-binomial ``logbin"   &  12.487 & 0.131\\
+			\bottomrule
+		\end{tabular}
+    }
+\end{table}
+\end{frame}
+
+
+%--------------------------------------------------------------------------------
+%	CAPÍTULO 5: DISCUSIÓN Y CONCLUSIONES
+%--------------------------------------------------------------------------------
+\section{Discusión y conclusiones}
+% "5.1. Comparación de resultados"
+\subsection{Comparación de resultados}
+\begin{frame}
+\frametitle{5. Discusión y conclusiones (I)}
+\framesubtitle{Comparación de resultados}
+\begin{enumerate}
+		\item {\color{green!55!blue} Modelo 1:}
+	\begin{itemize}\itemsep2pt
+		\item $\widehat{OR}$ y $\widehat{RR}$ llevan a diferentes conclusiones. 
+		\item Cambios en los signos y la significación de parámetros.
+		\item El modelo de regresión log-binomial no se ajusta bien a los datos.
+	\end{itemize}
+	\vspace{0.3cm}
+	\item  {\color{green!55!blue} Modelos 2 y 3:}
+		\begin{itemize}\itemsep2pt
+			\item $\widehat{OR}$ y $\widehat{RR}$ apuntan en la misma dirección.
+			\item Parámetros estimados significativos en ambos modelos y signos iguales.
+			\item Test de \textit{Hosmer-Lemeshow}:  ajustes de ambas regresiones son buenos.
+	\end{itemize}
+\end{enumerate}
+	\begin{block}{\textbf{Conclusiones}}
+			\begin{itemize}\itemsep2pt
+			\item La bondad del ajuste es de vital importancia para decidir el tipo de regresión a utilizar.
+			\item Se prefriere el modelo log-binomial por la interpretación del riesgo relativo, pero únicamente cuando el ajuste es bueno. 
+		\end{itemize}
+	\end{block}
+\end{frame}
+
+% "5.2. Consideraciones metodológicas"
+\subsection{Consideraciones metodológicas}
+\begin{frame}
+\frametitle{5. Discusión y conclusiones (II)}
+\framesubtitle{Consideraciones metodológicas}
+\begin{enumerate}\itemsep12pt
+	\item {\color{green!55!blue} Función \textit{``COPY''}:}
+		\begin{itemize}\itemsep6pt
+			\item Resultados  con $1000$ y $10000$  copias muy similares.
+			\item Coste computacional en ambos casos prácticamente igual.
+			\item Preferible el ajuste con más copias aunque la ganancia sea mínima.
+		\end{itemize}
+	\vspace{0.35cm}
+	\item  {\color{green!55!blue} Limitaciones del test de \textit{Hosmer-Lemeshow}:}
+		\begin{itemize}\itemsep6pt
+			\item El valor de $\chi^2_{HL}$ depende de los puntos de corte que definen los grupos.
+			\item Poca potencia para detectar falta de ajuste.
+			\item Alternativa:  Test propuesto por  \textcite{bondad}, función  \textit{``\texttt{residuals.lrm}''} de R.
+		\end{itemize}
+\end{enumerate}
+\end{frame}
+
+%--------------------------------------------------------------------------------
+%	BIBLIOGRAFÍA
+%--------------------------------------------------------------------------------
+\section{Referencias}
+\begin{frame}
+\frametitle{Referencias}
+\AtNextBibliography{\small}
+\printbibliography[heading=bibintoc, heading=none]
+\end{frame}
+\end{document}

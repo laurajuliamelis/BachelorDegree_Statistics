@@ -1,0 +1,306 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={Análisis de secuencias: ENSG00000114374.fa},
+            pdfauthor={Esteban Vegas},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{longtable,booktabs}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{Análisis de secuencias: ENSG00000114374.fa}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Esteban Vegas}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{2 de March, 2018}
+
+
+\begin{document}
+\maketitle
+
+En este informe analizamos el fichero fasta (.fa)
+\textbf{ENSG00000114374.fa}, que contiene exactamente \texttt{96}
+registros y se encuentra en la carpeta
+``\emph{E:/BIOCIÈNCIES/Entregues/5/Fasta file}''. A continuación resumo
+la tabla siguiente el número de cuentas de Adenina, Guanina, Citosina y
+Timina de cada registro. También añado el número total de bases
+nitrogenadas.
+
+\begin{longtable}[]{@{}lrrrrr@{}}
+\caption{Contaje de las bases nitrogenadas de cada
+registro}\tabularnewline
+\toprule
+Accession.number & A & T & C & G & Total\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Accession.number & A & T & C & G & Total\tabularnewline
+\midrule
+\endhead
+ENSG00000114374\textbar{}ENST0000033898 & 64 & 54 & 39 & 50 &
+207\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 33 & 39 & 25 & 27 &
+124\tabularnewline
+ENSG00000114374\textbar{}ENST0000049316 & 3 & 5 & 0 & 8 &
+16\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 45 & 42 & 37 & 26 &
+150\tabularnewline
+ENSG00000114374\textbar{}ENST0000045303 & 28 & 34 & 27 & 20 &
+109\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 72 & 67 & 29 & 44 &
+212\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 22 & 38 & 25 & 24 &
+109\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 20 & 26 & 11 & 23 &
+80\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 53 & 43 & 30 & 31 &
+157\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 22 & 38 & 25 & 24 &
+109\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 54 & 36 & 22 & 35 &
+147\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 53 & 45 & 33 & 39 &
+170\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 45 & 42 & 37 & 26 &
+150\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 44 & 38 & 31 & 21 &
+134\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 56 & 28 & 36 & 36 &
+156\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 253 & 283 & 101 & 188 &
+825\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 29 & 35 & 17 & 24 &
+105\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 57 & 42 & 27 & 27 &
+153\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 265 & 203 & 106 & 177 &
+751\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 265 & 203 & 106 & 177 &
+751\tabularnewline
+ENSG00000114374\textbar{}ENST0000045303 & 122 & 83 & 66 & 63 &
+334\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 26 & 20 & 32 & 18 &
+96\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 49 & 37 & 20 & 31 &
+137\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 24 & 31 & 20 & 14 &
+89\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 62 & 55 & 35 & 39 &
+191\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 57 & 72 & 52 & 38 &
+219\tabularnewline
+ENSG00000114374\textbar{}ENST0000049316 & 56 & 28 & 36 & 36 &
+156\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 520 & 531 & 247 & 263 &
+1561\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 77 & 49 & 37 & 50 &
+213\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 60 & 58 & 46 & 57 &
+221\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 101 & 72 & 36 & 43 &
+252\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 35 & 24 & 17 & 20 &
+96\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 35 & 44 & 16 & 21 &
+116\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 79 & 70 & 39 & 53 &
+241\tabularnewline
+ENSG00000114374\textbar{}ENST0000045303 & 26 & 20 & 32 & 18 &
+96\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 32 & 21 & 17 & 18 &
+88\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 50 & 92 & 51 & 48 &
+241\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 33 & 38 & 16 & 26 &
+113\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 74 & 87 & 55 & 63 &
+279\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 46 & 30 & 42 & 31 &
+149\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 44 & 38 & 31 & 21 &
+134\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 36 & 39 & 32 & 24 &
+131\tabularnewline
+ENSG00000114374\textbar{}ENST0000049316 & 181 & 203 & 111 & 120 &
+615\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 57 & 42 & 27 & 27 &
+153\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 61 & 70 & 52 & 38 &
+221\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 63 & 69 & 44 & 47 &
+223\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 109 & 107 & 50 & 77 &
+343\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 27 & 22 & 31 & 28 &
+108\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 48 & 44 & 26 & 29 &
+147\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 19 & 22 & 10 & 9 &
+60\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 61 & 70 & 52 & 38 &
+221\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 60 & 58 & 46 & 57 &
+221\tabularnewline
+ENSG00000114374\textbar{}ENST0000047140 & 240 & 286 & 166 & 157 &
+849\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 54 & 58 & 36 & 38 &
+186\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 43 & 39 & 17 & 27 &
+126\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 62 & 55 & 35 & 39 &
+191\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 20 & 26 & 11 & 23 &
+80\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 35 & 44 & 16 & 21 &
+116\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 36 & 39 & 32 & 24 &
+131\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 48 & 83 & 50 & 45 &
+226\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 24 & 31 & 20 & 14 &
+89\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 53 & 43 & 30 & 31 &
+157\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 109 & 107 & 50 & 77 &
+343\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 48 & 41 & 19 & 31 &
+139\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 38 & 35 & 30 & 23 &
+126\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 38 & 35 & 30 & 23 &
+126\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 53 & 45 & 33 & 39 &
+170\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 54 & 46 & 14 & 28 &
+142\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 36 & 33 & 28 & 24 &
+121\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 41 & 42 & 21 & 26 &
+130\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 77 & 49 & 37 & 50 &
+213\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 54 & 36 & 22 & 35 &
+147\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 72 & 67 & 29 & 44 &
+212\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 43 & 39 & 17 & 27 &
+126\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 41 & 42 & 21 & 26 &
+130\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 48 & 44 & 26 & 29 &
+147\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 48 & 41 & 19 & 31 &
+139\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 64 & 54 & 39 & 50 &
+207\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 74 & 87 & 55 & 63 &
+279\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 29 & 35 & 17 & 24 &
+105\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 54 & 46 & 14 & 28 &
+142\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 79 & 70 & 39 & 53 &
+241\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 36 & 33 & 28 & 24 &
+121\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 57 & 72 & 52 & 38 &
+219\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 101 & 72 & 36 & 43 &
+252\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 32 & 21 & 17 & 18 &
+88\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 46 & 53 & 34 & 41 &
+174\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 63 & 69 & 44 & 47 &
+223\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 49 & 37 & 20 & 31 &
+137\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 46 & 53 & 34 & 41 &
+174\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 520 & 531 & 247 & 263 &
+1561\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 35 & 24 & 17 & 20 &
+96\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 54 & 58 & 36 & 38 &
+186\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 33 & 39 & 25 & 27 &
+124\tabularnewline
+ENSG00000114374\textbar{}ENST0000033898 & 46 & 30 & 42 & 31 &
+149\tabularnewline
+ENSG00000114374\textbar{}ENST0000042656 & 33 & 38 & 16 & 26 &
+113\tabularnewline
+\bottomrule
+\end{longtable}
+
+
+\end{document}

@@ -1,0 +1,33 @@
+\frametitle{4. Aplicación de los modelos de regresión (IV)}
+\framesubtitle{Modelo de regresión log-binomial (ii)}
+ \textbf{Función ``logbin":}
+ \begin{alertblock}{ }
+ 	\small
+ 	\begin{verbatim}
+		Warning message:
+		nplbin: fitted probabilities numerically 1 occurred
+	\end{verbatim}
+	\normalsize
+\end{alertblock}
+
+ \begin{table} [h!]
+ 	\centering
+ 	\adjustbox{max height=\dimexpr\textheight-5.5cm\relax,
+ 		max width=\textwidth}{
+ 		\begin{tabular}{l c c c c c}
+ 			\toprule
+ 			\textbf{Variable} & $\hat{\beta}$ & s.e.($\hat{\beta}$) & Z & p-valor & $\widehat{RR}$\\
+ 			\midrule
+ 			Constante &  -3.905 & NA  & NA &NA &  \\
+ 			Neuroticismo &  3.62e-02   & NA  & NA &NA &1.037  \\
+ 			Puntuación EPDS &  3.72e-02 & NA  & NA &NA &1.038 \\
+ 			Apoyo social & 7.77e-16   & NA  & NA &NA& 1.000 \\
+ 			Historia psiquiátrica personal & 2.55e-01  & NA  & NA &NA  &1.291 \\
+ 			\bottomrule
+ 		\end{tabular}
+ 	}	
+ \end{table}
+	\begin{itemize}
+		\item Coste computacional muy alto.
+		\item Varias pruebas fijando como tolerancia interior \scriptsize(\texttt{bound.tol}) \normalsize diferentes valores entre 0 y 1 pero no obtención de todos los valores del modelo.
+	\end{itemize}

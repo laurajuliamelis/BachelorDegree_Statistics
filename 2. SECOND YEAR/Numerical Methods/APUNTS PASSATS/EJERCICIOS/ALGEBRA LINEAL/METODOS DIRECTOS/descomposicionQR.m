@@ -1,0 +1,1 @@
+%%descomposicion QRA=[6 2 -1 -1; 2 4 1 0; -1 1 4 -1; -1 0 -1 3];b=[0;7;-1;-2];disp('metodo QR')[Q,R]=qr(A);b=Q*b;sol1=R\b%%otro ejercicioA=[0.05 0.07 0.06 0.05; 0.07 0.1 0.08 0.07; 0.0 0.08 0.1 0.09; 0.05 0.07 0.09 0.1];b=[0.23;0.32;0.33;0.31];disp('metodo QR')[Q,R]=qr(A);b=Q*b;sol2=R\b

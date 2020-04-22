@@ -1,0 +1,38 @@
+\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
+\babel@toc {spanish}{}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {1}{Introducci\IeC {\'o}n}{2}{0}{1}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {2}{M\IeC {\'e}todos estad\IeC {\'\i }sticos}{3}{0}{2}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {2}{1}{Medidas epidemiol\IeC {\'o}gicas}{3}{0}{2}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {2}{2}{Regresi\IeC {\'o}n log\IeC {\'\i }stica}{4}{0}{2}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {2}{3}{Regresi\IeC {\'o}n log-binomial}{6}{0}{2}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {2}{4}{Bondad del ajuste}{8}{0}{2}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {2}{5}{Software}{9}{0}{2}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {3}{Estudio sobre la depresi\IeC {\'o}n postparto}{10}{0}{3}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {3}{1}{Metodolog\IeC {\'\i }a}{10}{0}{3}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {4}{Aplicaci\IeC {\'o}n de los modelos de regresi\IeC {\'o}n }{11}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {4}{1}{Descripci\IeC {\'o}n de la base de datos}{11}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {4}{2}{Modelo de regresi\IeC {\'o}n log\IeC {\'\i }stica}{12}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {4}{3}{Modelo de regresi\IeC {\'o}n log-binomial}{13}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {4}{4}{Pruebas de bondad de ajuste}{16}{0}{4}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {5}{Discusi\IeC {\'o}n y conclusiones}{17}{0}{5}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {5}{1}{Comparaci\IeC {\'o}n de resultados}{17}{0}{5}
+\defcounter {refsection}{0}\relax 
+\beamer@subsectionintoc {5}{2}{Consideraciones metodol\IeC {\'o}gicas}{18}{0}{5}
+\defcounter {refsection}{0}\relax 
+\beamer@sectionintoc {6}{Referencias}{19}{0}{6}

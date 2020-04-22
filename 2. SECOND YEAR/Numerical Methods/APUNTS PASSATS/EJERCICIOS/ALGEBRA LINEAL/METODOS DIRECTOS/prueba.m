@@ -1,0 +1,1 @@
+%% Resolucio per substitucio enreraA=[3 0 0 0;2 3 0 0; -2 -5 4 0;4 -3 1 2];B=[-5;0;-3;6];amp=[A;B']';n=length(B);disp ('************Solucio del sistema AX=b per substitucio enrera')X=zeros(n,1);X(n)=amp(n,n+1)/amp(n,n);for i=(n-1):-1:1X(i)=(amp(i,n+1)-amp(i,i+1:n)*X(i+1:n))/amp(i,i);endX

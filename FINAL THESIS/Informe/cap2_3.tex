@@ -1,0 +1,158 @@
+\section{Regresión logística}\label{cap:logistica}
+El modelo de regresión logística se enmarca en el conjunto de Modelos Lineales Generalizados y es uno de los modelos más utilizados en epidemiología para analizar el nivel de asociación entre una enfermedad y una o varias exposiciones cuando la variable respuesta es binaria. \\
+
+Los Modelos Lineales Generalizados están constituidos por un \textbf{componente aleatorio} que es el vector de valores de la variable respuesta \textbf{$Y$}, un \textbf{componente sistemático} representado por el predictor lineal $\eta$  (construido a partir de los parámetros a estimar $\boldsymbol{\beta}$ y de las variables explicativas o predictoras  $\boldsymbol{X}$, $\eta =  \alpha+ \boldsymbol{\beta'X}$) y una \textbf{función de enlace} que relaciona el predictor lineal con el valor esperado de la respuesta, condicionado al valor que toman las variables predictoras y que se denota de manera genérica como $g(\mu)$, donde $\mu$ es el valor esperado.
+\begin{equation}
+\label{eq:reg}
+g(E(Y|\boldsymbol{X})) =\alpha+ \boldsymbol{\beta'X} = \alpha+ \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k
+\end{equation}
+
+Una variable aleatoria binaria aparece cuando cada observación tiene (o no) una característica de manera que la variable puede tomar los valores $Y=1$ (Sí) o $Y=0$ (No). La probabilidad de éxito o respuesta positiva se denota como $P(Y=1)= \pi$ y está sujeta a la restricción
+\begin{equation*}
+Y \sim B(1,\pi) \quad \text{donde} \quad \pi \in [0,1].
+\end{equation*}
+
+Por otro lado, el predictor lineal ($\eta$) puede tomar cualquier valor real y es aquí cuando aparece la función de enlace \textbf{logit}, que es la que el modelo de regresión logística utiliza. \\
+
+La función \textit{logit} es el enlace canónico para datos binomiales, es decir, es la función que transforma el parámetro ``valor esperado'' ($\pi$) en el parámetro natural ($\theta$, estimado mediante el predictor lineal):
+\begin{equation*}
+\eta = \theta = g(\pi)=\text{logit}(\pi) = \log \Big( \frac{\pi}{1-\pi} \Big)
+\end{equation*}
+
+Al incorporar el enlace \textit{logit} a la ecuación \eqref{eq:reg}, se obtiene que los \textit{logits} de la probabilidades (o los logaritmos de la razón de probabilidades) son modelados como una función lineal de las variables predictoras $X_i$.
+\begin{equation}
+\label{eq:logit}
+ \log \Big( \frac{\pi_{\mathsmaller{\boldsymbol{X}}}}{1-\pi_{\mathsmaller{\boldsymbol{X}}}} \Big)= \alpha + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k
+\end{equation}
+donde $\pi_{\boldsymbol{X}}=P(Y=1|\boldsymbol{X})$ es la probabilidad de respuesta positiva condicionada al valor de las variables predictoras. \\
+
+Además, existe una expresión equivalente a la anterior \eqref{eq:logit} para calcular la probabilidad de respuesta positiva $\pi$:
+\begin{equation*}
+\pi_{\mathsmaller{\boldsymbol{X}}}=g^{-1}(\eta)=\frac{\exp(\eta)}{1+\exp(\eta)}=\frac{\exp(\alpha + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k)}{1+\exp(\alpha + \beta_1X_1 + \beta_2X_2 + \cdots + \beta_kX_k)},
+\end{equation*}
+ de manera que si $\beta_i>0$ ($\beta_i<0$) entonces $X_i$ es un factor de riesgo (factor protector) para $Y$. \\
+
+También se puede obtener la expresión \eqref{eq:logit} usando el \textit{odds}, que como se ha comentado en la Sección~\ref{OR}, representa el cociente de la probabilidad de que un evento ocurra y la probabilidad de que no ocurra.
+
+\begin{equation*}
+odds(Y=1|\boldsymbol{X})=\frac{\pi_{\mathsmaller{\boldsymbol{X}}}}{1-\pi_{\mathsmaller{\boldsymbol{X}}}} = \exp(\alpha + \beta_1X_1 + \beta_2X_2 + \cdots+ \beta_kX_k)
+\end{equation*}
+ \\
+De esta manera, se observa que para interpretar los parámetros del modelo, la regresión logística utiliza el \textit{odds ratio} como medida de asociación entre enfermedad y exposición. A modo de ilustración, se define la variable dicotómica $X_1$ con $X_1=1$ si ``\textit{Exposición}'' y $X_1=0$ si ``\textit{No exposición}''. Entonces, el OR asociado a $X_1=1$ y ajustado por todas las demás covariables puede ser expresado mediante la siguente fórmula:
+\begin{align*}
+OR_{X_1}
+&= \frac{odds(Y=1|X_1=1, X_2,... , X_k)}{odds(Y=1|X_1=0, X_2,... , X_k)} \\[1.2ex]
+&= \frac{\exp(\alpha + \beta_1 + \beta_2X_2 + \cdots + \beta_kX_k)}{\exp(\alpha + \beta_2X_2 + \cdots + \beta_kX_k)}  = \exp(\beta_1)
+\end{align*}
+Nótese que el modelo asume que el OR asociado a $X_1$ es el mismo para cualquiera de los valores de las demás covariables $X_2,...,X_k$.\\
+
+En consecuencia, el estimador de los OR asociados a las variables explicativas del modelo $X_k$ es $\widehat{OR}_{X_k}=\exp(\hat{\beta}_k)$ y su intervalo de confianza se puede obtener de la siguiente manera:
+\begin{align*}
+CI(OR_{X_k};1-\alpha)
+& =\exp \big( \hat{\beta_k} \mp z_{1-\frac{\alpha}{2}} \cdot \sqrt{\widehat{Var}(\hat{\beta}_k)} \big) \\
+& =OR_{X_k} \cdot \exp \big(  \mp z_{1-\frac{\alpha}{2}} \cdot \sqrt{\widehat{Var}(\hat{\beta}_k)}\big).
+\end{align*}
+
+La estimación de los parámetros en el modelo de regresión logística se realiza en base al criterio de \textbf{máxima verosimilitud}. Sea $(y_i, \boldsymbol{x_i})$ con $i=1,...,n$ una muestra de observaciones independientes, podemos expresar la función de máxima verosimilitud ($L$) como sigue:
+\begin{align*}
+ L(\alpha, \boldsymbol{\beta} | Y, \boldsymbol{X})
+ &=\prod_{i=1}^{n}P(Y=y_i|\boldsymbol{x_i})f(\boldsymbol{x_i})\propto \prod_{i=1}^{n}P(Y=y_i|\boldsymbol{x_i})\\[1ex]
+ & =\prod_{i=1}^{n}P(Y=1|\boldsymbol{x_i})^{\delta_i}P(Y=0|\boldsymbol{x_i})^{1-\delta_i} \\[1ex]
+ & =\prod_{i=1}^{n}\frac{\exp(\alpha + \boldsymbol{\beta'x_i})^{\delta_i}}{1+\exp(\alpha + \boldsymbol{\beta'x_i})},
+\end{align*}
+
+donde $\boldsymbol{\beta}=(\beta_1, ..., \beta_k)'$ y $\delta_i=1$ si $Y_i=1$ y 0 en caso contrario. Es importante tener en cuenta que se asume que la función de densidad conjunta $f(\boldsymbol{x_i})$ no depende de los parámetros $\alpha$ i $\boldsymbol{\beta}$ \autocite{Silvia}. En otras palabras, se supone que no hay sesgo de selección. \\
+
+En cuanto a la codificación de variables politómicas (categóricas con más de 2 niveles), es necesaria la creación de variables fictícias o \textit{dummies}. Dichas variables indican la presencia o ausencia de un atributo de la misma manera que lo hacen las dicotómicas con los valores $Y=1$ (Sí) o $Y=0$ (No) pero son necesarias tantas \textit{dummies} como categorías menos uno tiene la variable. \\
+
+Por ejemplo, si se supone que una de las variables regresoras, $X_k$, es una variable categórica con $s$ niveles, entonces se deberán incuir $s-1$ variables fictícias en el modelo:
+
+\begin{equation*}
+X_{k_1}= \left\{\begin{array}{l}1 \quad X_k=2\\0 \quad \text{en caso contrario}\end{array}\right., ... , X_{k_{s-1}}=\left\{\begin{array}{l}1 \quad X_k=s\\0 \quad \text{en caso contrario}\end{array}\right.,
+\end{equation*}
+ \\
+siendo en este caso el nivel $X_k=1$ la categoría de referencia.
+\newpage
+La regresión logística es aplicable tanto en estudios de cohorte como en estudios transversales aunque cabe mencionar que en los segundos, la interpretación de los parámetros se realiza a través del POR (\textit{prevalence odds ratio}, visto en la Sección~\ref{OR}).\\
+
+En los estudios de caso-control no es posible ajustar el modelo como en la expresión \eqref{eq:logit} debido a que no se puede estimar la probabilidad de enfermar, $P(Y=1|\boldsymbol{X})$. Por otra parte, sí es posible estimar $P(Y=1|Z=1,\boldsymbol{X})$ donde $Z$ es una variable que indica si un individuo está (o no) incluído en el estudio, de manera que la expresión del modelo de regresión logística en los estudios caso-control es la siguiente:\\
+\begin{equation*}
+\text{logit}(P(Y=1|Z=1,\boldsymbol{X}))=\log\Big(\frac{P(Y=1|Z=1,\boldsymbol{X})}{1-P(Y=1|Z=1,\boldsymbol{X})}\Big)=\alpha^*+\beta_1^*X_1+\beta^*_2X_2+\cdots+\beta^*_kX_k
+\end{equation*}
+\\[0.2cm]
+Definiendo $\pi_i=P(Z=1|Y=i,\boldsymbol{X})$ y asumiendo que $P(Z=1|Y=i,\boldsymbol{X})=P(Z=1|Y=i)$ para $i \in [0,1]$, se obtiene que
+\begin{align*}
+P(Y=1|Z=1,\boldsymbol{X})
+&=\frac{P(Z=1|Y=1,\boldsymbol{X})P(Y=1|\boldsymbol{X})}{\sum_{i \in \{0,1\}}P(Z=1|Y=i,\boldsymbol{X})P(Y=i|\boldsymbol{X})} \\[1.8ex]
+&=\frac{\pi_1 P(Y=1,\boldsymbol{X})}{\pi_1 P(Y=1,\boldsymbol{X})+\pi_0 P(Y=0,\boldsymbol{X})} \\[1.8ex]
+&=\frac{\pi_1 P(Y=1,\boldsymbol{X})/P(Y=0|\boldsymbol{X})}{\pi_1 P(Y=1,\boldsymbol{X})/ P(Y=0|\boldsymbol{X}) + \pi_0} \\[1.8ex]
+&=\frac{\pi_1 \exp(\alpha + \boldsymbol{\beta'X})}{\pi_1 \exp(\alpha + \boldsymbol{\beta'X}) + \pi_0} \\[1.8ex]
+&=\frac{\exp(\alpha^{*} + \boldsymbol{\beta'X})}{1+\exp(\alpha^{*} + \boldsymbol{\beta'X})}
+\end{align*}\\
+con lo que se demuestra que $\beta^{*}_i=\beta_i$, $\forall i$ y que $\alpha^{*}=\text{ln}(\pi_1/\pi_0)+\alpha$, siendo $\pi_1$ la probabilidad de formar parte del estudio teniendo la enfermedad (grupo de \textbf{casos}) y $\pi_0$, la probabilidad de formar parte del estudio siendo del grupo de \textbf{control}.\\
+
+Por tanto, es posible ajustar un modelo de regresión logística para los estudios de caso-control estimando sus parámetros mediante el estimador de máxima verosimilitud y cuyos parámetros $\boldsymbol{\beta}$ tienen la misma interpretación que en los estudios de cohorte. En cambio, no se puede estimar el parámetro $\alpha$, $\alpha=\alpha^{*}-\text{ln}(\pi_1/\pi_0)$, puesto que $\pi_0$ y $\pi_1$ son desconocidos \footnote{Generalmente, $\pi_1 \gg \pi_0$ puesto que el número de personas seleccionadas para el grupo de casos, en relación con el total de casos en la población, es mayor que la proporción de individuos libres de enfermedad (control). Esto permite concluir que $\alpha$, aunque desconocido, habitualmente será un valor inferior a $\alpha^{*}$}.\\
+\newpage
+Finalmente, una vez obtenido el ajuste del modelo de regresión logística, es necesario comprobar la \textbf{bondad del ajuste} de manera que el modelo pueda considerarse válido. Para ello, existen varios tests de hipótesis (devianza, test de \textit{Wald}, test de \textit{Pearson} y test de \textit{Hosmer-Lemeshow}) y herramientas gráficas (gráfico de calibración y gráfico de los residuos).\\
+
+La idea general de los contrastes de hipótesis es que, bajo la hipótesis nula de que el modelo se ajusta correctamente a los datos, se espera que el número de eventos que el modelo predice sea similar al número de eventos observados.\\
+
+\textbf{Test de \textit{Hosmer-Lemeshow}}\\
+[0.3cm]
+Es el método más utilizado para evaluar la bondad del ajuste. En primer lugar, se ordenan los individuos según el riesgo predicho de padecer una enfermedad ($\hat{\pi}_{\mathsmaller{\boldsymbol{X}}}=\hat{P}(Y=1|\boldsymbol{X})$), y se agrupan en diversos conjuntos del mismo tamaño $g$ (frecuentemente en la práctica $g=10$).\\
+
+Luego, se compara el número de eventos observados, $O_k$ con $k=1,..., g$, con el número de eventos esperados, $E_k$:
+\begin{equation*}
+E_k=\sum_{i=1}^{N_k}\hat{\pi}_{\mathsmaller{\boldsymbol{X_i}}}=\sum_{i=1}^{N_k}\hat{P}(Y=1|\boldsymbol{X}_i)=\sum_{i=1}^{N_k}\frac{\exp(\hat{\alpha} + \boldsymbol{\hat{\beta}'X}_i)}{1+\exp(\hat{\alpha} + \boldsymbol{\hat{\beta}'X}_i)}
+\end{equation*}
+donde $N_k$ es el tamaño del grupo $k$.\\
+
+El estadístico del test de $HL$ sigue asintóticamente una distribución chi-cuadrado ($\chi^2$) con $g-2$ grados de libertad \autocite{hosmer}, y se calcula como:
+ \begin{equation*}
+\chi^2_{HL}=\sum_{k=1}^{g}\frac{(O_k-E_k)^2}{E_k} \stackrel{H_0}{\sim} \chi^2_{g-2}
+ \end{equation*}
+
+ El p-valor para el test es P($ \chi^2_{g-2} > \chi^2_{HL}$) por lo que, si este es superior a un nivel $\alpha$, por ejemplo $\alpha=0.1$ (nivel de significación del $10\%$) se dice que no hay evidencias suficientes para rechazar la hipótesis nula ($H_0$) y consecuentemente, se concluye que no hay evidencias de que el modelo no se ajuste correctamente a los datos ya que las discrepancias entre los valores observados y los predichos no son estadísticamente significativas. En cambio, si el p-valor es inferior que $\alpha$, se concluye que hay evidencias para rechazar $H_0$ por lo se infiere que el modelo no se ajusta correctamente a los datos. \\
+ 
+ \textbf{Test basado en el estadístico de la devianza}\\
+ [0.3cm]
+ La devianza es otra de las medidas que permiten determinar la adecuación de un modelo. La explicación de esta prueba se desarrollará siguiendo la notación de \textcite{tfm2} en su trabajo ``Métodos de Bondad de Ajuste en Regresión Logística'' y bajo el contexto de datos agregados, que no es más que una representación de los datos en la que estos están agrupados según el patrón de las covariables (las combinaciones de valores de las variables explicativas).\\ 
+ 
+ La devianza compara la función de log-verosimilitud del modelo a diagnosticar con la del modelo saturado (modelo \textit{maximal} o completo, que contiene todos los posibles efectos principales y combinaciones de las variables que lo componen, y se ajusta perfectamente a los datos).
+  \begin{equation}
+  \label{eq:devianza}
+ D= -2\log\Big(\frac{\hat{L}_C}{\hat{L}_F}\Big)= 2(\log\hat{L}_F- \log\hat{L}_C)
+ \end{equation}
+ 
+ donde $\hat{L}_C$ es la función de verosimilitud del modelo ajustado y $\hat{L}_F$, la del modelo saturado. \\
+ 
+Siendo $J$ el número de patrones de las covariables posibles, $n_j$ el número de observaciones con el patrón de valores $j$ e $y_j$ el número de éxitos o respuestas positivas, sus respectivas log-verosimilitudes vienen dadas por:
+\begin{align*}
+\log\hat{L}_C=\sum_{j=1}^{J}\Big\{\log\binom{n_j}{y_j} + y_j \log \hat{p}_j + (n_j-y_j) \log (1-\hat{p}_j)\Big\}
+\\
+\log\hat{L}_F=\sum_{j=1}^{J}\Big\{\log\binom{n_j}{y_j}+ y_j \log \tilde{p}_j + (n_j-y_j)\log (1-\tilde{p}_j)\Big\}
+\end{align*}
+
+con $\hat{p}_j= \frac{\hat{y}_j}{n_j}$ y $\tilde{p}_j= \frac{y_j}{n_j}$, probabilidades estimada y observada de respuesta positiva ($Y=1$), respectivamente.\\
+
+De esta manera, al substituir ambas fórmulas en la ecuación (\ref{eq:devianza}), la expresión de la devianza específica para el modelo binomial de datos agrupados resulta:
+ \begin{align*}
+D
+&=2 \sum_{j=1}^{J}\Big\{ \log\Big( \frac{\tilde{p}_j}{\hat{p}_j}\Big)+(n_j-y_j)\log\Big( \frac{1-\tilde{p}_j}{1-\hat{p}_j}\Big)\Big\}\\
+&=2 \sum_{j=1}^{J}\Big\{ y_j \log\Big( \frac{y_j}{\hat{y}_j}\Big)+(n_j-y_j)\log\Big( \frac{n_j-y_j}{n_j-\hat{y}_j}\Big)\Big\}
+\end{align*}
+
+y es por ello que el estadístico de la devianza es una medida de bondad de ajuste que compara los valores observados ($y_j$) con los ajustados o predichos ($\hat{y}_j$). \\
+
+Nótese que en el caso de que un modelo de datos desagregados únicamente tenga variables categóricas, es posible realizar una interpretación de los datos como si estuvieran agrupados en patrones de las covariables.\\
+
+La distribución asintótica del estadístico de la devianza para un modelo $M$ bajo la hipótesis nula ($H_0$: el modelo actual se ajusta correctamente a los datos) con $p$ parámetros y $n$ observaciones es una chi-cuadrado con $n-p$ grados de libertad,
+ \begin{equation}
+\label{eq:asintotica}
+D_M=D(Y, \hat{\pi}) \sim \chi^2_{n-p}
+\end{equation}
+
+En consecuencia, el p-valor para el test es P($ \chi^2_{n-p} > D_M$) y, de la misma manera que con el test de \textit{Hosmer-Lemeshow}, si este es inferior a un determinado valor $\alpha$, entonces hay evidencias suficientes para rechazar $H_0$ y se concluye que el modelo no se ajusta correctamente a los datos. \\
+
+Por último, cabe mencionar que pese a ser esta una prueba habitualmente utilizada para evaluar la bondad del ajuste de un modelo, en presencia de variables contínuas no se cumple la propiedad asintótica de (\ref{eq:asintotica}) por lo que el test no es apropiado.
+
