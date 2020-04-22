@@ -1,1 +1,0 @@
-%%triangular inferior endavantA=[5 1 3 -1; 0 3 4 3; 0 0 2 -6; 0 0 0 -1];B=[-10 4 2 5];amp=[A;B]';n=length(B);X=zeros(n,1);X(1)=amp(1,n+1)/amp(1,1);for i=2:nX(i)=(amp(i,n+1)-amp(i,1:i-1)*X(1:i-1))/amp(i,i);endX

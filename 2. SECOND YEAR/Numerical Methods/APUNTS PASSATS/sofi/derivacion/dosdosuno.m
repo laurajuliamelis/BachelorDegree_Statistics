@@ -1,1 +1,0 @@
-for k=1:1:15h1=10^(-k);df1(k)=((atan(sqrt(5)/5))-atan((sqrt(5)-h1)/5)) / h1 ;enda= 1/6*ones(1,15); b=df1;      errorabs1= abs(a-b)T1 = [1:15; df1 ; errorabs1]'

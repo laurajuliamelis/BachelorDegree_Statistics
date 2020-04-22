@@ -1,1 +1,0 @@
-%%crear matriz y resolver LX=BL=zeros(20,20);b=zeros(20,1);for i=1:20for j=1:20if i>=jL(i,j)=i+j;endendb(i)=i;endLb%%triangular inferioramp=[L;b']';n=length(b);X=zeros(n,1);X(1)=amp(1,n+1)/amp(1,1);for i=2:nX(i)=(amp(i,n+1)-amp(i,1:i-1)*X(1:i-1))/amp(i,i);endX

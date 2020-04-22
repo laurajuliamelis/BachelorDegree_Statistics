@@ -1,1 +1,0 @@
-f=@(x)-0.340337.*x.^2 + 2.01071245.*x - 1.664755;a=1; b=2;n_trap = [2 4 8 16 32 64 128 256 512 ];ve = quad(f,a,b); %Valor exacto integralfor  k=1:length(n_trap);;      n=2.^k;      h=(b-a)/n;      t(k)=h;      x=a:h:b;      y=f(x);      T(k)=trapz(x,y);      Error(k)=abs(T(k)-ve);endh = t ;ve

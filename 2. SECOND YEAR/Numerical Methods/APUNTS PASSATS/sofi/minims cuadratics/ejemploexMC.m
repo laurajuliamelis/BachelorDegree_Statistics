@@ -1,1 +1,0 @@
-%%Ecuaciones normales B=A'*AC=A'*b%%sol residuo minimox=B\C%%comparamos residuosy= el vector que nos dae1=norm(b-A*x)e2=norm(b-A*y)%%resolucion para QR[Q,R]=qr(A)b1=Q*bsol=R\b1%%la matriz R=Q'A tiene el mismo nº de condicion que A%%nº de condicion de Acond(A)  %% mide el mal condicionamientorcond(A) %% mide el buen condicionamiento

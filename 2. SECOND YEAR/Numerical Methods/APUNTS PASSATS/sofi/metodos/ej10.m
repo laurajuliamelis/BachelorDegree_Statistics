@@ -1,1 +1,0 @@
-%%ejercicio 10 . numero de condicion de una matriz (ap.2.2)clcclear allA1=[1 1; 1 0]A2=[1 1; 1 0.01]b=[100;1]sol1=A1\bsol2=A2\b

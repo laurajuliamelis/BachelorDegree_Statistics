@@ -1,1 +1,0 @@
-f=@(t)(1./(sqrt(2*pi)))*exp(-(t.^2)./2);for n=1:10;    N=2.^n;    a=-2;    b=2;    h=(b-a)/N;    fba=f(a)+f(b);    for i=1:(N-1);        fba=fba+2*f(a+i*h);      end    T(n)=(h/2).*fba;endn=1:10;N=2.^n;tabla=[N;T]'

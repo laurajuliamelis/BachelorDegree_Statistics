@@ -1,1 +1,0 @@
-%%solucion stma Ax=b%%como peq cambios en A afectan a la solucionA1=[1 1;1 0];b=[100;1];solucion1=A1\bA2=[1 1;1 0.01];solucion2=A2\b

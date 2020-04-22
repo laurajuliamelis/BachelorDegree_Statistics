@@ -1,1 +1,0 @@
-%%EJEMPLO 1A=[2 4 1; 8 -1 3; 2 5 0] %%DEFINO MATRIZ COEFICIENTESb=[1;0;0] %%DEFINO TERMINO INDEPENDIENTE%% REGLA DE CRAMERd=det(A) %% DETERMINANTE DE LA MATRIZA1=A;A1(:,1)=b;d1=det(A1);x1=d1/d;A2=A;A2(:,2)=b;d2=det(A2);x2=d2/d;A3=A;A3(:,3)=b;d3=det(A3);x3=d3/d;%%SOLUCIONx=A\b

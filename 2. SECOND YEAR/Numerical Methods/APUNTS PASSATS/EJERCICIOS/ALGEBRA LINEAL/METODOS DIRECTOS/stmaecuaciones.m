@@ -1,1 +1,0 @@
-%%solucion sistema Ax=b%%ver como pequeños cambios en b producen grandes cambios en solA=[1 2; 1 2.01];b1=[4;4];solucion1=A\b1disp('pequeño cambio en b')b2=[3;5];solucion2=A\b2

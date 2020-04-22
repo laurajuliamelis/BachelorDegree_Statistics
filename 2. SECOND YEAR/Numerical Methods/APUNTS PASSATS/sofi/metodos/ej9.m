@@ -1,1 +1,0 @@
-%%ejercicio 9 . numero de condicion de una matriz (ap.2.2)clear allclcA=[1 2;1 2.01]b1=[4;4]b2=[3;5]sol1=A\b1sol2=A\b2

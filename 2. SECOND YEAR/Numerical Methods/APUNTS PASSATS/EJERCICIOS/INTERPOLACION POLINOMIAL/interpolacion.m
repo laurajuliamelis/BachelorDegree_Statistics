@@ -1,1 +1,0 @@
-x=[1 2 4 5];y=[0 2 12 21];function taula = difdiv(x,y)n=length(x);a=zeros(n);a(1:n,1)=y';for j=1:n-1for i=1:n-ja(i,j+1)=(a(i+1,j)-a(i,j))/(x(i+j)-x(i));endendtaula=[x',a]endt = difdiv(x,y)p1=[1 -0];p2=[1 -1];p3=[1 -2];p4=[1 -4];p5=[1 -8];q1=conv(p1,p2);q2=conv(q1,p3)q3=conv(q2,p4)q4=conv(q3,p5)

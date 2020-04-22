@@ -25,4 +25,5 @@ The contents are separated by year and course, each one of them contained in a d
 ## Course X
 ## Course X
 
-## FINAL PROJECT
+## FINAL THESIS
+

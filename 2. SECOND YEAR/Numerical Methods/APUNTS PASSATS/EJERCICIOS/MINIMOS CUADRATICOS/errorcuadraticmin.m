@@ -1,1 +1,0 @@
-%%solucion de error cuadratico minimoA=[1 1 1 0; 1 0 1 2; 1 1 0 1; 0 -1 2 0; -1 1 -1 1];b=[2;3;4;2;1];%%ecuaciones normalesB=A'*A;c=A'*b;disp('solucion stma lineal Ax=b')x=B\cdisp('residuo')r=norm(b-A*x)disp('metodo QR')[Q,R]=qr(A);b1=Q*b;sol=R\b1

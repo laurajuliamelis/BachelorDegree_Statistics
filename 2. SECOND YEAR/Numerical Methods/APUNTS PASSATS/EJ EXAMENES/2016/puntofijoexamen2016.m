@@ -1,1 +1,0 @@
-clear allclcg = @(x)x-1/13.*(x.^3 - x.^2 - x -1);x(1)=1.85;x(2)=g(x(1));eps=0.00000001;dif(1)=x(2)-x(1);f=@(x)x.^3 - x.^2 - x -1;n = 2while (abs(x(n)-x(n-1)) > eps) & (abs(g(x(n))) > eps)      dif(n)=x(n)-x(n-1);      x(n+1)=g(x(n));      n=n+1;endn = [1:n];dif = [0,dif];tabla_resultados = [n;x;abs(dif);abs(f(x))]'
